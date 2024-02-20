@@ -1,11 +1,9 @@
 package com.project.credit.bill.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.credit.card.entity.CreditCard;
-import com.project.credit.customer.entity.Customer;
 import com.project.credit.transaction.entity.Transaction;
 import jakarta.persistence.*;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +16,16 @@ public class Bill {
     @OneToMany
     private List<Transaction> transactions = new ArrayList<>();
 
+    private Date dueDate;
+    private boolean isPaid;
+
     public Bill() {
     }
 
-    public Bill(String name) {
+    public Bill(String name, Date dueDate, boolean isPaid) {
         this.name = name;
+        this.dueDate = dueDate;
+        this.isPaid = isPaid;
     }
 
     public Long getId() {
@@ -47,5 +50,21 @@ public class Bill {
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(boolean paid) {
+        isPaid = paid;
     }
 }

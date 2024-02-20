@@ -4,6 +4,7 @@ import com.project.credit.card.entity.CreditCard;
 import com.project.credit.transaction.entity.Transaction;
 import jakarta.persistence.*;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class Customer {
     private String password;
     private String phone;
     private String address;
+    private Date dateOfBirth;
+    private Double annualIncome;
 
 
     @OneToOne
@@ -28,12 +31,14 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String name, String email, String password, String phone, String address) {
+    public Customer(String name, String email, String password, String phone, String address, Date dateOfBirth, Double annualIncome) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.address = address;
+        this.dateOfBirth = dateOfBirth;
+        this.annualIncome = annualIncome;
     }
 
     public Long getId() {
@@ -90,6 +95,22 @@ public class Customer {
 
     public void setCreditCard(CreditCard creditCard) {
         this.creditCard = creditCard;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Double getAnnualIncome() {
+        return annualIncome;
+    }
+
+    public void setAnnualIncome(Double annualIncome) {
+        this.annualIncome = annualIncome;
     }
 }
 

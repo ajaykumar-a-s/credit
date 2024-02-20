@@ -15,6 +15,8 @@ public class Merchant {
     private String phone;
     private String address;
 
+    private Double balance;
+
     public Merchant() {
     }
 
@@ -72,5 +74,13 @@ public class Merchant {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 }

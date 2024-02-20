@@ -1,5 +1,6 @@
 package com.project.credit.card.entity;
 
+import com.project.credit.bill.entity.Bill;
 import com.project.credit.customer.entity.Customer;
 import com.project.credit.transaction.entity.Transaction;
 import jakarta.persistence.*;
@@ -16,11 +17,20 @@ public class CreditCard {
     private String cardNumber;
     private Date validUpto;
     private String cvv;
+
+    private Double currentLimit;
+
     @OneToOne
     private Customer customer;
 
     @Embedded
     private CreditCardType creditCardType;
+
+    @OneToMany
+    private List<Transaction> transactions = new ArrayList<>();
+
+    @OneToMany
+    private List<Bill> bills = new ArrayList<>();
 
     public CreditCard() {
     }
@@ -77,6 +87,30 @@ public class CreditCard {
 
     public void setCreditCardType(CreditCardType creditCardType) {
         this.creditCardType = creditCardType;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public List<Bill> getBills() {
+        return bills;
+    }
+
+    public void setBills(List<Bill> bills) {
+        this.bills = bills;
+    }
+
+    public Double getCurrentLimit() {
+        return currentLimit;
+    }
+
+    public void setCurrentLimit(Double currentLimit) {
+        this.currentLimit = currentLimit;
     }
 }
 
