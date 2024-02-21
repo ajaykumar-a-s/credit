@@ -1,7 +1,7 @@
-package com.project.credit.request.service;
+package com.project.credit.card.service;
 
-import com.project.credit.request.entity.CreditCardRequest;
-import com.project.credit.request.repository.CreditCardRequestRepository;
+import com.project.credit.card.entity.CreditCardRequest;
+import com.project.credit.card.repository.CreditCardRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
