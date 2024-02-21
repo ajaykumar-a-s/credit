@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransactionController {
     @Autowired
     private TransactionService transactionService;
-    @PostMapping("/transaction")
-    public Transaction saveTransaction() {
-        return transactionService.saveTransaction(null);
-    }
+//    @PostMapping("/transaction")
+//    public Transaction saveTransaction() {
+//        return transactionService.saveTransaction(null);
+//    }
 }
