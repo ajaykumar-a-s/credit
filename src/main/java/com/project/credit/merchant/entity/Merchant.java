@@ -16,16 +16,18 @@ public class Merchant {
     private String address;
 
     private Double balance;
+    private String cardNumber;
 
     public Merchant() {
     }
 
-    public Merchant(String name, String email, String password, String phone, String address) {
+    public Merchant(String name, String email, String password, String phone, String address, String cardNumber) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.address = address;
+        this.cardNumber = cardNumber;
     }
 
     public Integer getId() {
@@ -82,5 +84,13 @@ public class Merchant {
 
     public void setBalance(Double balance) {
         this.balance = balance;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 }
