@@ -1,12 +1,9 @@
 package com.project.credit.customer.entity;
 
 import com.project.credit.card.entity.CreditCard;
-import com.project.credit.transaction.entity.Transaction;
 import jakarta.persistence.*;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Customer {
