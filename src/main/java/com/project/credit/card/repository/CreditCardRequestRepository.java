@@ -1,6 +1,6 @@
-package com.project.credit.request.repository;
+package com.project.credit.card.repository;
 
-import com.project.credit.request.entity.CreditCardRequest;
+import com.project.credit.card.entity.CreditCardRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CreditCardRequestRepository extends JpaRepository<CreditCardRequest, Long>{

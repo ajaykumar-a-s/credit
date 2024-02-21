@@ -1,7 +1,7 @@
-package com.project.credit.request.controller;
+package com.project.credit.card.controller;
 
-import com.project.credit.request.entity.CreditCardRequest;
-import com.project.credit.request.service.CreditCardRequestService;
+import com.project.credit.card.entity.CreditCardRequest;
+import com.project.credit.card.service.CreditCardRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
