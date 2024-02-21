@@ -14,5 +14,7 @@ public class MerchantController {
     public Merchant saveMerchant() {
         return merchantService.saveMerchant(null);
     }
+
+
 }
 //git
