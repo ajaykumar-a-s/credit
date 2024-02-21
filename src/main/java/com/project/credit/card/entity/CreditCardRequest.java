@@ -1,4 +1,4 @@
-package com.project.credit.request.entity;
+package com.project.credit.card.entity;
 
 import com.project.credit.customer.entity.Customer;
 import jakarta.persistence.Entity;

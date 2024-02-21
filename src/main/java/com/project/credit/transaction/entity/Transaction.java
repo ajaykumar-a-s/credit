@@ -1,6 +1,7 @@
 package com.project.credit.transaction.entity;
 
 
+import com.project.credit.card.entity.CreditCard;
 import com.project.credit.merchant.entity.Merchant;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +22,11 @@ public class Transaction {
     private Date date;
     private String type;
     @ManyToOne
+    private CreditCard creditCard;
+    @ManyToOne
     private Merchant merchant;
+
+
 
     public Transaction() {
     }
@@ -88,6 +93,14 @@ public class Transaction {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
     }
 }
 
