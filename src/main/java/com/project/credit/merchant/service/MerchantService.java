@@ -1,16 +1,23 @@
 package com.project.credit.merchant.service;
 
 import com.project.credit.merchant.entity.Merchant;
+import com.project.credit.merchant.exception.MerchantException;
+
+import java.util.List;
 
 public interface MerchantService {
-   // List<Merchant> getAllMerchants();
-    Merchant saveMerchant(Merchant merchant);
-    Merchant getMerchantById (Long id);
+ List<Merchant> getAllMerchants();
 
-    Merchant editMerchant(Merchant merchant);
+ // List<Merchant> getAllMerchants();
+    Merchant saveMerchant(Merchant merchant) throws MerchantException;
+   // Merchant getMerchantById (Long id);
 
-    Merchant deleteMerchant(Long id);
+    Merchant getMerchantById(Integer id) throws MerchantException;
 
-    Merchant viewAllMerchant(Merchant merchant);
+    Merchant editMerchant(Merchant merchant) throws MerchantException;
+
+    Merchant deleteMerchant(Integer id) throws MerchantException;
+
+    List<Merchant> viewAllMerchant() throws MerchantException;
 
 }
