@@ -1,12 +1,12 @@
 package com.project.credit.bill.service;
 
 import com.project.credit.bill.entity.Bill;
-
-import java.time.LocalDate;
+import com.project.credit.bill.exception.BillException;
+import com.project.credit.card.exception.CardException;
 
 public interface BillService {
-    Bill autoGenerateBillForMonth();
-    Boolean billPayment(Long billId);
+    Bill autoGenerateBillForMonth() throws BillException;
+   Bill billPayment(String cardNumber) throws BillException, CardException;
 
 }
 
