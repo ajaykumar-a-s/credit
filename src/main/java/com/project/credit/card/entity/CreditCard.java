@@ -35,7 +35,7 @@ public class CreditCard {
     public CreditCard() {
     }
 
-    public CreditCard(String cardNumber, Date validUpto, String cvv) {
+    public CreditCard(String cardNumber, Date validUpto, String cvv, CreditCardType creditCardType) {
         this.cardNumber = cardNumber;
         this.validUpto = validUpto;
         this.cvv = cvv;
