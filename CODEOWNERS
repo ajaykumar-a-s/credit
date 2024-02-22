@@ -1,0 +1,11 @@
+# CODEOWNERS file
+
+# Main branch
+* @ajaykumar-a-s
+
+# Branch-specific ownership
+customer/* @samyuktha2002
+card/* @gitmeataswin
+merchant/* @SrinidhiRamesh
+transaction/* @ajaykumar-a-s
+billing/* @Surandharg
