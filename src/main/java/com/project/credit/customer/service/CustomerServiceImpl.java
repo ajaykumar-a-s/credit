@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CustomerServiceImpl implements CustomerService{
+public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
+
     @Override
-    public Customer saveCustomer(Customer customer) throws CustomerException
-    {
+    public Customer saveCustomer(Customer customer) throws CustomerException {
         //return customerRepository.save(customer);
         return null;
     }
@@ -25,24 +25,23 @@ public class CustomerServiceImpl implements CustomerService{
         //return customerRepository.findById(customerId).get();
         return null;
     }
-    /*@Override
-    public Customer editCustomer(Customer customer) {
+
+    @Override
+    public Customer editCustomer(Customer customer) throws CustomerException {
         return null;
-    }*/
+    }
 
 
     @Override
-    public void deleteCustomerById(Long customerId) throws CustomerException
-    {
+    public Customer deleteCustomerById(Long customerId) throws CustomerException {
         //customerRepository.deleteById(customerId);
         return null;
     }
 
     @Override
-    public List<Customer> viewAllCustomers() throws CustomerException
-    {
+    public List<Customer> viewAllCustomers() throws CustomerException {
         //return (List<Customer>)
-                //customerRepository.findAll();
+        //customerRepository.findAll();
         return null;
     }
 }
