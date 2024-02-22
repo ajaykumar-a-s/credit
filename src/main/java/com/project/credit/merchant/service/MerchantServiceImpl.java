@@ -19,11 +19,10 @@ public class MerchantServiceImpl implements MerchantService{
         this.MerchantRepository = merchantRepository;
     }*/
 
-
-    /*@Override
+    @Override
     public List<Merchant> getAllMerchants() {
-        return MerchantRepository.findAll();
-    }*/
+        return null;
+    }
 
     @Override
     public Merchant saveMerchant(Merchant merchant) throws MerchantException {
