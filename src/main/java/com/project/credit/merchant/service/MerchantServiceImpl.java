@@ -26,6 +26,11 @@ public class MerchantServiceImpl implements MerchantService{
     }*/
 
     @Override
+    public List<Merchant> getAllMerchants() {
+        return null;
+    }
+
+    @Override
     public Merchant saveMerchant(Merchant merchant) throws MerchantException {
 
        // this.merchantMap.put(merchant.getId(),merchant);
