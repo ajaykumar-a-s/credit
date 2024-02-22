@@ -13,9 +13,9 @@ public interface CustomerService {
 
     Customer getCustomerById(Long customerId) throws CustomerException;
 
-    //Customer editCustomer(Customer customer);
+    Customer editCustomer(Customer customer) throws CustomerException;
 
-    void deleteCustomerById(Long customerId) throws CustomerException;
+    Customer deleteCustomerById(Long customerId) throws CustomerException;
 
 }
 
