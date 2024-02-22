@@ -15,13 +15,15 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public Customer saveCustomer(Customer customer) throws CustomerException
     {
-        return customerRepository.save(customer);
+        //return customerRepository.save(customer);
+        return null;
     }
 
 
     @Override
     public Customer getCustomerById(Long customerId) throws CustomerException {
-        return customerRepository.findById(customerId).get();
+        //return customerRepository.findById(customerId).get();
+        return null;
     }
     /*@Override
     public Customer editCustomer(Customer customer) {
@@ -32,14 +34,16 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public void deleteCustomerById(Long customerId) throws CustomerException
     {
-        customerRepository.deleteById(customerId);
+        //customerRepository.deleteById(customerId);
+        return null;
     }
 
     @Override
     public List<Customer> viewAllCustomers() throws CustomerException
     {
-        return (List<Customer>)
-                customerRepository.findAll();
+        //return (List<Customer>)
+                //customerRepository.findAll();
+        return null;
     }
 }
 
