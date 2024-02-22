@@ -20,9 +20,6 @@ public class CreditCard {
 
     private Double currentLimit;
 
-    @OneToOne
-    private Customer customer;
-
     @Embedded
     private CreditCardType creditCardType;
 
@@ -35,10 +32,11 @@ public class CreditCard {
     public CreditCard() {
     }
 
-    public CreditCard(String cardNumber, Date validUpto, String cvv) {
+    public CreditCard(String cardNumber, Date validUpto, String cvv, CreditCardType creditCardType) {
         this.cardNumber = cardNumber;
         this.validUpto = validUpto;
         this.cvv = cvv;
+        this.creditCardType = creditCardType;
     }
 
     public Long getId() {
@@ -71,14 +69,6 @@ public class CreditCard {
 
     public void setCvv(String cvv) {
         this.cvv = cvv;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 
     public CreditCardType getCreditCardType() {
