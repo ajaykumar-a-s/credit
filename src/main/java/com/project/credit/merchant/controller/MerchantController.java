@@ -12,6 +12,13 @@ public class MerchantController {
     private MerchantService merchantService;
     @PostMapping("/merchant")
     public Merchant saveMerchant() {
-        return merchantService.saveMerchant(null);
+        try {
+            return merchantService.saveMerchant(null);
+        } catch (com.project.credit.merchant.exception.MerchantException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+
 }
+//git

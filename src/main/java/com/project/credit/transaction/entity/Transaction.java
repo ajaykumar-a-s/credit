@@ -1,14 +1,13 @@
 package com.project.credit.transaction.entity;
 
 
-import com.project.credit.card.entity.CreditCard;
-import com.project.credit.merchant.entity.Merchant;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 
 @Entity
@@ -20,23 +19,21 @@ public class Transaction {
     private String description;
     private Double amount;
     private Date date;
-    private String type;
-    @ManyToOne
-    private CreditCard creditCard;
-    @ManyToOne
-    private Merchant merchant;
-
+    private String type = "Debit";
+    private String fromCardNumber;
+    private String toCardNumber;
 
 
     public Transaction() {
     }
 
-    public Transaction(String name, String description, double amount, Date date, String type) {
+    public Transaction(String name, String description, double amount, String fromCardNumber, String toCardNumber) {
         this.name = name;
         this.description = description;
         this.amount = amount;
-        this.date = date;
-        this.type = type;
+        this.fromCardNumber = fromCardNumber;
+        this.toCardNumber = toCardNumber;
+        this.date = Date.valueOf(LocalDate.now());
     }
 
     public Long getId() {
@@ -79,14 +76,6 @@ public class Transaction {
         this.date = date;
     }
 
-    public Merchant getMerchant() {
-        return merchant;
-    }
-
-    public void setMerchant(Merchant merchant) {
-        this.merchant = merchant;
-    }
-
     public String getType() {
         return type;
     }
@@ -95,12 +84,20 @@ public class Transaction {
         this.type = type;
     }
 
-    public CreditCard getCreditCard() {
-        return creditCard;
+    public String getFromCardNumber() {
+        return fromCardNumber;
     }
 
-    public void setCreditCard(CreditCard creditCard) {
-        this.creditCard = creditCard;
+    public void setFromCardNumber(String fromCardNumber) {
+        this.fromCardNumber = fromCardNumber;
+    }
+
+    public String getToCardNumber() {
+        return toCardNumber;
+    }
+
+    public void setToCardNumber(String toCardNumber) {
+        this.toCardNumber = toCardNumber;
     }
 }
 
