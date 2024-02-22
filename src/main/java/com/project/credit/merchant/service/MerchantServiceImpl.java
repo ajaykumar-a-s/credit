@@ -12,43 +12,44 @@ public class MerchantServiceImpl implements MerchantService{
 
    // private Map <Integer,Merchant> merchantMap = new HashMap<>();
 
-    private final MerchantRepository MerchantRepository;
+   // private final MerchantRepository MerchantRepository;
 
-    public MerchantServiceImpl(MerchantRepository merchantRepository) {
+   /* public MerchantServiceImpl(MerchantRepository merchantRepository) {
         super();
         this.MerchantRepository = merchantRepository;
-    }
+    }*/
 
 
-    @Override
+    /*@Override
     public List<Merchant> getAllMerchants() {
         return MerchantRepository.findAll();
-    }
+    }*/
 
     @Override
     public Merchant saveMerchant(Merchant merchant) throws MerchantException {
 
        // this.merchantMap.put(merchant.getId(),merchant);
          //return this.productMap.get(product.getId());
-       return MerchantRepository.save(merchant);
-       // return null;
+       //return MerchantRepository.save(merchant);
+        return null;
     }
 
     @Override
     public Merchant getMerchantById(Integer id) throws MerchantException {
-        return MerchantRepository.findById(id).get();
+        return null;
+        //return MerchantRepository.findById(id).get();
 
     }
     @Override
     public Merchant editMerchant(Merchant merchant) throws MerchantException {
-        return MerchantRepository.save(merchant);
-        //return null;
+        //return MerchantRepository.save(merchant);
+        return null;
     }
 
     @Override
     public Merchant deleteMerchant(Integer id) throws MerchantException
     {
-        MerchantRepository.deleteById(id);
+       // MerchantRepository.deleteById(id);
         return null;
     }
 
