@@ -1,12 +1,10 @@
 package com.project.credit.transaction.entity;
 
 
-import com.project.credit.card.entity.CreditCard;
-import com.project.credit.merchant.entity.Merchant;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+
 
 import java.sql.Date;
 import java.time.LocalDate;
