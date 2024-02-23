@@ -14,7 +14,9 @@ public interface MerchantService {
 
     Merchant getMerchantById(Integer id) throws MerchantException;
 
-    Merchant editMerchant(Merchant merchant) throws MerchantException;
+    Merchant getMerchantByCardNumber(String cardNumber) throws MerchantException;
+
+    Merchant updateMerchant(Merchant merchant) throws MerchantException;
 
     Merchant deleteMerchant(Integer id) throws MerchantException;
 
