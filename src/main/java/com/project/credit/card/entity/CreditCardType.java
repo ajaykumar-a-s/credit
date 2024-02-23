@@ -1,5 +1,6 @@
 package com.project.credit.card.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.io.Serializable;
@@ -7,6 +8,7 @@ import java.io.Serializable;
 @Embeddable
 public class CreditCardType implements Serializable {
 
+    @Column(unique = true)
     private String cardType;
     private Double creditLimit;
     private Double interestRate;
