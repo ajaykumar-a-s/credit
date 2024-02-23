@@ -22,7 +22,7 @@ class TransactionServiceTests {
     }
     @Test
     void testAddTransaction(){
-        Transaction transaction = new Transaction("Test Transaction", "Test Description", 100.0, "1234567890123456", "1234567890123456");
+        Transaction transaction = new Transaction("Test Transaction", "Test Description", 100.0);
         try {
             transaction = transactionService.addTransaction(transaction);
             Assertions.assertNotNull(transaction);
@@ -32,7 +32,7 @@ class TransactionServiceTests {
     }
     @Test
     void testWithAmountGreaterThanLimit(){
-        Transaction transaction = new Transaction("Test Transaction", "Test Description", 100000.0, "1234567890123456", "1234567890123456");
+        Transaction transaction = new Transaction("Test Transaction", "Test Description", 100000.0);
         CreditCard fromCreditCard = new CreditCard("1234567890123456", null, null, new CreditCardType("test", 1000000.0, null) );
         Assertions.assertThrows(TransactionException.class, ()->transactionService.addTransaction(transaction));
     }
