@@ -1,5 +1,6 @@
 package com.project.credit.merchant.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -10,12 +11,15 @@ public class Merchant {
     @GeneratedValue
     private Integer id;
     private String name;
+    @Column(unique = true)
     private String email;
+
     private String password;
     private String phone;
     private String address;
 
     private Double balance;
+    @Column(unique = true)
     private String cardNumber;
 
     public Merchant() {
