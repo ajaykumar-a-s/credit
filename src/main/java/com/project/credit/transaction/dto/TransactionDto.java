@@ -1,9 +1,13 @@
 package com.project.credit.transaction.dto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class TransactionDto {
     private String fromCardNumber;
     private String fromCardHolderName;
-    private String expiryDate;
+    private java.sql.Date expiryDate;
     private String cvv;
     private String toCardNumber;
     private String name;
@@ -16,12 +20,31 @@ public class TransactionDto {
     public TransactionDto(String fromCardNumber, String fromCardHolderName, String expiryDate, String cvv, String toCardNumber, String name, String description, Double amount) {
         this.fromCardNumber = fromCardNumber;
         this.fromCardHolderName = fromCardHolderName;
-        this.expiryDate = expiryDate;
+        this.setExpiryDate(expiryDate);
         this.cvv = cvv;
         this.toCardNumber = toCardNumber;
         this.name = name;
         this.description = description;
         this.amount = amount;
+    }
+
+
+    public void setExpiryDate(String expiryDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/yy");
+        java.util.Date date = null;
+        try {
+            date = sdf.parse(expiryDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH)); // set day to the last of the month
+        this.expiryDate = new java.sql.Date(cal.getTimeInMillis());
+    }
+
+    public java.sql.Date getExpiryDate() {
+        return this.expiryDate;
     }
 
     public String getFromCardNumber() {
@@ -38,14 +61,6 @@ public class TransactionDto {
 
     public void setFromCardHolderName(String fromCardHolderName) {
         this.fromCardHolderName = fromCardHolderName;
-    }
-
-    public String getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(String expiryDate) {
-        this.expiryDate = expiryDate;
     }
 
     public String getCvv() {
