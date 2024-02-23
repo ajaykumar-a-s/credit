@@ -1,7 +1,6 @@
 package com.project.credit.card.entity;
 
 import com.project.credit.bill.entity.Bill;
-import com.project.credit.customer.entity.Customer;
 import com.project.credit.transaction.entity.Transaction;
 import jakarta.persistence.*;
 
@@ -102,6 +101,7 @@ public class CreditCard {
     public void setCurrentLimit(Double currentLimit) {
         this.currentLimit = currentLimit;
     }
+
 }
 //git test
 

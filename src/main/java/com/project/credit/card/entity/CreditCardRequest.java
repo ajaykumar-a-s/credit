@@ -14,14 +14,14 @@ public class CreditCardRequest {
 
     private boolean approved;
 
-    private Long customerId;
+    @ManyToOne
+    private Customer customer;
 
     public CreditCardRequest() {
     }
 
-    public CreditCardRequest(boolean approved, Long customerId) {
+    public CreditCardRequest(boolean approved) {
         this.approved = approved;
-        this.customerId = customerId;
     }
 
     public Long getId() {
@@ -40,11 +40,11 @@ public class CreditCardRequest {
         this.approved = approved;
     }
 
-    public Long getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setCustomer(Customer creditCard) {
+        this.customer = creditCard;
     }
 }
