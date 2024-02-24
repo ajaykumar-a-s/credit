@@ -19,6 +19,7 @@ public class CreditCard {
 
     private Double currentLimit;
 
+
     @Embedded
     private CreditCardType creditCardType;
 
@@ -103,5 +104,3 @@ public class CreditCard {
     }
 
 }
-//git test
-
