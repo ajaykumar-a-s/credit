@@ -1,9 +1,12 @@
 package com.project.credit.transaction.entity;
 
 
+import com.project.credit.card.entity.CreditCard;
+import com.project.credit.merchant.entity.Merchant;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 
 import java.sql.Date;
@@ -20,19 +23,23 @@ public class Transaction {
     private Double amount;
     private Date date;
     private String type = "Debit";
-    private String fromCardNumber;
-    private String toCardNumber;
+
+    @ManyToOne
+    private CreditCard creditCard;
+
+    @ManyToOne
+    private Merchant merchant;
 
 
     public Transaction() {
     }
 
-    public Transaction(String name, String description, double amount, String fromCardNumber, String toCardNumber) {
+    public Transaction(String name, String description, double amount, CreditCard creditCard, Merchant merchant) {
         this.name = name;
         this.description = description;
         this.amount = amount;
-        this.fromCardNumber = fromCardNumber;
-        this.toCardNumber = toCardNumber;
+        this.creditCard = creditCard;
+        this.merchant = merchant;
         this.date = Date.valueOf(LocalDate.now());
     }
 
@@ -84,20 +91,5 @@ public class Transaction {
         this.type = type;
     }
 
-    public String getFromCardNumber() {
-        return fromCardNumber;
-    }
-
-    public void setFromCardNumber(String fromCardNumber) {
-        this.fromCardNumber = fromCardNumber;
-    }
-
-    public String getToCardNumber() {
-        return toCardNumber;
-    }
-
-    public void setToCardNumber(String toCardNumber) {
-        this.toCardNumber = toCardNumber;
-    }
 }
 

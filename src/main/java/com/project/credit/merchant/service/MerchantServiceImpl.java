@@ -2,7 +2,6 @@ package com.project.credit.merchant.service;
 
 import com.project.credit.merchant.entity.Merchant;
 import com.project.credit.merchant.exception.MerchantException;
-import com.project.credit.merchant.repository.MerchantRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,8 +43,14 @@ public class MerchantServiceImpl implements MerchantService{
         //return MerchantRepository.findById(id).get();
 
     }
+
     @Override
-    public Merchant editMerchant(Merchant merchant) throws MerchantException {
+    public Merchant getMerchantByCardNumber(String cardNumber) throws MerchantException {
+        return null;
+    }
+
+    @Override
+    public Merchant updateMerchant(Merchant merchant) throws MerchantException {
         //return MerchantRepository.save(merchant);
         return null;
     }
