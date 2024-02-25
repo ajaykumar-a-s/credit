@@ -2,75 +2,107 @@ package com.project.credit.merchant.service;
 
 import com.project.credit.merchant.entity.Merchant;
 import com.project.credit.merchant.exception.MerchantException;
+import com.project.credit.merchant.repository.MerchantRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.List;
 
 @Service
-public class MerchantServiceImpl implements MerchantService{
+public class MerchantServiceImpl implements MerchantService {
 
-   // private Map <Integer,Merchant> merchantMap = new HashMap<>();
+    @Autowired
+    private MerchantRepository merchantRepository;
+//    private Merchant merchant;
 
-   // private final MerchantRepository MerchantRepository;
-
-   /* public MerchantServiceImpl(MerchantRepository merchantRepository) {
-        super();
-        this.MerchantRepository = merchantRepository;
-    }*/
-
-    @Override
-    public List<Merchant> getAllMerchants() {
-        return null;
-    }
-
-    @Override
-    public List<Merchant> getAllMerchants() {
-        return null;
-    }
 
     @Override
     public Merchant saveMerchant(Merchant merchant) throws MerchantException {
-
-       // this.merchantMap.put(merchant.getId(),merchant);
-         //return this.productMap.get(product.getId());
-       //return MerchantRepository.save(merchant);
-        return null;
+        try {
+            // Save the merchant using the repository
+            return merchantRepository.save(merchant);
+        } catch (Exception e) {
+            // Handle any exceptions and throw a merchant CustomerException
+            throw new MerchantException("Failed to save merchant: " + e.getMessage());
+        }
     }
 
     @Override
-    public Merchant getMerchantById(Integer id) throws MerchantException {
-        return null;
-        //return MerchantRepository.findById(id).get();
+    public Merchant getMerchantById(Long merchantId) throws MerchantException {
+        try {
+            // Find the merchant by ID
+            Optional<Merchant> optionalMerchant = merchantRepository.findById(merchantId);
+
+            // Check if merchant exists
+            if (optionalMerchant.isPresent()) {
+                return optionalMerchant.get(); // Return the customer if found
+            } else {
+                throw new MerchantException("Customer not found with ID: " + merchantId);
+            }
+        } catch (Exception e) {
+            // Handle any exceptions and throw a custom MerchantException
+            throw new MerchantException("Failed to get merchant by ID: " + e.getMessage());
+        }
 
     }
 
     @Override
-    public Merchant getMerchantByCardNumber(String cardNumber) throws MerchantException {
+    public Merchant getMerchantByCardNumber(String cardNumber) throws MerchantException
+    {
         return null;
     }
 
     @Override
     public Merchant updateMerchant(Merchant merchant) throws MerchantException {
-        //return MerchantRepository.save(merchant);
         return null;
     }
 
     @Override
-    public Merchant deleteMerchant(Integer id) throws MerchantException
-    {
-       // MerchantRepository.deleteById(id);
-        return null;
+    public Merchant deleteMerchantById(Long merchantId) throws MerchantException {
+        try {
+
+            Merchant existingMerchant = merchantRepository.findById(merchantId)
+                    .orElseThrow(() -> new MerchantException("Merchant not found with ID: " + merchantId));
+            merchantRepository.deleteById(merchantId);
+            return existingMerchant;
+
+
+        } catch (Exception e) {
+
+            throw new MerchantException("Failed to delete customer: " + e.getMessage());
+        }
     }
 
-    public List<Merchant> viewAllMerchant() throws MerchantException
-    {
 
-        return null;
+
+    @Override
+    public List<Merchant> viewAllMerchants() throws MerchantException {
+        try {
+
+            return merchantRepository.findAll();
+        } catch (Exception e) {
+
+            throw new MerchantException("Failed to retrieve merchants!!: " + e.getMessage());
+        }
     }
-
-
-
-
-
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
