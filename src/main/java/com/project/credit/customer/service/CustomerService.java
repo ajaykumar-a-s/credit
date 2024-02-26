@@ -13,7 +13,7 @@ public interface CustomerService {
 
     Customer getCustomerById(Long customerId) throws CustomerException;
 
-    Customer editCustomer(Customer customer) throws CustomerException;
+    Customer updateCustomer(Customer customer) throws CustomerException;
 
     Customer deleteCustomerById(Long customerId) throws CustomerException;
 
