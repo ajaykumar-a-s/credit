@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
     @Autowired
@@ -15,34 +16,52 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer saveCustomer(Customer customer) throws CustomerException {
-        //return customerRepository.save(customer);
-        return null;
+        if (customer == null) {
+            throw new CustomerException("Customer cannot be null");
+        }
+        return customerRepository.save(customer);
     }
 
 
     @Override
     public Customer getCustomerById(Long customerId) throws CustomerException {
-       // return customerRepository.findById(customerId).get();
-        return null;
+        return customerRepository.findById(customerId).orElseThrow(() -> new CustomerException("Customer with id " + customerId + " not found"));
+
     }
 
     @Override
-    public Customer editCustomer(Customer customer) throws CustomerException {
-        return null;
+    public Customer updateCustomer(Customer customer) throws CustomerException {
+        Customer oldCustomer=null;
+        try {
+             oldCustomer = getCustomerById(customer.getId());
+        } catch (CustomerException e) {
+            throw e;
+        }
+        return customerRepository.save(customer);
+
     }
 
 
     @Override
     public Customer deleteCustomerById(Long customerId) throws CustomerException {
-        //customerRepository.deleteById(customerId);
-        return null;
+        Customer customer=null;
+        try{
+            customer=getCustomerById(customerId);
+        } catch (CustomerException e) {
+            throw e;
+        }
+        customerRepository.deleteById(customerId);
+        return customer;
     }
 
     @Override
     public List<Customer> viewAllCustomers() throws CustomerException {
-        //return (List<Customer>)
-        //customerRepository.findAll();
-        return null;
+        List<Customer> customers =customerRepository.findAll();
+        if (customers.isEmpty())
+        {
+            throw new CustomerException("No customers found");
+        }
+        return customers;
     }
 }
 
