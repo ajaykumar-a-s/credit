@@ -1,5 +1,7 @@
 package com.project.credit.card.service;
 
+import com.project.credit.bill.entity.Bill;
+import com.project.credit.bill.exception.BillException;
 import com.project.credit.card.entity.CreditCard;
 import com.project.credit.card.entity.CreditCardType;
 import com.project.credit.card.exception.CardException;
@@ -43,6 +45,11 @@ public class CreditCardServiceImpl implements CreditCardService{
 
     @Override
     public CreditCard updateCreditCard(CreditCard creditCard) throws CardException {
+        return null;
+    }
+
+    @Override
+    public List<Bill> getBillByCardNumber(String cardNumber) throws CardException, BillException {
         return null;
     }
 }

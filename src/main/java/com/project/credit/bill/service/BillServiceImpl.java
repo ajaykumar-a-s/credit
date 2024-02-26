@@ -24,9 +24,13 @@ public class BillServiceImpl implements BillService {
 
     @Autowired
     private TransactionService transactionService;
+    @Autowired
     private CreditCardService creditCardService;
+    @Autowired
+    private BillRepository billRepository;
 
     private List<Transaction> transactionsOfMonth= new ArrayList<>();
+    private CreditCard creditCardByCardNumber =null;
 
     @Override
     public Bill autoGenerateBillForMonth(String cardNumber) throws BillException, TransactionException, DateException, CardException {
@@ -37,37 +41,40 @@ public class BillServiceImpl implements BillService {
         Date lastDateOfMonth = Date.valueOf(lastMonthDate.withDayOfMonth(currentDate.lengthOfMonth()));
         Date dueDate = Date.valueOf(currentDate.withDayOfMonth(15));
 
+
+       List<Bill> bills = creditCardService.getBillByCardNumber(cardNumber);
+           if( bills.get(bills.size()-1).getBillGeneratedDate().toLocalDate().getMonth().compareTo(currentDate.getMonth())==0){
+              return bills.get(bills.size()-1);
+           }
+
+
          transactionsOfMonth=  transactionService.getAllTransactionsByCardIdForParticularDuration(cardNumber,firstDateOfMonth,lastDateOfMonth);
         Double amountToBePaid = null;
          for (Transaction list :transactionsOfMonth) {
-              amountToBePaid =+list.getAmount();
+              amountToBePaid +=list.getAmount();
          }
 
-        if(transactionsOfMonth!=null)
-        return new Bill(transactionsOfMonth.get(0).getName(),null,transactionsOfMonth,amountToBePaid,dueDate,false);
-        else
-            return null;
+        if(transactionsOfMonth==null) {
+           throw new BillException("You didn't use your Credit Card, So no bill is genertated.");
+              }
+        return billRepository.save(new Bill( cardNumber, transactionsOfMonth, amountToBePaid,Date.valueOf(currentDate), dueDate, false));
+
     }
-    private CreditCard creditCardByCardNumber =null;
+
 
 
 
     @Override
     public Bill billPayment(String cardNumber) throws BillException, CardException {
     creditCardByCardNumber= creditCardService.findCreditCardByCardNumber(cardNumber);
-    for (Bill billList :creditCardByCardNumber.getBills()){
-        if(billList.isPaid()==false){
-            billList.setPaid(true);
+        List<Bill> bills = creditCardService.getBillByCardNumber(cardNumber);
+        if( bills.get(bills.size()-1).isPaid()==false)
+       {
+           bills.get(bills.size()-1).setPaid(true);
             creditCardByCardNumber.setCurrentLimit(creditCardByCardNumber.getCreditCardType().getCreditLimit());
-            return billList;
+
         }
-
-
-    }
-    return null;
-
-
-
+        return bills.get(bills.size()-1);
     }
 
 
