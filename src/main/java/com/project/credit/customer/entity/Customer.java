@@ -113,6 +113,8 @@ public class Customer {
     public void setAnnualIncome(Double annualIncome) {
         this.annualIncome = annualIncome;
     }
+
+
 }
 
 
