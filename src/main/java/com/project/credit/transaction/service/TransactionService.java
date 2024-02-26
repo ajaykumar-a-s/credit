@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface TransactionService {
 
-    Transaction transferAmount(TransactionDto transactionDto) throws TransactionException, CardException, MerchantException;
+    Transaction transferAmount(TransactionDto transactionDto) throws CardException, MerchantException, TransactionException;
     Transaction addTransaction(Transaction transaction) throws TransactionException;
 
     Transaction getTransactionById(Long id) throws TransactionException;

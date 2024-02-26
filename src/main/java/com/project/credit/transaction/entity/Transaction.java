@@ -34,10 +34,12 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(String name, String description, double amount) {
+    public Transaction(String name, String description, double amount, CreditCard creditCard, Merchant merchant) {
         this.name = name;
         this.description = description;
         this.amount = amount;
+        this.creditCard = creditCard;
+        this.merchant = merchant;
         this.date = Date.valueOf(LocalDate.now());
     }
 

@@ -40,4 +40,9 @@ public class CreditCardServiceImpl implements CreditCardService{
     public CreditCard generateCard(CreditCardType creditCardType) throws CardException {
         return null;
     }
+
+    @Override
+    public CreditCard updateCreditCard(CreditCard creditCard) throws CardException {
+        return null;
+    }
 }
