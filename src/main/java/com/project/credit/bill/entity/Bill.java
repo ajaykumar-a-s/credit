@@ -15,15 +15,20 @@ public class Bill {
     private String name;
     @OneToMany
     private List<Transaction> transactions = new ArrayList<>();
+    private Double amount;
 
     private Date dueDate;
     private boolean isPaid;
+    private String cardNumber;
 
     public Bill() {
     }
 
-    public Bill(String name, Date dueDate, boolean isPaid) {
+    public Bill(String name,String cardNumber, List<Transaction> transactions, Double amount, Date dueDate, boolean isPaid) {
         this.name = name;
+        this.cardNumber=cardNumber;
+        this.transactions = transactions;
+        this.amount = amount;
         this.dueDate = dueDate;
         this.isPaid = isPaid;
     }
@@ -64,7 +69,23 @@ public class Bill {
         return isPaid;
     }
 
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
     public void setPaid(boolean paid) {
         isPaid = paid;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 }
