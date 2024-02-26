@@ -1,5 +1,7 @@
 package com.project.credit.card.service;
 
+import com.project.credit.bill.entity.Bill;
+import com.project.credit.bill.exception.BillException;
 import com.project.credit.card.entity.CreditCard;
 import com.project.credit.card.entity.CreditCardRequest;
 import com.project.credit.card.entity.CreditCardType;
@@ -139,5 +141,10 @@ public class CreditCardServiceImpl implements CreditCardService {
         if (findCreditCardByCardNumber(creditCard.getCardNumber()) == null)
             throw new CardException("No such credit card found in database");
         return creditCardRepository.save(creditCard);
+    }
+
+    @Override
+    public List<Bill> getBillByCardNumber(String cardNumber) throws CardException, BillException {
+        return null;
     }
 }

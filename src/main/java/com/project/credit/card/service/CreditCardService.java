@@ -1,5 +1,7 @@
 package com.project.credit.card.service;
 
+import com.project.credit.bill.entity.Bill;
+import com.project.credit.bill.exception.BillException;
 import com.project.credit.card.entity.CreditCard;
 import com.project.credit.card.entity.CreditCardRequest;
 import com.project.credit.card.exception.CardException;
@@ -23,9 +25,9 @@ public interface CreditCardService {
 
     public CreditCard updateCreditCard(CreditCard creditCard) throws CardException;
     public  String  generateCardNumber() throws  CardException;
-public Integer generateRandomCvv();
+    public Integer generateRandomCvv();
     public Date getValidUptoDate();
-
+    public List<Bill> getBillByCardNumber(String cardNumber) throws CardException, BillException;
 
 
 }

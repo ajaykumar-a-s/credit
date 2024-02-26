@@ -2,28 +2,79 @@ package com.project.credit.bill.service;
 
 import com.project.credit.bill.entity.Bill;
 import com.project.credit.bill.exception.BillException;
+import com.project.credit.bill.repository.BillRepository;
+import com.project.credit.card.entity.CreditCard;
+import com.project.credit.card.service.CreditCardService;
+import com.project.credit.transaction.entity.Transaction;
+import com.project.credit.card.exception.CardException;
+import com.project.credit.transaction.exception.DateException;
+import com.project.credit.transaction.exception.TransactionException;
+import com.project.credit.transaction.service.TransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BillServiceImpl implements BillService {
 
 
-    @Override
-    public Bill autoGenerateBillForMonth() throws BillException {
-        LocalDate currentDate=LocalDate.now();
-        if(currentDate.compareTo(currentDate.withDayOfMonth(currentDate.lengthOfMonth()))==0){
-            LocalDate firstDateofMonth = currentDate.withDayOfMonth(1);
-            LocalDate lastDateofMonth = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
-        }
+    @Autowired
+    private TransactionService transactionService;
+    @Autowired
+    private CreditCardService creditCardService;
+    @Autowired
+    private BillRepository billRepository;
 
-        return null;
+    private List<Transaction> transactionsOfMonth= new ArrayList<>();
+    private CreditCard creditCardByCardNumber =null;
+
+    @Override
+    public Bill autoGenerateBillForMonth(String cardNumber) throws BillException, TransactionException, DateException, CardException {
+
+        LocalDate currentDate=LocalDate.now();
+        LocalDate lastMonthDate = currentDate.minusMonths(1);
+        Date firstDateOfMonth = Date.valueOf(lastMonthDate.withDayOfMonth(1));
+        Date lastDateOfMonth = Date.valueOf(lastMonthDate.withDayOfMonth(currentDate.lengthOfMonth()));
+        Date dueDate = Date.valueOf(currentDate.withDayOfMonth(15));
+
+
+       List<Bill> bills = creditCardService.getBillByCardNumber(cardNumber);
+           if( bills.get(bills.size()-1).getBillGeneratedDate().toLocalDate().getMonth().compareTo(currentDate.getMonth())==0){
+              return bills.get(bills.size()-1);
+           }
+
+
+         transactionsOfMonth=  transactionService.getAllTransactionsByCardIdForParticularDuration(cardNumber,firstDateOfMonth,lastDateOfMonth);
+        Double amountToBePaid = null;
+         for (Transaction list :transactionsOfMonth) {
+              amountToBePaid +=list.getAmount();
+         }
+
+        if(transactionsOfMonth==null) {
+           throw new BillException("You didn't use your Credit Card, So no bill is genertated.");
+              }
+        return billRepository.save(new Bill( cardNumber, transactionsOfMonth, amountToBePaid,Date.valueOf(currentDate), dueDate, false));
+
     }
 
+
+
+
     @Override
-    public Bill billPayment(String cardNumber) throws BillException {
-        return null;
+    public Bill billPayment(String cardNumber) throws BillException, CardException {
+    creditCardByCardNumber= creditCardService.findCreditCardByCardNumber(cardNumber);
+        List<Bill> bills = creditCardService.getBillByCardNumber(cardNumber);
+        if( bills.get(bills.size()-1).isPaid()==false)
+       {
+           bills.get(bills.size()-1).setPaid(true);
+            creditCardByCardNumber.setCurrentLimit(creditCardByCardNumber.getCreditCardType().getCreditLimit());
+
+        }
+        return bills.get(bills.size()-1);
     }
 
 
