@@ -124,7 +124,7 @@ public class TransactionServiceImpl implements TransactionService {
             throw new DateException("Start date cannot be greater than end date");
         }
         List<Transaction> transactions = transactionRepository.findAllByDateBetween(startDate, endDate);
-        if (transactions.isEmpty()){
+        if (transactions.isEmpty()) {
             throw new TransactionException("No transactions found");
         }
         return transactions;
