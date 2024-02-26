@@ -13,6 +13,7 @@ public class CreditCardRequest {
     private Long id;
 
     private boolean approved;
+
     @ManyToOne
     private Customer customer;
 
@@ -43,7 +44,7 @@ public class CreditCardRequest {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomer(Customer creditCard) {
+        this.customer = creditCard;
     }
 }
