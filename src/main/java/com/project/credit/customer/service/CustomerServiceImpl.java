@@ -22,7 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getCustomerById(Long customerId) throws CustomerException {
-        //return customerRepository.findById(customerId).get();
+       // return customerRepository.findById(customerId).get();
         return null;
     }
 
