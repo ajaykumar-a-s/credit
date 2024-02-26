@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface CreditCardService {
 
-    public CreditCard findCreditCardByCardNumber(Long cardNumber) throws CardException;
+    public CreditCard findCreditCardByCardNumber(String cardNumber) throws CardException;
 
     public CreditCard requestCard(Long customerId) throws CustomerException;
 

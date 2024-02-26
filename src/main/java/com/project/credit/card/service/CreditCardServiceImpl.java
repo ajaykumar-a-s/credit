@@ -82,7 +82,7 @@ private CreditCard creditCard;
         return null;
     }
     @Override
-    public CreditCard findCreditCardByCardNumber(Long cardNumber) throws CardException {
+    public CreditCard findCreditCardByCardNumber(String cardNumber) throws CardException {
         //return creditCardRepository.findById(cardNumber).get();
         return null;
 
