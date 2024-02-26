@@ -3,6 +3,7 @@ package com.project.credit.card.entity;
 import com.project.credit.bill.entity.Bill;
 import com.project.credit.transaction.entity.Transaction;
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -13,9 +14,10 @@ public class CreditCard {
     @Id
     @GeneratedValue
     private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String cardNumber;
     private Date validUpto;
-    private String cvv;
+    private Integer cvv;
 
     private Double currentLimit;
 
@@ -32,7 +34,7 @@ public class CreditCard {
     public CreditCard() {
     }
 
-    public CreditCard(String cardNumber, Date validUpto, String cvv, CreditCardType creditCardType) {
+    public CreditCard(String cardNumber, Date validUpto, Integer cvv, CreditCardType creditCardType) {
         this.cardNumber = cardNumber;
         this.validUpto = validUpto;
         this.cvv = cvv;
@@ -63,11 +65,12 @@ public class CreditCard {
         this.validUpto = validUpto;
     }
 
-    public String getCvv() {
+    public Integer getCvv() {
+
         return cvv;
     }
 
-    public void setCvv(String cvv) {
+    public void setCvv(Integer cvv) {
         this.cvv = cvv;
     }
 
