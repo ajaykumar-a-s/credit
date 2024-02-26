@@ -12,13 +12,14 @@ public class CreditCardRequest {
     @GeneratedValue
     private Long id;
 
-    private boolean approved;
+    private boolean approved = false;
 
     @ManyToOne
     private Customer customer;
 
     public CreditCardRequest() {
     }
+
 
     public CreditCardRequest(boolean approved) {
         this.approved = approved;
