@@ -1,4 +1,5 @@
 package com.project.credit.merchant.controller;
+
 import com.project.credit.merchant.entity.Merchant;
 import com.project.credit.merchant.exception.MerchantException;
 import com.project.credit.merchant.service.MerchantService;
@@ -14,56 +15,54 @@ public class MerchantController {
     @Autowired
     private MerchantService merchantService;
 
-    @PostMapping  ("/merchant")
-    public ResponseEntity<Merchant> saveMerchant(@RequestBody Merchant merchant) {
-        try {
-            Merchant savedMerchant = merchantService.saveMerchant(merchant);
-            return new ResponseEntity<>(savedMerchant, HttpStatus.CREATED);
-        } catch (MerchantException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @PostMapping("/merchant")
+    public Merchant saveMerchant(@RequestBody Merchant merchant) throws MerchantException
+    {
+        return merchantService.saveMerchant(merchant);
     }
 
     @GetMapping("/merchant/{id}")
-    public ResponseEntity<Merchant> getMerchantById(@PathVariable("id") Long merchantId) {
-        try {
-            Merchant merchant = merchantService.getMerchantById(merchantId);
-            return new ResponseEntity<>(merchant, HttpStatus.OK);
-        } catch (MerchantException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public Merchant getMerchantById(@PathVariable("id") Long merchantId) throws MerchantException
+    {
+        return merchantService.getMerchantById(merchantId);
     }
 
     @PutMapping("/merchant")
-    public ResponseEntity<Merchant> updateMerchant(@RequestBody Merchant merchant) {
-        try {
-            Merchant updatedMerchant = merchantService.updateMerchant(merchant);
-            return new ResponseEntity<>(updatedMerchant, HttpStatus.OK);
-        } catch (MerchantException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public Merchant updateMerchant(@RequestBody Merchant merchant) throws  MerchantException
+    {
+        return merchantService.updateMerchant(merchant);
     }
+
 
     @DeleteMapping("/merchant/{id}")
-    public ResponseEntity<?> deleteMerchantById(@PathVariable("id") Long merchantId) {
-        try {
-            merchantService.deleteMerchantById(merchantId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (MerchantException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public Merchant deleteMerchantById(@PathVariable("id") Long merchantId) throws  MerchantException
+    {
+        return merchantService.deleteMerchantById(merchantId);
     }
 
-    @GetMapping  ("/merchants")
-    public ResponseEntity<List<Merchant>> viewAllMerchants() {
-        try {
-            List<Merchant> merchants = merchantService.viewAllMerchants();
-            return new ResponseEntity<>(merchants, HttpStatus.OK);
-        } catch (MerchantException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @GetMapping("/merchants")
+    public List<Merchant> viewAllMerchants() throws MerchantException
+    {
+        return merchantService.viewAllMerchants();
     }
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
