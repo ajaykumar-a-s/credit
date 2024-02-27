@@ -3,7 +3,6 @@ package com.project.credit.card.entity;
 import com.project.credit.bill.entity.Bill;
 import com.project.credit.transaction.entity.Transaction;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.sql.Date;
 import java.util.ArrayList;
