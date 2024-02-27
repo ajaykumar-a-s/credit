@@ -39,7 +39,7 @@ public class CreditCardServiceImpl implements CreditCardService {
         if (customer.getCreditCard() != null) {
             throw new CreditCardRequestException("Customer already has a credit card");
         }
-        List<CreditCardRequest> creditCardRequests = creditCardRequestRepository.findAllByCustomer_Id(customerId);
+        List<CreditCardRequest> creditCardRequests = creditCardRequestRepository.findAllByCustomer_CustomerId(customerId);
         for (CreditCardRequest creditCardRequest : creditCardRequests) {
             if (creditCardRequest.getStatus().equals("requested")) {
                 throw new CreditCardRequestException("Customer already requested a card. Please wait for validation");

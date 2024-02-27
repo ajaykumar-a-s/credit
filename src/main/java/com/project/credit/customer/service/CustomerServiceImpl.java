@@ -33,7 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer updateCustomer(Customer customer) throws CustomerException {
         Customer oldCustomer=null;
         try {
-             oldCustomer = getCustomerById(customer.getId());
+             oldCustomer = getCustomerById(customer.getCustomerId());
         } catch (CustomerException e) {
             throw e;
         }

@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 public class Merchant {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long merchantId;
     private String name;
     @Column(unique = true)
     private String email;
@@ -34,12 +34,12 @@ public class Merchant {
         this.cardNumber = cardNumber;
     }
 
-    public Long getId() {
-        return id;
+    public Long getMerchantId() {
+        return merchantId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setMerchantId(Long id) {
+        this.merchantId = id;
     }
 
     public String getName() {
