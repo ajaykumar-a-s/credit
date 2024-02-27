@@ -31,6 +31,7 @@ public class BillServiceImpl implements BillService {
 
     private List<Transaction> transactionsOfMonth= new ArrayList<>();
     private CreditCard creditCardByCardNumber =null;
+    private  Double amountToBePaid = null;
 
     @Override
     public Bill autoGenerateBillForMonth(String cardNumber) throws BillException, TransactionException, DateException, CardException {
@@ -49,7 +50,7 @@ public class BillServiceImpl implements BillService {
 
 
          transactionsOfMonth=  transactionService.getAllTransactionsByCardNumberForParticularDuration(cardNumber,firstDateOfMonth,lastDateOfMonth);
-        Double amountToBePaid = null;
+
          for (Transaction list :transactionsOfMonth) {
               amountToBePaid +=list.getAmount();
          }
@@ -65,7 +66,7 @@ public class BillServiceImpl implements BillService {
 
 
     @Override
-    public Bill billPayment(String cardNumber) throws BillException, CardException {
+    public Bill billPayment(String cardNumber) throws BillException, CardException, TransactionException {
     creditCardByCardNumber= creditCardService.findCreditCardByCardNumber(cardNumber);
         List<Bill> bills = creditCardService.getBillByCardNumber(cardNumber);
         if( bills.get(bills.size()-1).isPaid()==false)
@@ -74,8 +75,13 @@ public class BillServiceImpl implements BillService {
             creditCardByCardNumber.setCurrentLimit(creditCardByCardNumber.getCreditCardType().getCreditLimit());
 
         }
+        Transaction creditTransaction = new Transaction("Bill Payment","Credit Recharge",amountToBePaid,creditCardByCardNumber,null);
+        creditTransaction.setType("Credit");
+        transactionService.addTransaction(creditTransaction);
         return bills.get(bills.size()-1);
     }
+
+
 
 
 }

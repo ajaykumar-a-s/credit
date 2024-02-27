@@ -6,6 +6,7 @@ import com.project.credit.card.entity.CreditCard;
 import com.project.credit.card.entity.CreditCardRequest;
 import com.project.credit.card.entity.CreditCardType;
 import com.project.credit.card.exception.CardException;
+import com.project.credit.card.exception.CreditCardRequestException;
 import com.project.credit.card.repository.CreditCardRepository;
 import com.project.credit.card.repository.CreditCardRequestRepository;
 import org.springframework.stereotype.Service;
@@ -33,8 +34,17 @@ public class CreditCardServiceImpl implements CreditCardService {
 
 
     @Override
-    public CreditCardRequest requestCard(Long customerId) throws CustomerException {
+    public CreditCardRequest requestCard(Long customerId) throws CustomerException, CreditCardRequestException {
         Customer customer = customerService.getCustomerById(customerId);
+        if (customer.getCreditCard() != null) {
+            throw new CreditCardRequestException("Customer already has a credit card");
+        }
+        List<CreditCardRequest> creditCardRequests = creditCardRequestRepository.findAllByCustomer_Id(customerId);
+        for (CreditCardRequest creditCardRequest : creditCardRequests) {
+            if (creditCardRequest.getStatus().equals("requested")) {
+                throw new CreditCardRequestException("Customer already requested a card. Please wait for validation");
+            }
+        }
         CreditCardRequest creditCardRequest = new CreditCardRequest();
         creditCardRequest.setCustomer(customer);
         return creditCardRequestRepository.save(creditCardRequest);
@@ -44,31 +54,42 @@ public class CreditCardServiceImpl implements CreditCardService {
     @Override
     public List<CreditCardRequest> getRequestedCardList() throws CardException {
 
-        return creditCardRequestRepository.findAll();
+        return creditCardRequestRepository.findAllByStatus("requested");
 
 
     }
 
     @Override
-    public CreditCard validateCustomer(Long customerId) throws CustomerException, CardException {
-        Customer customer = customerService.getCustomerById(customerId);
+    public CreditCard validateCreditCardRequest(Long creditCardRequestId) throws CustomerException, CardException, CreditCardRequestException {
+        CreditCardRequest creditCardRequest = creditCardRequestRepository.findById(creditCardRequestId).orElse(null);
+        if (creditCardRequest == null) {
+            throw new CreditCardRequestException("No such request exists for the given id");
+        }
+        if (creditCardRequest.getStatus().equals("approved")) {
+            throw new CreditCardRequestException("Request already approved");
+        }
+        Customer customer = creditCardRequest.getCustomer();
 
         Double income = customer.getAnnualIncome() / 12;
 
-        if (income < 100000)
+        if (income < 100000) {
+            creditCardRequest.setStatus("rejected");
+            creditCardRequestRepository.save(creditCardRequest);
             throw new CustomerException("Not eligible");
-        if (customer.getCreditCard() != null)
+        }
+        if (customer.getCreditCard() != null) {
+            creditCardRequest.setStatus("rejected");
+            creditCardRequestRepository.save(creditCardRequest);
             throw new CustomerException("You already holds a credit card");
-
-
-        return generateCard(customer);
+        }
+        return generateCard(creditCardRequest);
     }
 
 
     @Override
-    public CreditCard generateCard(Customer customer) throws CardException {
+    public CreditCard generateCard(CreditCardRequest creditCardRequest) throws CardException {
         CreditCardType creditCardType = null;
-        Double income = customer.getAnnualIncome() / 12;
+        Double income = creditCardRequest.getCustomer().getAnnualIncome() / 12;
         switch ((int) (Math.ceil(income / 100000))) {
             case 1:
                 creditCardType = new CreditCardType("BRONZE", 100000D, 10D);
@@ -87,8 +108,9 @@ public class CreditCardServiceImpl implements CreditCardService {
         creditCard.setCardNumber(generateCardNumber());
         creditCard.setCvv(generateRandomCvv());
         creditCard.setValidUpto(getValidUptoDate());
-
-
+        creditCard.setCreditCardType(creditCardType);
+        creditCard.setCurrentLimit(creditCardType.getCreditLimit());
+        creditCardRequest.setStatus("approved");
         return creditCardRepository.save(creditCard);
     }
 
@@ -133,6 +155,14 @@ public class CreditCardServiceImpl implements CreditCardService {
             cardNumber.append(random.nextInt(10));
         }
         return cardNumber.toString();
+    }
+
+    @Override
+    public List<CreditCard> getCardList() throws CardException {
+
+        return creditCardRepository.findAll();
+
+
     }
 
 
