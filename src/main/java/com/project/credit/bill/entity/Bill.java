@@ -4,7 +4,6 @@ import com.project.credit.transaction.entity.Transaction;
 import jakarta.persistence.*;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public class Bill {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long billId;
     @OneToMany
     private List<Transaction> transactions = new ArrayList<>();
     private Double amount;
@@ -34,12 +33,12 @@ public class Bill {
         this.isPaid = isPaid;
     }
 
-    public Long getId() {
-        return id;
+    public Long getBillId() {
+        return billId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setBillId(Long id) {
+        this.billId = id;
     }
 
     public List<Transaction> getTransactions() {

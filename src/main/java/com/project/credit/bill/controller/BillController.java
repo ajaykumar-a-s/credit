@@ -34,7 +34,7 @@ public class BillController {
 
     }
     @PostMapping("/billPayment/{cardNumber}")
-    public Bill billPayment(@PathVariable String cardNumber) throws BillException, CardException {
+    public Bill billPayment(@PathVariable String cardNumber) throws BillException, CardException, TransactionException {
         return billService.billPayment(cardNumber);
     }
 
