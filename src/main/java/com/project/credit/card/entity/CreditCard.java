@@ -12,7 +12,7 @@ import java.util.List;
 public class CreditCard {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long creditCardId;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true)
     private String cardNumber;
@@ -41,12 +41,12 @@ public class CreditCard {
         this.creditCardType = creditCardType;
     }
 
-    public Long getId() {
-        return id;
+    public Long getCreditCardId() {
+        return creditCardId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCreditCardId(Long id) {
+        this.creditCardId = id;
     }
 
     public String getCardNumber() {
