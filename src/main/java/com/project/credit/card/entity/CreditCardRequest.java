@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class CreditCardRequest {
     @Id
     @GeneratedValue
-    private Long creditCardRequestId;
+    private Long id;
 
     private String status = "requested";
     @ManyToOne
@@ -16,12 +16,12 @@ public class CreditCardRequest {
     public CreditCardRequest() {
     }
 
-    public Long getCreditCardRequestId() {
-        return creditCardRequestId;
+    public Long getId() {
+        return id;
     }
 
-    public void setCreditCardRequestId(Long id) {
-        this.creditCardRequestId = id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
 

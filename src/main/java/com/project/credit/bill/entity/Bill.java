@@ -11,7 +11,7 @@ import java.util.List;
 public class Bill {
     @Id
     @GeneratedValue
-    private Long billId;
+    private Long id;
     @OneToMany
     private List<Transaction> transactions = new ArrayList<>();
     private Double amount;
@@ -33,12 +33,12 @@ public class Bill {
         this.isPaid = isPaid;
     }
 
-    public Long getBillId() {
-        return billId;
+    public Long getId() {
+        return id;
     }
 
-    public void setBillId(Long id) {
-        this.billId = id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public List<Transaction> getTransactions() {
