@@ -17,7 +17,7 @@ import java.time.LocalDate;
 public class Transaction {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long transactionId;
     private String name;
     private String description;
     private Double amount;
@@ -43,12 +43,12 @@ public class Transaction {
         this.date = Date.valueOf(LocalDate.now());
     }
 
-    public Long getId() {
-        return id;
+    public Long getTransactionId() {
+        return transactionId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTransactionId(Long id) {
+        this.transactionId = id;
     }
 
     public String getName() {

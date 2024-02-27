@@ -10,7 +10,7 @@ public class Customer {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long customerId;
     private String name;
 
     @Column(unique = true)
@@ -43,12 +43,12 @@ public class Customer {
         this.annualIncome = annualIncome;
     }
 
-    public Long getId() {
-        return id;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCustomerId(Long id) {
+        this.customerId = id;
     }
 
     public String getName() {

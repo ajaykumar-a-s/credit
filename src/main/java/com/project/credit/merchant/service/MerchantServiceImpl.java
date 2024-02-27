@@ -6,7 +6,6 @@ import com.project.credit.merchant.repository.MerchantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.List;
 
 @Service
@@ -34,7 +33,7 @@ public class MerchantServiceImpl implements MerchantService {
     public Merchant updateMerchant(Merchant merchant) throws MerchantException {
         Merchant oldMerchant=null;
         try {
-            oldMerchant = getMerchantById(merchant.getId());
+            oldMerchant = getMerchantById(merchant.getMerchantId());
         } catch (MerchantException e) {
             throw e;
         }
