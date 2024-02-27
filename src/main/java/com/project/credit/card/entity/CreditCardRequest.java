@@ -1,10 +1,7 @@
 package com.project.credit.card.entity;
 
 import com.project.credit.customer.entity.Customer;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class CreditCardRequest {
@@ -12,17 +9,11 @@ public class CreditCardRequest {
     @GeneratedValue
     private Long id;
 
-    private boolean approved = false;
-
+    private String status = "requested";
     @ManyToOne
     private Customer customer;
 
     public CreditCardRequest() {
-    }
-
-
-    public CreditCardRequest(boolean approved) {
-        this.approved = approved;
     }
 
     public Long getId() {
@@ -33,13 +24,6 @@ public class CreditCardRequest {
         this.id = id;
     }
 
-    public boolean isApproved() {
-        return approved;
-    }
-
-    public void setApproved(boolean approved) {
-        this.approved = approved;
-    }
 
     public Customer getCustomer() {
         return customer;
@@ -47,5 +31,13 @@ public class CreditCardRequest {
 
     public void setCustomer(Customer creditCard) {
         this.customer = creditCard;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

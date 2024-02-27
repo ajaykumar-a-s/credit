@@ -8,7 +8,6 @@ import java.io.Serializable;
 @Embeddable
 public class CreditCardType implements Serializable {
 
-    @Column(unique = true)
     private String cardType;
     private Double creditLimit;
     private Double interestRate;

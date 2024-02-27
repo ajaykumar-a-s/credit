@@ -15,6 +15,7 @@ public class CreditCard {
     @GeneratedValue
     private Long id;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true)
     private String cardNumber;
     private Date validUpto;
     private Integer cvv;
