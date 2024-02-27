@@ -69,7 +69,11 @@ public class MerchantServiceImpl implements MerchantService {
     @Override
     public Merchant getMerchantByCardNumber(String cardNumber) throws MerchantException
     {
-        return null;
+        Merchant merchant =  merchantRepository.findByCardNumber(cardNumber);
+        if (merchant == null) {
+            throw new MerchantException("Merchant with card number " + cardNumber + " not found");
+        }
+        return merchant;
     }
 
 

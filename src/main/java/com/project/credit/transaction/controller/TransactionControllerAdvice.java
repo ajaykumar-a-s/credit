@@ -11,8 +11,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class TransactionControllerAdvice {
-    @ExceptionHandler(value = {CardException.class, MerchantException.class, TransactionException.class, DateException.class})
-    public ResponseEntity handleException(Exception e){
+    @ExceptionHandler(value = TransactionException.class)
+    public ResponseEntity transactionException(TransactionException e) {
+        return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(value = DateException.class)
+    public ResponseEntity dateException(DateException e) {
+        return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(value = MerchantException.class)
+    public ResponseEntity merchantException(MerchantException e) {
+        return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(value = CardException.class)
+    public ResponseEntity cardException(CardException e) {
         return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
