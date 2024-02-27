@@ -3,7 +3,6 @@ package com.project.credit.transaction.service;
 import com.project.credit.card.entity.CreditCard;
 import com.project.credit.card.exception.CardException;
 import com.project.credit.card.service.CreditCardService;
-import com.project.credit.customer.exception.CustomerException;
 import com.project.credit.merchant.entity.Merchant;
 import com.project.credit.merchant.exception.MerchantException;
 import com.project.credit.merchant.service.MerchantService;
@@ -11,6 +10,7 @@ import com.project.credit.transaction.dto.TransactionDto;
 import com.project.credit.transaction.entity.Transaction;
 import com.project.credit.transaction.exception.DateException;
 import com.project.credit.transaction.exception.TransactionException;
+import com.project.credit.transaction.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +19,8 @@ import java.util.List;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
+    @Autowired
+    private TransactionRepository transactionRepository;
     @Autowired
     private CreditCardService creditCardService;
 
@@ -49,14 +51,15 @@ public class TransactionServiceImpl implements TransactionService {
         if (transactionDto.getCvv() == null || transactionDto.getCvv().isEmpty()) {
             throw new TransactionException("CVV cannot be empty");
         }
-        CreditCard creditCard = creditCardService.findCreditCardByCardNumber(transactionDto.getFromCardNumber());
-        Merchant merchant = merchantService.getMerchantByCardNumber(transactionDto.getToCardNumber());
-        if (creditCard == null) {
-            throw new CardException("From card number does not exist");
+        CreditCard creditCard = null;
+        Merchant merchant = null;
+        try {
+            creditCard = creditCardService.findCreditCardByCardNumber(transactionDto.getFromCardNumber());
+            merchant = merchantService.getMerchantByCardNumber(transactionDto.getToCardNumber());
+        } catch (CardException | MerchantException e) {
+            throw e;
         }
-        if (merchant == null) {
-            throw new MerchantException("To card number does not exist");
-        }
+
         if (transactionDto.getExpiryDate().compareTo(new Date(System.currentTimeMillis())) < 0) {
             throw new CardException("Card has expired");
         }
@@ -73,31 +76,57 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction addTransaction(Transaction transaction) throws TransactionException {
-        return null;
+        if (transaction == null) {
+            throw new TransactionException("Transaction details cannot be empty");
+        }
+        return transactionRepository.save(transaction);
     }
 
     @Override
     public Transaction getTransactionById(Long id) throws TransactionException {
-        return null;
+        Transaction transaction = transactionRepository.findById(id).orElse(null);
+        if (transaction == null) {
+            throw new TransactionException("Transaction does not exist");
+        }
+        return transaction;
     }
 
     @Override
     public List<Transaction> getAllTransactions() throws TransactionException {
-        return null;
+        List<Transaction> transactions = transactionRepository.findAll();
+        if (transactions.isEmpty()) {
+            throw new TransactionException("No transactions found");
+        }
+        return transactions;
     }
 
     @Override
-    public List<Transaction> getAllTransactionsByCardId(String cardId) throws CardException, TransactionException {
-        return null;
+    public List<Transaction> getAllTransactionsByCardNumber(String cardNumber) throws CardException, TransactionException {
+        CreditCard creditCard = null;
+        try {
+            creditCard = creditCardService.findCreditCardByCardNumber(cardNumber);
+        } catch (CardException e) {
+            throw e;
+        }
+        List<Transaction> transactions = transactionRepository.findAllByCreditCard(creditCard);
+        if (transactions.isEmpty()) {
+            throw new TransactionException("No transactions found");
+        }
+        return transactions;
     }
 
     @Override
-    public List<Transaction> getAllTransactionsByCustomerId(Long customerId) throws CustomerException, TransactionException {
-        return null;
-    }
-
-    @Override
-    public List<Transaction> getAllTransactionsByCardIdForParticularDuration(String cardNumber, Date startDate, Date endDate) throws CardException, DateException, TransactionException {
-        return null;
+    public List<Transaction> getAllTransactionsByCardNumberForParticularDuration(String cardNumber, Date startDate, Date endDate) throws CardException, DateException, TransactionException {
+        if (startDate == null || endDate == null) {
+            throw new DateException("Start date and end date cannot be empty");
+        }
+        if (startDate.compareTo(endDate) > 0) {
+            throw new DateException("Start date cannot be greater than end date");
+        }
+        List<Transaction> transactions = transactionRepository.findAllByDateBetween(startDate, endDate);
+        if (transactions.isEmpty()) {
+            throw new TransactionException("No transactions found");
+        }
+        return transactions;
     }
 }

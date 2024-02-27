@@ -48,7 +48,7 @@ public class BillServiceImpl implements BillService {
            }
 
 
-         transactionsOfMonth=  transactionService.getAllTransactionsByCardIdForParticularDuration(cardNumber,firstDateOfMonth,lastDateOfMonth);
+         transactionsOfMonth=  transactionService.getAllTransactionsByCardNumberForParticularDuration(cardNumber,firstDateOfMonth,lastDateOfMonth);
         Double amountToBePaid = null;
          for (Transaction list :transactionsOfMonth) {
               amountToBePaid +=list.getAmount();
