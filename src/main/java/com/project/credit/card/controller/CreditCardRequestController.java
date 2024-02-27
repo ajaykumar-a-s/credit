@@ -4,9 +4,7 @@ import com.project.credit.card.entity.CreditCard;
 import com.project.credit.card.entity.CreditCardRequest;
 import com.project.credit.card.exception.CardException;
 import com.project.credit.card.service.CreditCardService;
-import com.project.credit.customer.entity.Customer;
 import com.project.credit.customer.exception.CustomerException;
-import com.project.credit.customer.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +17,11 @@ public class CreditCardRequestController {
     @PostMapping("/request/{id}")
     public CreditCardRequest requestCard(@PathVariable("id") Long customerId) throws CustomerException
     {
-        return creditCardService.requestCard(customerId);
+        try {
+            return creditCardService.requestCard(customerId);
+        } catch (com.project.credit.card.exception.CreditCardRequestException e) {
+            throw new RuntimeException(e);
+        }
     }
     @GetMapping("/requestlist")
     public List<CreditCardRequest> getRequestedCardList() throws CardException
@@ -28,7 +30,11 @@ public class CreditCardRequestController {
     }
     @PostMapping("/validate/{id}")
     public CreditCard validateCustomer(@PathVariable("id") Long customerId) throws CustomerException, CardException {
-        return creditCardService.validateCustomer(customerId);
+        try {
+            return creditCardService.validateCreditCardRequest(customerId);
+        } catch (com.project.credit.card.exception.CreditCardRequestException e) {
+            throw new RuntimeException(e);
+        }
     }
     @GetMapping("/cardlist")
     public List<CreditCard> getCardList() throws CardException

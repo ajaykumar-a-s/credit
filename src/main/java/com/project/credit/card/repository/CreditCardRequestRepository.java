@@ -3,6 +3,9 @@ package com.project.credit.card.repository;
 import com.project.credit.card.entity.CreditCardRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface CreditCardRequestRepository extends JpaRepository<CreditCardRequest, Long>{
-    CreditCardRequest findByCustomer_id(Long id);
+    List<CreditCardRequest> findAllByCustomer_Id(Long id);
+    List<CreditCardRequest> findAllByStatus(String status);
 }

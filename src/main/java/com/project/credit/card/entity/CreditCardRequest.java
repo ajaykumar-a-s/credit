@@ -9,17 +9,11 @@ public class CreditCardRequest {
     @GeneratedValue
     private Long id;
 
-    private Boolean approved = false;
-
+    private String status = "requested";
     @ManyToOne
     private Customer customer;
 
     public CreditCardRequest() {
-    }
-
-
-    public CreditCardRequest(boolean approved) {
-        this.approved = approved;
     }
 
     public Long getId() {
@@ -30,13 +24,6 @@ public class CreditCardRequest {
         this.id = id;
     }
 
-    public Boolean isApproved() {
-        return approved;
-    }
-
-    public void setApproved(Boolean approved) {
-        this.approved = approved;
-    }
 
     public Customer getCustomer() {
         return customer;
@@ -44,5 +31,13 @@ public class CreditCardRequest {
 
     public void setCustomer(Customer creditCard) {
         this.customer = creditCard;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
