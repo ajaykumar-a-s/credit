@@ -87,7 +87,7 @@ public class CreditCardServiceImpl implements CreditCardService {
         creditCard.setCardNumber(generateCardNumber());
         creditCard.setCvv(generateRandomCvv());
         creditCard.setValidUpto(getValidUptoDate());
-
+       creditCardRequestRepository.findByCustomer_id(customer.getId()).setApproved(true);
 
         return creditCardRepository.save(creditCard);
     }

@@ -12,7 +12,7 @@ public class CreditCardRequest {
     @GeneratedValue
     private Long id;
 
-    private boolean approved = false;
+    private Boolean approved = null;
 
     @ManyToOne
     private Customer customer;
@@ -33,11 +33,11 @@ public class CreditCardRequest {
         this.id = id;
     }
 
-    public boolean isApproved() {
+    public Boolean isApproved() {
         return approved;
     }
 
-    public void setApproved(boolean approved) {
+    public void setApproved(Boolean approved) {
         this.approved = approved;
     }
 
