@@ -1,10 +1,7 @@
 package com.project.credit.card.entity;
 
 import com.project.credit.customer.entity.Customer;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class CreditCardRequest {
@@ -12,7 +9,7 @@ public class CreditCardRequest {
     @GeneratedValue
     private Long id;
 
-    private Boolean approved = null;
+    private Boolean approved = false;
 
     @ManyToOne
     private Customer customer;

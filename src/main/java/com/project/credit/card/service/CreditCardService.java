@@ -28,6 +28,6 @@ public interface CreditCardService {
     public Integer generateRandomCvv();
     public Date getValidUptoDate();
     public List<Bill> getBillByCardNumber(String cardNumber) throws CardException, BillException;
-
+    public List<CreditCard> getCardList() throws CardException;
 
 }

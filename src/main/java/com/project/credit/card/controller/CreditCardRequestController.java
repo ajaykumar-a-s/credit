@@ -30,6 +30,11 @@ public class CreditCardRequestController {
     public CreditCard validateCustomer(@PathVariable("id") Long customerId) throws CustomerException, CardException {
         return creditCardService.validateCustomer(customerId);
     }
+    @GetMapping("/cardlist")
+    public List<CreditCard> getCardList() throws CardException
+    {
+        return creditCardService.getCardList();
+    }
 
    
 
