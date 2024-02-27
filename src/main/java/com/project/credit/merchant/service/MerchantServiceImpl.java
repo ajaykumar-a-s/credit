@@ -2,76 +2,109 @@ package com.project.credit.merchant.service;
 
 import com.project.credit.merchant.entity.Merchant;
 import com.project.credit.merchant.exception.MerchantException;
+import com.project.credit.merchant.repository.MerchantRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.List;
 
 @Service
-public class MerchantServiceImpl implements MerchantService{
+public class MerchantServiceImpl implements MerchantService {
 
-   // private Map <Integer,Merchant> merchantMap = new HashMap<>();
+    @Autowired
+    private MerchantRepository merchantRepository;
 
-   // private final MerchantRepository MerchantRepository;
-
-   /* public MerchantServiceImpl(MerchantRepository merchantRepository) {
-        super();
-        this.MerchantRepository = merchantRepository;
-    }*/
-
-
-    /*@Override
-    public List<Merchant> getAllMerchants() {
-        return MerchantRepository.findAll();
-    }*/
 
     @Override
-    public List<Merchant> getAllMerchants() {
-        return null;
+    public Merchant saveMerchant(Merchant merchant) throws MerchantException{
+        if (merchant == null) {
+            throw new MerchantException("Merchant cannot be null");
+        }
+        return merchantRepository.save(merchant);
     }
 
     @Override
-    public Merchant saveMerchant(Merchant merchant) throws MerchantException {
+    public Merchant getMerchantById(Long merchantId) throws MerchantException {
+        return merchantRepository.findById(merchantId).orElseThrow(() -> new MerchantException("Merchant with id " + merchantId + " not found"));
 
-       // this.merchantMap.put(merchant.getId(),merchant);
-         //return this.productMap.get(product.getId());
-       //return MerchantRepository.save(merchant);
-        return null;
-    }
-
-    @Override
-    public Merchant getMerchantById(Integer id) throws MerchantException {
-        return null;
-        //return MerchantRepository.findById(id).get();
-
-    }
-
-    @Override
-    public Merchant getMerchantByCardNumber(String cardNumber) throws MerchantException {
-        return null;
     }
 
     @Override
     public Merchant updateMerchant(Merchant merchant) throws MerchantException {
-        //return MerchantRepository.save(merchant);
-        return null;
+        Merchant oldMerchant=null;
+        try {
+            oldMerchant = getMerchantById(merchant.getId());
+        } catch (MerchantException e) {
+            throw e;
+        }
+        return merchantRepository.save(merchant);
+
     }
 
     @Override
-    public Merchant deleteMerchant(Integer id) throws MerchantException
-    {
-       // MerchantRepository.deleteById(id);
-        return null;
+    public Merchant deleteMerchantById(Long merchantId) throws MerchantException {
+        Merchant merchant =null;
+        try{
+            merchant=getMerchantById(merchantId);
+        } catch (MerchantException e) {
+            throw e;
+        }
+        merchantRepository.deleteById(merchantId);
+        return merchant;
     }
 
-    public List<Merchant> viewAllMerchant() throws MerchantException
-    {
-
-        return null;
+    @Override
+    public List<Merchant> viewAllMerchants() throws MerchantException {
+        List<Merchant> merchants =merchantRepository.findAll();
+        if (merchants.isEmpty())
+        {
+            throw new MerchantException("No Merchants found");
+        }
+        return merchants;
     }
 
 
 
+    @Override
+    public Merchant getMerchantByCardNumber(String cardNumber) throws MerchantException
+    {
+        return null;
+    }
 
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
