@@ -55,6 +55,9 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer == null) {
             throw new CustomerException("Customer cannot be null");
         }
+        if (customer.getCustomerId() == null) {
+            throw new CustomerException("Customer id cannot be null");
+        }
         getCustomerById(customer.getCustomerId());
         return customerRepository.save(customer);
 
