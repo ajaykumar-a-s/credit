@@ -21,7 +21,7 @@ public interface CreditCardService {
 
     public CreditCard validateCreditCardRequest(Long creditCardRequestId) throws CustomerException, CardException, CreditCardRequestException;
 
-    public CreditCard generateCard(CreditCardRequest creditCardRequest) throws CardException;
+    public CreditCard generateCard(CreditCardRequest creditCardRequest) throws CardException, CustomerException;
 
     public CreditCard updateCreditCard(CreditCard creditCard) throws CardException;
     public  String  generateCardNumber() throws  CardException;

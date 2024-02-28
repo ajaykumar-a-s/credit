@@ -48,23 +48,25 @@ public class TransactionServiceImpl implements TransactionService {
         if (transactionDto.getExpiryDate() == null) {
             throw new TransactionException("Expiry date cannot be empty");
         }
-        if (transactionDto.getCvv() == null || transactionDto.getCvv().isEmpty()) {
+        if (transactionDto.getCvv() == null || transactionDto.getCvv() <= 0){
             throw new TransactionException("CVV cannot be empty");
         }
         CreditCard creditCard = null;
         Merchant merchant = null;
-        try {
-            creditCard = creditCardService.findCreditCardByCardNumber(transactionDto.getFromCardNumber());
-            merchant = merchantService.getMerchantByCardNumber(transactionDto.getToCardNumber());
-        } catch (CardException | MerchantException e) {
-            throw e;
-        }
+        creditCard = creditCardService.findCreditCardByCardNumber(transactionDto.getFromCardNumber());
+        merchant = merchantService.getMerchantByCardNumber(transactionDto.getToCardNumber());
 
         if (transactionDto.getExpiryDate().compareTo(new Date(System.currentTimeMillis())) < 0) {
             throw new CardException("Card has expired");
         }
         if (creditCard.getCurrentLimit() < transactionDto.getAmount()) {
             throw new TransactionException("Insufficient Credit Limit");
+        }
+        if (!creditCard.getCustomer().getName().equals(transactionDto.getFromCardHolderName())) {
+            throw new TransactionException("Card holder name does not match");
+        }
+        if (!creditCard.getCvv().equals(transactionDto.getCvv())) {
+            throw new TransactionException("CVV does not match");
         }
         creditCard.setCurrentLimit(creditCard.getCurrentLimit() - transactionDto.getAmount());
         creditCardService.updateCreditCard(creditCard);
@@ -102,12 +104,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Transaction> getAllTransactionsByCardNumber(String cardNumber) throws CardException, TransactionException {
-        CreditCard creditCard = null;
-        try {
-            creditCard = creditCardService.findCreditCardByCardNumber(cardNumber);
-        } catch (CardException e) {
-            throw e;
-        }
+        CreditCard creditCard = creditCardService.findCreditCardByCardNumber(cardNumber);
         List<Transaction> transactions = transactionRepository.findAllByCreditCard(creditCard);
         if (transactions.isEmpty()) {
             throw new TransactionException("No transactions found");
@@ -123,6 +120,7 @@ public class TransactionServiceImpl implements TransactionService {
         if (startDate.compareTo(endDate) > 0) {
             throw new DateException("Start date cannot be greater than end date");
         }
+        CreditCard creditCard = creditCardService.findCreditCardByCardNumber(cardNumber);
         List<Transaction> transactions = transactionRepository.findAllByDateBetween(startDate, endDate);
         if (transactions.isEmpty()) {
             throw new TransactionException("No transactions found");
