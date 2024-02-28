@@ -87,7 +87,7 @@ public class CreditCardServiceImpl implements CreditCardService {
 
 
     @Override
-    public CreditCard generateCard(CreditCardRequest creditCardRequest) throws CardException {
+    public CreditCard generateCard(CreditCardRequest creditCardRequest) throws CardException, CustomerException {
         CreditCardType creditCardType = null;
         Double income = creditCardRequest.getCustomer().getAnnualIncome() / 12;
         switch ((int) (Math.ceil(income / 100000))) {
@@ -104,14 +104,14 @@ public class CreditCardServiceImpl implements CreditCardService {
                 creditCardType = new CreditCardType("PLATINUM", 400000D, 5D);
                 break;
         }
-        CreditCard creditCard = new CreditCard();
-        creditCard.setCardNumber(generateCardNumber());
-        creditCard.setCvv(generateRandomCvv());
-        creditCard.setValidUpto(getValidUptoDate());
-        creditCard.setCreditCardType(creditCardType);
-        creditCard.setCurrentLimit(creditCardType.getCreditLimit());
+        Customer customer = creditCardRequest.getCustomer();
         creditCardRequest.setStatus("approved");
-        return creditCardRepository.save(creditCard);
+        creditCardRequestRepository.save(creditCardRequest);
+        CreditCard creditCard = new CreditCard(generateCardNumber(), getValidUptoDate(), generateRandomCvv(), creditCardType.getCreditLimit(), customer, creditCardType);
+        creditCardRepository.save(creditCard);
+        customer.setCreditCard(creditCard);
+        customerService.updateCustomer(customer);
+        return customer.getCreditCard();
     }
 
     public Date getValidUptoDate() {

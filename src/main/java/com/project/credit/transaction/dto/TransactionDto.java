@@ -8,7 +8,7 @@ public class TransactionDto {
     private String fromCardNumber;
     private String fromCardHolderName;
     private java.sql.Date expiryDate;
-    private String cvv;
+    private Integer cvv;
     private String toCardNumber;
     private String name;
     private String description;
@@ -17,7 +17,7 @@ public class TransactionDto {
     public TransactionDto() {
     }
 
-    public TransactionDto(String fromCardNumber, String fromCardHolderName, String expiryDate, String cvv, String toCardNumber, String name, String description, Double amount) {
+    public TransactionDto(String fromCardNumber, String fromCardHolderName, String expiryDate, Integer cvv, String toCardNumber, String name, String description, Double amount) {
         this.fromCardNumber = fromCardNumber;
         this.fromCardHolderName = fromCardHolderName;
         this.setExpiryDate(expiryDate);
@@ -63,11 +63,11 @@ public class TransactionDto {
         this.fromCardHolderName = fromCardHolderName;
     }
 
-    public String getCvv() {
+    public Integer getCvv() {
         return cvv;
     }
 
-    public void setCvv(String cvv) {
+    public void setCvv(Integer cvv) {
         this.cvv = cvv;
     }
 
