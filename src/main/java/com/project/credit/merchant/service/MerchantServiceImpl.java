@@ -20,6 +20,16 @@ public class MerchantServiceImpl implements MerchantService {
         if (merchant == null) {
             throw new MerchantException("Merchant cannot be null");
         }
+        if (merchant.getBalance() == null) {
+            throw new MerchantException("Balance cannot be null");
+        }
+        if (merchant.getName() == null || merchant.getName().isEmpty()) {
+            throw new MerchantException("Merchant name cannot be empty");
+        }
+        if (merchant.getCardNumber() == null || merchant.getCardNumber().isEmpty()) {
+            throw new MerchantException("Card number cannot be empty");
+        }
+
         return merchantRepository.save(merchant);
     }
 
@@ -31,24 +41,20 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     public Merchant updateMerchant(Merchant merchant) throws MerchantException {
-        Merchant oldMerchant=null;
-        try {
-            oldMerchant = getMerchantById(merchant.getMerchantId());
-        } catch (MerchantException e) {
-            throw e;
+        if (merchant == null) {
+            throw new MerchantException("Merchant cannot be null");
         }
+        if (merchant.getMerchantId() == null) {
+            throw new MerchantException("Merchant id cannot be null");
+        }
+        getMerchantById(merchant.getMerchantId());
         return merchantRepository.save(merchant);
 
     }
 
     @Override
     public Merchant deleteMerchantById(Long merchantId) throws MerchantException {
-        Merchant merchant =null;
-        try{
-            merchant=getMerchantById(merchantId);
-        } catch (MerchantException e) {
-            throw e;
-        }
+        Merchant merchant=getMerchantById(merchantId);
         merchantRepository.deleteById(merchantId);
         return merchant;
     }
