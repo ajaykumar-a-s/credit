@@ -48,13 +48,11 @@ public class TransactionServiceImpl implements TransactionService {
         if (transactionDto.getExpiryDate() == null) {
             throw new TransactionException("Expiry date cannot be empty");
         }
-        if (transactionDto.getCvv() == null || transactionDto.getCvv() <= 0){
+        if (transactionDto.getCvv() == null || transactionDto.getCvv() <= 0) {
             throw new TransactionException("CVV cannot be empty");
         }
-        CreditCard creditCard = null;
-        Merchant merchant = null;
-        creditCard = creditCardService.findCreditCardByCardNumber(transactionDto.getFromCardNumber());
-        merchant = merchantService.getMerchantByCardNumber(transactionDto.getToCardNumber());
+        CreditCard creditCard = creditCardService.findCreditCardByCardNumber(transactionDto.getFromCardNumber());
+        Merchant merchant = merchantService.getMerchantByCardNumber(transactionDto.getToCardNumber());
 
         if (transactionDto.getExpiryDate().compareTo(new Date(System.currentTimeMillis())) < 0) {
             throw new CardException("Card has expired");
@@ -120,7 +118,7 @@ public class TransactionServiceImpl implements TransactionService {
         if (startDate.compareTo(endDate) > 0) {
             throw new DateException("Start date cannot be greater than end date");
         }
-        CreditCard creditCard = creditCardService.findCreditCardByCardNumber(cardNumber);
+        creditCardService.findCreditCardByCardNumber(cardNumber);
         List<Transaction> transactions = transactionRepository.findAllByDateBetween(startDate, endDate);
         if (transactions.isEmpty()) {
             throw new TransactionException("No transactions found");
