@@ -1,10 +1,13 @@
 package com.project.credit.card.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.credit.bill.entity.Bill;
+import com.project.credit.customer.entity.Customer;
 import com.project.credit.transaction.entity.Transaction;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,11 @@ public class CreditCard {
     private Integer cvv;
 
     private Double currentLimit;
+    private Date cardCreatedOn;
+
+    @OneToOne
+    @JsonIgnore
+    private Customer customer;
 
 
     @Embedded
@@ -34,10 +42,13 @@ public class CreditCard {
     public CreditCard() {
     }
 
-    public CreditCard(String cardNumber, Date validUpto, Integer cvv, CreditCardType creditCardType) {
+    public CreditCard(String cardNumber, Date validUpto, Integer cvv, Double currentLimit, Customer customer, CreditCardType creditCardType) {
         this.cardNumber = cardNumber;
         this.validUpto = validUpto;
         this.cvv = cvv;
+        this.currentLimit = currentLimit;
+        this.cardCreatedOn = Date.valueOf(LocalDate.now());
+        this.customer = customer;
         this.creditCardType = creditCardType;
     }
 
@@ -106,4 +117,19 @@ public class CreditCard {
         this.currentLimit = currentLimit;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Date getCardCreatedOn() {
+        return cardCreatedOn;
+    }
+
+    public void setCardCreatedOn(Date cardCreatedOn) {
+        this.cardCreatedOn = cardCreatedOn;
+    }
 }

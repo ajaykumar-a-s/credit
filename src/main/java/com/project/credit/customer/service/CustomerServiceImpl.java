@@ -19,6 +19,27 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer == null) {
             throw new CustomerException("Customer cannot be null");
         }
+        if (customer.getName() == null || customer.getName().isEmpty()) {
+            throw new CustomerException("Customer name cannot be null");
+        }
+        if (customer.getEmail() == null || customer.getEmail().isEmpty()) {
+            throw new CustomerException("Customer email cannot be null");
+        }
+        if (customer.getPassword() == null || customer.getPassword().isEmpty()) {
+            throw new CustomerException("Customer password cannot be null");
+        }
+        if (customer.getPhone() == null || customer.getPhone().isEmpty()) {
+            throw new CustomerException("Customer phone cannot be null");
+        }
+        if (customer.getAddress() == null || customer.getAddress().isEmpty()) {
+            throw new CustomerException("Customer address cannot be null");
+        }
+        if (customer.getDateOfBirth() == null) {
+            throw new CustomerException("Customer date of birth cannot be null");
+        }
+        if (customer.getAnnualIncome() == null) {
+            throw new CustomerException("Customer annual income cannot be null");
+        }
         return customerRepository.save(customer);
     }
 
@@ -31,12 +52,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer updateCustomer(Customer customer) throws CustomerException {
-        Customer oldCustomer=null;
-        try {
-             oldCustomer = getCustomerById(customer.getCustomerId());
-        } catch (CustomerException e) {
-            throw e;
+        if (customer == null) {
+            throw new CustomerException("Customer cannot be null");
         }
+        if (customer.getCustomerId() == null) {
+            throw new CustomerException("Customer id cannot be null");
+        }
+        getCustomerById(customer.getCustomerId());
         return customerRepository.save(customer);
 
     }
@@ -44,12 +66,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer deleteCustomerById(Long customerId) throws CustomerException {
-        Customer customer=null;
-        try{
-            customer=getCustomerById(customerId);
-        } catch (CustomerException e) {
-            throw e;
-        }
+        Customer customer = getCustomerById(customerId);
         customerRepository.deleteById(customerId);
         return customer;
     }
