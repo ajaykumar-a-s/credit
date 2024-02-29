@@ -43,13 +43,18 @@ public class BillServiceImpl implements BillService {
         Date dueDate = Date.valueOf(currentDate.withDayOfMonth(15));
 
 
+        creditCardByCardNumber=creditCardService.findCreditCardByCardNumber(cardNumber);
+        LocalDate cardCreatedDate = creditCardByCardNumber.getCardCreatedOn().toLocalDate();
+        if(cardCreatedDate.getMonth().compareTo(currentDate.getMonth())==0)
+        {
+            throw new BillException("You have to use your Credit Card for atleast one month to generate bill.");
+        }
        List<Bill> bills = creditCardService.getBillByCardNumber(cardNumber);
-           if( bills.get(bills.size()-1).getBillGeneratedDate().toLocalDate().getMonth().compareTo(currentDate.getMonth())==0){
-              return bills.get(bills.size()-1);
-           }
+        if (bills.get(bills.size() - 1).getBillGeneratedDate().toLocalDate().getMonth().compareTo(currentDate.getMonth()) == 0) {
+                    return bills.get(bills.size() - 1);
+        }
 
-
-         transactionsOfMonth=  transactionService.getAllTransactionsByCardNumberForParticularDuration(cardNumber,firstDateOfMonth,lastDateOfMonth);
+        transactionsOfMonth=  transactionService.getAllTransactionsByCardNumberForParticularDuration(cardNumber,firstDateOfMonth,lastDateOfMonth);
 
          for (Transaction list :transactionsOfMonth) {
               amountToBePaid +=list.getAmount();
@@ -69,6 +74,7 @@ public class BillServiceImpl implements BillService {
     public Bill billPayment(String cardNumber) throws BillException, CardException, TransactionException {
     creditCardByCardNumber= creditCardService.findCreditCardByCardNumber(cardNumber);
         List<Bill> bills = creditCardService.getBillByCardNumber(cardNumber);
+        if(bills!=null)
         if( bills.get(bills.size()-1).isPaid()==false)
        {
            bills.get(bills.size()-1).setPaid(true);
