@@ -6,7 +6,10 @@ import com.project.credit.customer.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Service
@@ -40,6 +43,27 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer.getAnnualIncome() == null) {
             throw new CustomerException("Customer annual income cannot be null");
         }
+        if (!customer.getEmail().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
+            throw new CustomerException("Invalid email format");
+        }
+        String customerPassword = customer.getPassword();
+        if (customerPassword.length() < 8 && customerPassword.equals(customerPassword.toLowerCase()) && customerPassword.equals(customerPassword.toUpperCase()) && customerPassword.matches(".*\\d.*") && !customerPassword.matches("[a-zA-Z0-9 ]*")) {
+            throw new CustomerException("Password is in invalid format");
+        }
+        if (customer.getPhone().matches("^[6-9]\\d{9}$")){
+            throw new CustomerException("Phone number is in valid format");
+        }
+        if (customer.getDateOfBirth().compareTo(new Date(System.currentTimeMillis())) > 0){
+            throw new CustomerException("DOB cannot be in future");
+        }
+        if (new Date(System.currentTimeMillis()).getYear() - customer.getDateOfBirth().getYear() < 18){
+            throw new CustomerException("You should be greater than 18 years");
+        }
+        if (new Date(System.currentTimeMillis()).getYear() - customer.getDateOfBirth().getYear() > 100){
+            throw new CustomerException("Age should be below 100");
+        }
+
+
         return customerRepository.save(customer);
     }
 
@@ -73,9 +97,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> viewAllCustomers() throws CustomerException {
-        List<Customer> customers =customerRepository.findAll();
-        if (customers.isEmpty())
-        {
+        List<Customer> customers = customerRepository.findAll();
+        if (customers.isEmpty()) {
             throw new CustomerException("No customers found");
         }
         return customers;
