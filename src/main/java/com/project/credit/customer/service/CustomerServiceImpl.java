@@ -50,8 +50,8 @@ public class CustomerServiceImpl implements CustomerService {
         if (customerPassword.length() < 8 && customerPassword.equals(customerPassword.toLowerCase()) && customerPassword.equals(customerPassword.toUpperCase()) && customerPassword.matches(".*\\d.*") && !customerPassword.matches("[a-zA-Z0-9 ]*")) {
             throw new CustomerException("Password is in invalid format");
         }
-        if (customer.getPhone().matches("^[6-9]\\d{9}$")){
-            throw new CustomerException("Phone number is in valid format");
+        if (!customer.getPhone().matches("^[6-9]\\d{9}$")){
+            throw new CustomerException("Phone number is invalid format");
         }
         if (customer.getDateOfBirth().compareTo(new Date(System.currentTimeMillis())) > 0){
             throw new CustomerException("DOB cannot be in future");
