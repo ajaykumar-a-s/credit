@@ -52,9 +52,14 @@ public class CreditCardServiceImpl implements CreditCardService {
     }
 
     @Override
-    public List<CreditCardRequest> getRequestedCardList() throws CardException {
+    public List<CreditCardRequest> getRequestedCardList() throws CreditCardRequestException {
 
-        return creditCardRequestRepository.findAllByStatus("requested");
+
+        List<CreditCardRequest> creditCardRequests = creditCardRequestRepository.findAllByStatus("requested");
+        if (creditCardRequests.isEmpty()) {
+            throw new CreditCardRequestException("No requests found");
+        }
+        return creditCardRequests;
 
 
     }
@@ -88,7 +93,7 @@ public class CreditCardServiceImpl implements CreditCardService {
 
     @Override
     public CreditCard generateCard(CreditCardRequest creditCardRequest) throws CardException, CustomerException {
-        CreditCardType creditCardType = null;
+        CreditCardType creditCardType;
         Double income = creditCardRequest.getCustomer().getAnnualIncome() / 12;
         switch ((int) (Math.ceil(income / 100000))) {
             case 1:
@@ -126,21 +131,19 @@ public class CreditCardServiceImpl implements CreditCardService {
     @Override
     public CreditCard findCreditCardByCardNumber(String cardNumber) throws CardException {
         CreditCard creditCard = creditCardRepository.findByCardNumber(cardNumber);
-        if (creditCard == null)
-            throw new CardException("Credit Card not found in database");
+        if (creditCard == null) throw new CardException("Credit Card not found in database");
 
         return creditCard;
 
     }
 
-    public String generateCardNumber() throws CardException {
+    public String generateCardNumber() {
 
 
         String cardNumber;
         do {
             cardNumber = generateNextCardNumber();
-        }
-        while (creditCardRepository.existsByCardNumber(cardNumber));
+        } while (creditCardRepository.existsByCardNumber(cardNumber));
 
         return cardNumber;
 
@@ -159,10 +162,11 @@ public class CreditCardServiceImpl implements CreditCardService {
 
     @Override
     public List<CreditCard> getCardList() throws CardException {
-
-        return creditCardRepository.findAll();
-
-
+        List<CreditCard> creditCards = creditCardRepository.findAll();
+        if (creditCards.isEmpty()) {
+            throw new CardException("No credit cards found in database");
+        }
+        return creditCards;
     }
 
 
@@ -175,6 +179,11 @@ public class CreditCardServiceImpl implements CreditCardService {
 
     @Override
     public List<Bill> getBillByCardNumber(String cardNumber) throws CardException, BillException {
-        return creditCardRepository.findAllBillsByCardNumber(cardNumber);
+        findCreditCardByCardNumber(cardNumber);
+        List<Bill> bills = creditCardRepository.findAllBillsByCardNumber(cardNumber);
+        if (bills.isEmpty()){
+            throw new BillException("No bills found for the given card number");
+        }
+        return bills;
     }
 }
