@@ -39,7 +39,7 @@ public class BillServiceImpl implements BillService {
         LocalDate currentDate=LocalDate.now();
         LocalDate lastMonthDate = currentDate.minusMonths(1);
         Date firstDateOfMonth = Date.valueOf(lastMonthDate.withDayOfMonth(1));
-        Date lastDateOfMonth = Date.valueOf(lastMonthDate.withDayOfMonth(currentDate.lengthOfMonth()));
+        Date lastDateOfMonth = Date.valueOf(lastMonthDate.withDayOfMonth(lastMonthDate.lengthOfMonth()));
         Date dueDate = Date.valueOf(currentDate.withDayOfMonth(15));
 
 
@@ -50,7 +50,8 @@ public class BillServiceImpl implements BillService {
             throw new BillException("You have to use your Credit Card for atleast one month to generate bill.");
         }
        List<Bill> bills = creditCardService.getBillByCardNumber(cardNumber);
-        if (bills.get(bills.size() - 1).getBillGeneratedDate().toLocalDate().getMonth().compareTo(currentDate.getMonth()) == 0) {
+        if(!bills.isEmpty())
+            if (bills.get(bills.size() - 1).getBillGeneratedDate().toLocalDate().getMonth().compareTo(currentDate.getMonth()) == 0) {
                     return bills.get(bills.size() - 1);
         }
 
@@ -74,12 +75,14 @@ public class BillServiceImpl implements BillService {
     public Bill billPayment(String cardNumber) throws BillException, CardException, TransactionException {
     creditCardByCardNumber= creditCardService.findCreditCardByCardNumber(cardNumber);
         List<Bill> bills = creditCardService.getBillByCardNumber(cardNumber);
-        if(bills!=null)
-        if( bills.get(bills.size()-1).isPaid()==false)
-       {
-           bills.get(bills.size()-1).setPaid(true);
-            creditCardByCardNumber.setCurrentLimit(creditCardByCardNumber.getCreditCardType().getCreditLimit());
-
+        if(!bills.isEmpty()) {
+            if (bills.get(bills.size() - 1).isPaid()) {
+                throw new BillException("You have paid all the bills");
+            }
+            else {
+                bills.get(bills.size() - 1).setPaid(true);
+                creditCardByCardNumber.setCurrentLimit(creditCardByCardNumber.getCreditCardType().getCreditLimit());
+            }
         }
         Transaction creditTransaction = new Transaction("Bill Payment","Credit Recharge",amountToBePaid,creditCardByCardNumber,null);
         creditTransaction.setType("Credit");

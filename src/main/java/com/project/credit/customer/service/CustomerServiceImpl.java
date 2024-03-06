@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new CustomerException("Invalid email format");
         }
         String customerPassword = customer.getPassword();
-        if (customerPassword.length() < 8 && customerPassword.equals(customerPassword.toLowerCase()) && customerPassword.equals(customerPassword.toUpperCase()) && customerPassword.matches(".*\\d.*") && !customerPassword.matches("[a-zA-Z0-9 ]*")) {
+        if (customerPassword.length() < 8 || customerPassword.equals(customerPassword.toLowerCase()) || customerPassword.equals(customerPassword.toUpperCase()) || !customerPassword.matches(".*\\d.*") || customerPassword.matches("[a-zA-Z0-9 ]*")) {
             throw new CustomerException("Password is in invalid format");
         }
         if (!customer.getPhone().matches("^[6-9]\\d{9}$")){
