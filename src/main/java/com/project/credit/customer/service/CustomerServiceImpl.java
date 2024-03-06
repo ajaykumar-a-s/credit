@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 @Service
@@ -47,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new CustomerException("Invalid email format");
         }
         String customerPassword = customer.getPassword();
-        if (customerPassword.length() < 8 && customerPassword.equals(customerPassword.toLowerCase()) && customerPassword.equals(customerPassword.toUpperCase()) && customerPassword.matches(".*\\d.*") && !customerPassword.matches("[a-zA-Z0-9 ]*")) {
+        if (customerPassword.length() < 8 || customerPassword.equals(customerPassword.toLowerCase()) || customerPassword.equals(customerPassword.toUpperCase()) || !customerPassword.matches(".*\\d.*") || customerPassword.matches("[a-zA-Z0-9 ]*")) {
             throw new CustomerException("Password is in invalid format");
         }
         if (!customer.getPhone().matches("^[6-9]\\d{9}$")){
@@ -62,7 +60,15 @@ public class CustomerServiceImpl implements CustomerService {
         if (new Date(System.currentTimeMillis()).getYear() - customer.getDateOfBirth().getYear() > 100){
             throw new CustomerException("Age should be below 100");
         }
-
+        if(customer.getAnnualIncome() < 0){
+            throw new CustomerException("Annual income cannot be negative");
+        }
+        if (customerRepository.findByEmail(customer.getEmail()) != null) {
+            throw new CustomerException("Customer with email " + customer.getEmail() + " already exists");
+        }
+        if (customerRepository.findByPhone(customer.getPhone()) != null) {
+            throw new CustomerException("Customer with phone " + customer.getPhone() + " already exists");
+        }
 
         return customerRepository.save(customer);
     }

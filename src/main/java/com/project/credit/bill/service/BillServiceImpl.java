@@ -77,12 +77,14 @@ public class BillServiceImpl implements BillService {
     public Bill billPayment(String cardNumber) throws BillException, CardException, TransactionException {
     creditCardByCardNumber= creditCardService.findCreditCardByCardNumber(cardNumber);
         List<Bill> bills = creditCardService.getBillByCardNumber(cardNumber);
-        if(bills!=null)
-        if( bills.get(bills.size()-1).isPaid()==false)
-       {
-           bills.get(bills.size()-1).setPaid(true);
-            creditCardByCardNumber.setCurrentLimit(creditCardByCardNumber.getCreditCardType().getCreditLimit());
-
+        if(!bills.isEmpty()) {
+            if (bills.get(bills.size() - 1).isPaid()) {
+                throw new BillException("You have paid all the bills");
+            }
+            else {
+                bills.get(bills.size() - 1).setPaid(true);
+                creditCardByCardNumber.setCurrentLimit(creditCardByCardNumber.getCreditCardType().getCreditLimit());
+            }
         }
         Transaction creditTransaction = new Transaction("Bill Payment","Credit Recharge",amountToBePaid,creditCardByCardNumber,null);
         creditTransaction.setType("Credit");

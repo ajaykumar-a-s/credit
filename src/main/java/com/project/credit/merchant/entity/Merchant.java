@@ -15,6 +15,7 @@ public class Merchant {
     private String email;
 
     private String password;
+    @Column(unique = true)
     private String phone;
     private String address;
 

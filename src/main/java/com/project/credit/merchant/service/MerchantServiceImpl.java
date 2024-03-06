@@ -29,6 +29,40 @@ public class MerchantServiceImpl implements MerchantService {
         if (merchant.getCardNumber() == null || merchant.getCardNumber().isEmpty()) {
             throw new MerchantException("Card number cannot be empty");
         }
+        if (merchant.getCardNumber().length() != 16) {
+            throw new MerchantException("Card number should be 16 digits");
+        }
+        if (!merchant.getCardNumber().matches("[0-9]+")) {
+            throw new MerchantException("Card number should contain only digits");
+        }
+        if (merchant.getEmail() == null || merchant.getEmail().isEmpty()) {
+            throw new MerchantException("Email cannot be empty");
+        }
+        if (!merchant.getEmail().matches("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")) {
+            throw new MerchantException("Invalid email");
+        }
+        if (merchant.getPhone() == null || merchant.getPhone().isEmpty()) {
+            throw new MerchantException("Phone number cannot be empty");
+        }
+        if (merchant.getPhone().length() != 10) {
+            throw new MerchantException("Phone number should be 10 digits");
+        }
+        if (!merchant.getPhone().matches("[0-9]+")) {
+            throw new MerchantException("Phone number should contain only digits");
+        }
+        if (merchant.getAddress() == null || merchant.getAddress().isEmpty()) {
+            throw new MerchantException("Address cannot be empty");
+        }
+        if (merchant.getPassword() == null || merchant.getPassword().isEmpty()) {
+            throw new MerchantException("Password cannot be empty");
+        }
+        if (merchantRepository.findByEmail(merchant.getEmail()) != null) {
+            throw new MerchantException("Merchant with email " + merchant.getEmail() + " already exists");
+        }
+        if (merchantRepository.findByCardNumber(merchant.getCardNumber()) != null) {
+            throw new MerchantException("Merchant with card number " + merchant.getCardNumber() + " already exists");
+        }
+
 
         return merchantRepository.save(merchant);
     }
