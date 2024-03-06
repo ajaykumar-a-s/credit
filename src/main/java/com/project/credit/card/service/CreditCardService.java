@@ -17,7 +17,7 @@ public interface CreditCardService {
 
     public CreditCardRequest requestCard(Long customerId) throws CustomerException, CreditCardRequestException;
 
-    public List<CreditCardRequest> getRequestedCardList() throws CardException;
+    public List<CreditCardRequest> getRequestedCardList() throws CreditCardRequestException;
 
     public CreditCard validateCreditCardRequest(Long creditCardRequestId) throws CustomerException, CardException, CreditCardRequestException;
 
