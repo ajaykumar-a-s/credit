@@ -6,6 +6,7 @@ import com.project.credit.merchant.repository.MerchantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -56,8 +57,23 @@ public class MerchantServiceImpl implements MerchantService {
         if (merchant.getPassword() == null || merchant.getPassword().isEmpty()) {
             throw new MerchantException("Password cannot be empty");
         }
+        if (merchant.getDateOfBirth() == null) {
+            throw new MerchantException("Date of birth cannot be empty");
+        }
+        if (merchant.getDateOfBirth().compareTo(new Date(System.currentTimeMillis())) > 0) {
+            throw new MerchantException("Date of birth cannot be in future");
+        }
+        if (new Date(System.currentTimeMillis()).getYear() - merchant.getDateOfBirth().getYear() < 18) {
+            throw new MerchantException("Age should be greater than 18");
+        }
+        if (new Date(System.currentTimeMillis()).getYear() - merchant.getDateOfBirth().getYear() > 100) {
+            throw new MerchantException("Age should be less than 100");
+        }
         if (merchantRepository.findByEmail(merchant.getEmail()) != null) {
             throw new MerchantException("Merchant with email " + merchant.getEmail() + " already exists");
+        }
+        if (merchantRepository.findByPhone(merchant.getPhone()) != null) {
+            throw new MerchantException("Merchant with phone number " + merchant.getPhone() + " already exists");
         }
         if (merchantRepository.findByCardNumber(merchant.getCardNumber()) != null) {
             throw new MerchantException("Merchant with card number " + merchant.getCardNumber() + " already exists");

@@ -169,6 +169,15 @@ public class CreditCardServiceImpl implements CreditCardService {
         return creditCards;
     }
 
+    @Override
+    public CreditCard deleteCreditCardByCardNumber(String cardNumber) throws CardException, CustomerException {
+        CreditCard creditCard = findCreditCardByCardNumber(cardNumber);
+        creditCard.getCustomer().setCreditCard(null);
+        customerService.updateCustomer(creditCard.getCustomer());
+        creditCardRepository.delete(creditCard);
+        return creditCard;
+    }
+
 
     @Override
     public CreditCard updateCreditCard(CreditCard creditCard) throws CardException {
