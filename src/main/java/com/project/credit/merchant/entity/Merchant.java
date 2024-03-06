@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
+import java.util.Date;
+
 @Entity
 public class Merchant {
     @Id
@@ -18,6 +20,7 @@ public class Merchant {
     @Column(unique = true)
     private String phone;
     private String address;
+    private Date dateOfBirth;
 
     private Double balance;
     @Column(unique = true)
@@ -26,12 +29,13 @@ public class Merchant {
     public Merchant() {
     }
 
-    public Merchant(String name, String email, String password, String phone, String address, String cardNumber) {
+    public Merchant(String name, String email, String password, String phone, String address, Date dateOfBirth, String cardNumber) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.address = address;
+        this.dateOfBirth = dateOfBirth;
         this.cardNumber = cardNumber;
     }
 
@@ -97,5 +101,13 @@ public class Merchant {
 
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }
