@@ -179,6 +179,7 @@ public class CreditCardServiceImpl implements CreditCardService {
 
     @Override
     public List<Bill> getBillByCardNumber(String cardNumber) throws CardException, BillException {
+
         findCreditCardByCardNumber(cardNumber);
         List<Bill> bills = creditCardRepository.findAllBillsByCardNumber(cardNumber);
         if (bills.isEmpty()){
