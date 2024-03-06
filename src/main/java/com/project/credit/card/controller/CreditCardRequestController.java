@@ -26,7 +26,11 @@ public class CreditCardRequestController {
     @GetMapping("/requestlist")
     public List<CreditCardRequest> getRequestedCardList() throws CardException
     {
-        return creditCardService.getRequestedCardList();
+        try {
+            return creditCardService.getRequestedCardList();
+        } catch (com.project.credit.card.exception.CreditCardRequestException e) {
+            throw new RuntimeException(e);
+        }
     }
     @PostMapping("/validate/{id}")
     public CreditCard validateCustomer(@PathVariable("id") Long customerId) throws CustomerException, CardException {

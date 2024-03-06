@@ -31,7 +31,7 @@ public class BillServiceImpl implements BillService {
 
     private List<Transaction> transactionsOfMonth= new ArrayList<>();
     private CreditCard creditCardByCardNumber =null;
-    private  Double amountToBePaid = null;
+    private  Double amountToBePaid = 0.0;
 
     @Override
     public Bill autoGenerateBillForMonth(String cardNumber) throws BillException, TransactionException, DateException, CardException {
@@ -51,7 +51,7 @@ public class BillServiceImpl implements BillService {
         }
        List<Bill> bills = creditCardService.getBillByCardNumber(cardNumber);
         if(!bills.isEmpty())
-            if (bills.get(bills.size() - 1).getBillGeneratedDate().toLocalDate().getMonth().compareTo(currentDate.getMonth()) == 0) {
+        if (bills.get(bills.size() - 1).getBillGeneratedDate().toLocalDate().getMonth().compareTo(currentDate.getMonth()) == 0) {
                     return bills.get(bills.size() - 1);
         }
 
@@ -64,7 +64,9 @@ public class BillServiceImpl implements BillService {
         if(transactionsOfMonth==null) {
            throw new BillException("You didn't use your Credit Card, So no bill is genertated.");
               }
-        return billRepository.save(new Bill( cardNumber, transactionsOfMonth, amountToBePaid,Date.valueOf(currentDate), dueDate, false));
+        Bill newBill = new Bill( cardNumber, transactionsOfMonth, amountToBePaid,Date.valueOf(currentDate), dueDate, false);
+        creditCardByCardNumber.getBills().add(newBill);
+        return billRepository.save(newBill);
 
     }
 
