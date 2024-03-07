@@ -9,6 +9,7 @@ import com.project.credit.card.exception.CardException;
 import com.project.credit.card.exception.CreditCardRequestException;
 import com.project.credit.card.repository.CreditCardRepository;
 import com.project.credit.card.repository.CreditCardRequestRepository;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 import com.project.credit.customer.entity.Customer;
 import com.project.credit.customer.exception.CustomerException;
@@ -29,6 +30,7 @@ public class CreditCardServiceImpl implements CreditCardService {
     private CreditCardRepository creditCardRepository;
     @Autowired
     private CustomerService customerService;
+
     @Autowired
     private CreditCardRequestRepository creditCardRequestRepository;
 
@@ -177,6 +179,23 @@ public class CreditCardServiceImpl implements CreditCardService {
         return creditCard;
     }
 
+    @Override
+    public CreditCardRequest deleteCreditCardRequestById(Long creditCardRequestId) throws CreditCardRequestException {
+
+        CreditCardRequest creditCardRequest=getCreditCardRequestById(creditCardRequestId);
+        creditCardRequestRepository.delete(creditCardRequest);
+
+        return null;
+    }
+
+    @Override
+    public CreditCardRequest getCreditCardRequestById(Long creditCardRequestId) throws CreditCardRequestException {
+        CreditCardRequest creditCardRequest=creditCardRequestRepository.findById(creditCardRequestId).orElse(null);
+        if(creditCardRequest==null)
+            throw new CreditCardRequestException("No such request found");
+        return creditCardRequest;
+    }
+
 
     @Override
     public CreditCard updateCreditCard(CreditCard creditCard) throws CardException {
@@ -195,4 +214,5 @@ public class CreditCardServiceImpl implements CreditCardService {
         }
         return bills;
     }
+
 }
