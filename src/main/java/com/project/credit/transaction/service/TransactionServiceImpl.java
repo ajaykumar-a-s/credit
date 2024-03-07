@@ -125,4 +125,11 @@ public class TransactionServiceImpl implements TransactionService {
         }
         return transactions;
     }
+
+    @Override
+    public Transaction deleteTransactionById(Long id) throws TransactionException {
+        Transaction transaction = getTransactionById(id);
+        transactionRepository.deleteById(id);
+        return transaction;
+    }
 }

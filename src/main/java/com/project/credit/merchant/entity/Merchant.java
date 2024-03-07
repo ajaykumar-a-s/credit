@@ -29,13 +29,14 @@ public class Merchant {
     public Merchant() {
     }
 
-    public Merchant(String name, String email, String password, String phone, String address, Date dateOfBirth, String cardNumber) {
+    public Merchant(String name, String email, String password, String phone, String address, Date dateOfBirth, Double balance, String cardNumber) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.address = address;
         this.dateOfBirth = dateOfBirth;
+        this.balance = balance;
         this.cardNumber = cardNumber;
     }
 
