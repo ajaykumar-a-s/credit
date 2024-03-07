@@ -48,8 +48,8 @@ class TransactionServiceTests {
         merchantService.saveMerchant(merchant);
         creditCardRequest = creditCardService.requestCard(customer.getCustomerId());
         creditCard = creditCardService.validateCreditCardRequest(creditCardRequest.getCreditCardRequestId());
-        transactionDto1 = new TransactionDto(customer.getCreditCard().getCardNumber(), "John Doe", "12/25", 123, "1234567890123456", "Amazon", "Test Transaction", 100.0);
-        transactionDto2 = new TransactionDto(customer.getCreditCard().getCardNumber(), "John Doe", "12/25", 123, "1234567890123456", "Amazon", "Test Transaction", 1000000.0);
+        transactionDto1 = new TransactionDto(customer.getCreditCard().getCardNumber(), "John Doe", "12/25", customer.getCreditCard().getCvv(), "1234567890123456", "Amazon", "Test Transaction", 100.0);
+        transactionDto2 = new TransactionDto(customer.getCreditCard().getCardNumber(), "John Doe", "12/25", customer.getCreditCard().getCvv(), "1234567890123456", "Amazon", "Test Transaction", 200000.0);
 
     }
 
@@ -94,6 +94,5 @@ class TransactionServiceTests {
             System.out.println(e.getMessage());
         }
     }
-    @Test
 
 }
