@@ -75,9 +75,9 @@ public class CreditCardServiceImpl implements CreditCardService {
         }
         Customer customer = creditCardRequest.getCustomer();
 
-        Double income = customer.getAnnualIncome() / 12;
+        Double annualIncome = customer.getAnnualIncome();
 
-        if (income < 100000) {
+        if (annualIncome < 400000) {
             creditCardRequest.setStatus("rejected");
             creditCardRequestRepository.save(creditCardRequest);
             throw new CustomerException("Not eligible");
@@ -92,23 +92,21 @@ public class CreditCardServiceImpl implements CreditCardService {
 
 
     @Override
-    public CreditCard generateCard(CreditCardRequest creditCardRequest) throws CardException, CustomerException {
-        CreditCardType creditCardType;
-        Double income = creditCardRequest.getCustomer().getAnnualIncome() / 12;
-        switch ((int) (Math.ceil(income / 100000))) {
-            case 1:
-                creditCardType = new CreditCardType("BRONZE", 100000D, 10D);
-                break;
-            case 2:
-                creditCardType = new CreditCardType("SILVER", 200000D, 8D);
-                break;
-            case 3:
-                creditCardType = new CreditCardType("GOLD", 300000D, 7D);
-                break;
-            default:
-                creditCardType = new CreditCardType("PLATINUM", 400000D, 5D);
-                break;
+    public CreditCard generateCard(CreditCardRequest creditCardRequest) throws CustomerException {
+        CreditCardType creditCardType = null;
+        Double annualIncome = creditCardRequest.getCustomer().getAnnualIncome();
+        if (annualIncome > 400000) {
+            if (annualIncome < 600000) {
+                creditCardType = new CreditCardType("BRONZE", 30000D, 10D);
+            } else if (annualIncome < 800000) {
+                creditCardType = new CreditCardType("SILVER", 50000D, 8D);
+            } else if (annualIncome < 1200000) {
+                creditCardType = new CreditCardType("GOLD", 60000D, 7D);
+            } else {
+                creditCardType = new CreditCardType("PLATINUM", 100000D, 5D);
+            }
         }
+
         Customer customer = creditCardRequest.getCustomer();
         CreditCard creditCard = new CreditCard(generateCardNumber(), getValidUptoDate(), generateRandomCvv(), creditCardType.getCreditLimit(), customer, creditCardType);
         creditCardRepository.save(creditCard);
@@ -192,7 +190,7 @@ public class CreditCardServiceImpl implements CreditCardService {
 
         findCreditCardByCardNumber(cardNumber);
         List<Bill> bills = creditCardRepository.findAllBillsByCardNumber(cardNumber);
-        if (bills.isEmpty()){
+        if (bills.isEmpty()) {
             throw new BillException("No bills found for the given card number");
         }
         return bills;
