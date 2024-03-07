@@ -110,13 +110,14 @@ public class CreditCardServiceImpl implements CreditCardService {
                 break;
         }
         Customer customer = creditCardRequest.getCustomer();
-        creditCardRequest.setStatus("approved");
-        creditCardRequestRepository.save(creditCardRequest);
         CreditCard creditCard = new CreditCard(generateCardNumber(), getValidUptoDate(), generateRandomCvv(), creditCardType.getCreditLimit(), customer, creditCardType);
         creditCardRepository.save(creditCard);
         customer.setCreditCard(creditCard);
         customerService.updateCustomer(customer);
+        creditCardRequest.setStatus("approved");
+        creditCardRequestRepository.save(creditCardRequest);
         return customer.getCreditCard();
+
     }
 
     public Date getValidUptoDate() {
