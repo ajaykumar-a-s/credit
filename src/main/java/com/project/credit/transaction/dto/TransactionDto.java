@@ -1,5 +1,7 @@
 package com.project.credit.transaction.dto;
 
+import com.project.credit.transaction.exception.DateException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,7 +22,11 @@ public class TransactionDto {
     public TransactionDto(String fromCardNumber, String fromCardHolderName, String expiryDate, Integer cvv, String toCardNumber, String name, String description, Double amount) {
         this.fromCardNumber = fromCardNumber;
         this.fromCardHolderName = fromCardHolderName;
-        this.setExpiryDate(expiryDate);
+        try {
+            this.setExpiryDate(expiryDate);
+        } catch (DateException e) {
+            throw new RuntimeException(e);
+        }
         this.cvv = cvv;
         this.toCardNumber = toCardNumber;
         this.name = name;
@@ -29,13 +35,13 @@ public class TransactionDto {
     }
 
 
-    public void setExpiryDate(String expiryDate) {
+    public void setExpiryDate(String expiryDate) throws DateException {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/yy");
         java.util.Date date = null;
         try {
             date = sdf.parse(expiryDate);
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new DateException("Invalid date format. Please use MM/yy format.");
         }
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
