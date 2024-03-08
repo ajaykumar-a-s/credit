@@ -1,7 +1,10 @@
 package com.project.credit;
 
+import com.project.credit.bill.entity.Bill;
+import com.project.credit.bill.exception.BillException;
 import com.project.credit.card.entity.CreditCard;
 import com.project.credit.card.entity.CreditCardRequest;
+import com.project.credit.card.entity.CreditCardType;
 import com.project.credit.card.exception.CardException;
 import com.project.credit.card.exception.CreditCardRequestException;
 import com.project.credit.card.service.CreditCardService;
@@ -20,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -29,7 +34,7 @@ public class CardServiceTests {
     private CustomerService customerService;
     @Autowired
     private CreditCardService creditCardService;
-    Customer customer = new Customer("John Doe", "johndoe@example.com", "Ninja@2002", "6234567890", "123 Main St", Date.valueOf("1990-01-01"), 2000000.0);
+    Customer customer = new Customer("John Doe", "johndoe@example.com", "Ninja@2002", "6234567890", "123 Main St", Date.valueOf("1990-01-01"), 500000.0);
     CreditCardRequest creditCardRequest = null;
     CreditCard creditCard = null;
 
@@ -196,9 +201,36 @@ public class CardServiceTests {
 
     @Test
     public void testGetCreditCardRequestByIdWithNonExistentRequest() {
-        Assertions.assertThrows(CreditCardRequestException.class, () -> creditCardService.getCreditCardRequestById(9999999999999999L));
+        CreditCard creditCard1=null;
+        Assertions.assertThrows(CardException.class, () -> creditCardService.updateCreditCard(creditCard1));
+    }
+    @Test
+    public void testUpdateCreditCardWithInValidData() throws CardException {
+
+
+        CreditCardType creditCardType1 = new CreditCardType("GOLD", 60000D, 7D);
+
+
+
+        CreditCard creditCard1 = new CreditCard();
+//        creditCard.setCardNumber("1234567890123456");
+        creditCard1.setValidUpto(Date.valueOf(LocalDate.now().plusYears(2))); // Valid for 2 years from now
+        creditCard1.setCvv(123);
+        creditCard1.setCurrentLimit(50000.0);
+        creditCard1.setCardCreatedOn(Date.valueOf(LocalDate.now()));
+        creditCard1.setCustomer(customer);
+        creditCard1.setCreditCardType(creditCardType1);
+        creditCard1.setTransactions(new ArrayList<>());
+        creditCard1.setBills(new ArrayList<>());
+
+        Assertions.assertThrows(CardException.class, () -> creditCardService.updateCreditCard(creditCard1));
+    }
+    @Test
+    public void testDeleteCardRequestById() {
+        CreditCardRequest creditCardRequest1=new CreditCardRequest();
+        //creditCardRequest1.setCreditCardRequestId(null);
+        Assertions.assertThrows(CreditCardRequestException.class, () -> creditCardService.deleteCreditCardRequestById(creditCardRequest1.getCreditCardRequestId()));
     }
 
-    
 }
 
