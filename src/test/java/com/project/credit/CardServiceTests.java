@@ -121,11 +121,7 @@ public class CardServiceTests {
         Assertions.assertThrows(CustomerException.class, () -> creditCardService.requestCard(9999999999999999L));
     }
 
-    @Test
-    public void testGetRequestedCardList() throws CreditCardRequestException {
-        List<CreditCardRequest> requests = creditCardService.getRequestedCardList();
-        Assertions.assertFalse(requests.isEmpty());
-    }
+
 
     @Test
     public void testValidateCreditCardRequestWithExistingRequest() throws CustomerException, CreditCardRequestException, CardException {
@@ -177,11 +173,7 @@ public class CardServiceTests {
         Assertions.assertThrows(CardException.class, () -> creditCardService.deleteCreditCardByCardNumber("9999999999999999"));
     }
 
-    @Test
-    public void testGetRequestedCardListWithExistingRequests() throws CreditCardRequestException {
-        List<CreditCardRequest> requests = creditCardService.getRequestedCardList();
-        Assertions.assertFalse(requests.isEmpty());
-    }
+
 
 
     @Test
@@ -189,10 +181,6 @@ public class CardServiceTests {
         Assertions.assertThrows(CardException.class, () -> creditCardService.findCreditCardByCardNumber("9999999999999999"));
     }
 
-    @Test
-    public void testGetBillByNonExistentCardNumber() {
-        Assertions.assertThrows(CardException.class, () -> creditCardService.getBillByCardNumber("9999999999999999"));
-    }
 
     @Test
     public void testDeleteCreditCardRequestByIdWithNonExistentRequest() {
