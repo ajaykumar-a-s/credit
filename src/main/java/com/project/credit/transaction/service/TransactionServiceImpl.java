@@ -66,6 +66,9 @@ public class TransactionServiceImpl implements TransactionService {
         if (!creditCard.getCvv().equals(transactionDto.getCvv())) {
             throw new TransactionException("CVV does not match");
         }
+        if (creditCard.getCardCreatedOn().compareTo(new Date(System.currentTimeMillis())) > 0) {
+            throw new CardException("Card has not been activated");
+        }
         creditCard.setCurrentLimit(creditCard.getCurrentLimit() - transactionDto.getAmount());
         creditCardService.updateCreditCard(creditCard);
         merchant.setBalance(merchant.getBalance() + transactionDto.getAmount());
