@@ -27,7 +27,7 @@ public interface CreditCardService {
     public  String  generateCardNumber() throws  CardException;
     public Integer generateRandomCvv();
     public Date getValidUptoDate();
-    public List<Bill> getBillByCardNumber(String cardNumber) throws CardException, BillException;
+
     public List<CreditCard> getCardList() throws CardException;
     public CreditCard deleteCreditCardByCardNumber(String cardNumber) throws CardException, CustomerException;
 
