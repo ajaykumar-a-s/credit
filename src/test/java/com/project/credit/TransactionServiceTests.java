@@ -25,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,8 +41,8 @@ class TransactionServiceTests {
     private MerchantService merchantService;
     @Autowired
     private TransactionService transactionService;
-    Customer customer = new Customer("John Doe", "johndoe@example.com", "Ninja@2002", "6234567890", "123 Main St", Date.valueOf("1990-01-01"), 2000000.0);
-    Merchant merchant = new Merchant("Amazon", "amazon@merchant.com", "Ninja@2002", "9234567890", "123 Main St", Date.valueOf("1990-01-01"), 5000.0, "1234567890123456");
+    Customer customer = new Customer("John Doe", "johndoe@example.com", "Ninja@2002", "6234567890", "123 Main St", Date.valueOf(LocalDate.now().minusYears(20)), 2000000.0);
+    Merchant merchant = new Merchant("Amazon", "amazon@merchant.com", "Ninja@2002", "9234567890", "123 Main St", Date.valueOf(LocalDate.now().minusYears(20)), 5000.0, "1234567890123456");
     CreditCardRequest creditCardRequest = null;
     CreditCard creditCard = null;
     TransactionDto transactionDto = null;
@@ -142,7 +143,7 @@ class TransactionServiceTests {
     @Test
     void testTransferAmountWithExpiredDate() {
         Date expiryDate = transactionDto.getExpiryDate();
-        transactionDto.setExpiryDate(new Date(System.currentTimeMillis() - 100000));
+        transactionDto.setExpiryDate(Date.valueOf(LocalDate.now().minusYears(1)));
         Assertions.assertThrows(CardException.class, () -> transactionService.transferAmount(transactionDto));
         transactionDto.setExpiryDate(expiryDate);
     }
@@ -176,7 +177,7 @@ class TransactionServiceTests {
         try {
             creditCardService.updateCreditCard(creditCard);
             Assertions.assertThrows(CardException.class, () -> transactionService.transferAmount(transactionDto));
-            creditCard.setCardCreatedOn(new Date(System.currentTimeMillis() - 100000));
+            creditCard.setCardCreatedOn(Date.valueOf(LocalDate.now().minusYears(1)));
             creditCardService.updateCreditCard(creditCard);
         } catch (CardException e) {
             System.out.println(e.getMessage());
@@ -257,7 +258,7 @@ class TransactionServiceTests {
         try {
             Transaction transaction1 = transactionService.transferAmount(transactionDto);
             Transaction transaction2 = transactionService.transferAmount(transactionDto);
-            List<Transaction> transactions = transactionService.getAllTransactionsByCardNumberForParticularDuration(transactionDto.getFromCardNumber(), new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
+            List<Transaction> transactions = transactionService.getAllTransactionsByCardNumberForParticularDuration(transactionDto.getFromCardNumber(), Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now()));
             Assertions.assertEquals(new ArrayList<>(Arrays.asList(transaction1, transaction2)), transactions);
             transactionService.deleteTransactionById(transaction1.getTransactionId());
             transactionService.deleteTransactionById(transaction2.getTransactionId());
@@ -268,7 +269,7 @@ class TransactionServiceTests {
 
     @Test
     void testGetAllTransactionsByCardNumberForParticularDurationWithNoTransactions() {
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.getAllTransactionsByCardNumberForParticularDuration(customer.getCreditCard().getCardNumber(), new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())));
+        Assertions.assertThrows(TransactionException.class, () -> transactionService.getAllTransactionsByCardNumberForParticularDuration(customer.getCreditCard().getCardNumber(), Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now())));
     }
 
     @Test
@@ -278,7 +279,7 @@ class TransactionServiceTests {
 
     @Test
     void testGetAllTransactionsByCardNumberForParticularDurationWithInvalidDates() {
-        Assertions.assertThrows(DateException.class, () -> transactionService.getAllTransactionsByCardNumberForParticularDuration(customer.getCreditCard().getCardNumber(), new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis() - 100000)));
+        Assertions.assertThrows(DateException.class, () -> transactionService.getAllTransactionsByCardNumberForParticularDuration(customer.getCreditCard().getCardNumber(), Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now().minusDays(1))));
     }
 
     @Test
