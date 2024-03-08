@@ -33,6 +33,7 @@ public class CreditCard {
     @Embedded
     private CreditCardType creditCardType;
 
+
     @OneToMany
     private List<Transaction> transactions = new ArrayList<>();
 

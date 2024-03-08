@@ -170,9 +170,16 @@ public class CreditCardServiceImpl implements CreditCardService {
         return creditCards;
     }
 
+
     @Override
     public CreditCard deleteCreditCardByCardNumber(String cardNumber) throws CardException, CustomerException {
+        if (cardNumber == null || cardNumber.isEmpty()) {
+            throw new CardException("Card number cannot be null or empty");
+        }
         CreditCard creditCard = findCreditCardByCardNumber(cardNumber);
+        if (creditCard == null) {
+            throw new CardException("Credit card not found in database");
+        }
         creditCard.getCustomer().setCreditCard(null);
         customerService.updateCustomer(creditCard.getCustomer());
         creditCardRepository.delete(creditCard);
@@ -181,13 +188,13 @@ public class CreditCardServiceImpl implements CreditCardService {
 
     @Override
     public CreditCardRequest deleteCreditCardRequestById(Long creditCardRequestId) throws CreditCardRequestException {
-
-        CreditCardRequest creditCardRequest=getCreditCardRequestById(creditCardRequestId);
+        if (creditCardRequestId == null) {
+            throw new CreditCardRequestException("Credit card request ID cannot be null");
+        }
+        CreditCardRequest creditCardRequest = getCreditCardRequestById(creditCardRequestId);
         creditCardRequestRepository.delete(creditCardRequest);
-
         return null;
     }
-
     @Override
     public CreditCardRequest getCreditCardRequestById(Long creditCardRequestId) throws CreditCardRequestException {
         CreditCardRequest creditCardRequest=creditCardRequestRepository.findById(creditCardRequestId).orElse(null);
@@ -197,12 +204,15 @@ public class CreditCardServiceImpl implements CreditCardService {
     }
 
 
-    @Override
     public CreditCard updateCreditCard(CreditCard creditCard) throws CardException {
+        if (creditCard == null) {
+            throw new CardException("Credit card cannot be null");
+        }
         if (findCreditCardByCardNumber(creditCard.getCardNumber()) == null)
             throw new CardException("No such credit card found in database");
         return creditCardRepository.save(creditCard);
     }
+
 
     @Override
     public List<Bill> getBillByCardNumber(String cardNumber) throws CardException, BillException {
