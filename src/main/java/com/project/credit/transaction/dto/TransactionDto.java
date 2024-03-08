@@ -42,6 +42,9 @@ public class TransactionDto {
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH)); // set day to the last of the month
         this.expiryDate = new java.sql.Date(cal.getTimeInMillis());
     }
+    public void setExpiryDate(java.sql.Date expiryDate) {
+        this.expiryDate = expiryDate;
+    }
 
     public java.sql.Date getExpiryDate() {
         return this.expiryDate;
