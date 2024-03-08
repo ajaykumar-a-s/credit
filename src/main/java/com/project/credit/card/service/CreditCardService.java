@@ -31,4 +31,6 @@ public interface CreditCardService {
     public List<CreditCard> getCardList() throws CardException;
     public CreditCard deleteCreditCardByCardNumber(String cardNumber) throws CardException, CustomerException;
 
+   public  CreditCardRequest deleteCreditCardRequestById(Long creditCardRequestId) throws CreditCardRequestException;
+   public  CreditCardRequest getCreditCardRequestById(Long creditCardRequestId) throws CreditCardRequestException;
 }
