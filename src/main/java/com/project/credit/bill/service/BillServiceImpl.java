@@ -30,7 +30,7 @@ public class BillServiceImpl implements BillService {
     private BillRepository billRepository;
 
     private List<Transaction> transactionsOfMonth= new ArrayList<>();
-    private CreditCard creditCardByCardNumber =null;
+    private CreditCard creditCard =null;
     private  Double amountToBePaid = 0.0;
 
     @Override
@@ -43,15 +43,15 @@ public class BillServiceImpl implements BillService {
         Date dueDate = Date.valueOf(currentDate.withDayOfMonth(15));
 
 
-        creditCardByCardNumber=creditCardService.findCreditCardByCardNumber(cardNumber);
-        LocalDate cardCreatedDate = creditCardByCardNumber.getCardCreatedOn().toLocalDate();
+        creditCard =creditCardService.findCreditCardByCardNumber(cardNumber);
+        LocalDate cardCreatedDate = creditCard.getCardCreatedOn().toLocalDate();
         if(cardCreatedDate.getMonth().compareTo(currentDate.getMonth())==0)
         {
             throw new BillException("You have to use your Credit Card for atleast one month to generate bill.");
         }
-       List<Bill> bills = creditCardService.getBillByCardNumber(cardNumber);
+       List<Bill> bills = creditCard.getBills();
         if(!bills.isEmpty())
-        if (bills.get(bills.size() - 1).getBillGeneratedDate().toLocalDate().getMonth().compareTo(currentDate.getMonth()) == 0) {
+            if (bills.get(bills.size() - 1).getBillGeneratedDate().toLocalDate().getMonth().compareTo(currentDate.getMonth()) == 0) {
                     return bills.get(bills.size() - 1);
         }
 
@@ -65,7 +65,7 @@ public class BillServiceImpl implements BillService {
            throw new BillException("You didn't use your Credit Card, So no bill is genertated.");
               }
         Bill newBill = new Bill( cardNumber, transactionsOfMonth, amountToBePaid,Date.valueOf(currentDate), dueDate, false);
-        creditCardByCardNumber.getBills().add(newBill);
+        creditCard.getBills().add(newBill);
         return billRepository.save(newBill);
 
     }
@@ -75,18 +75,21 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Bill billPayment(String cardNumber) throws BillException, CardException, TransactionException {
-    creditCardByCardNumber= creditCardService.findCreditCardByCardNumber(cardNumber);
-        List<Bill> bills = creditCardService.getBillByCardNumber(cardNumber);
+    creditCard = creditCardService.findCreditCardByCardNumber(cardNumber);
+        List<Bill> bills = creditCard.getBills();
         if(!bills.isEmpty()) {
             if (bills.get(bills.size() - 1).isPaid()) {
                 throw new BillException("You have paid all the bills");
             }
             else {
                 bills.get(bills.size() - 1).setPaid(true);
-                creditCardByCardNumber.setCurrentLimit(creditCardByCardNumber.getCreditCardType().getCreditLimit());
+                creditCard.setCurrentLimit(creditCard.getCreditCardType().getCreditLimit());
             }
         }
-        Transaction creditTransaction = new Transaction("Bill Payment","Credit Recharge",amountToBePaid,creditCardByCardNumber,null);
+        else {
+            throw new BillException("No bill is generated for this month");
+        }
+        Transaction creditTransaction = new Transaction("Bill Payment","Credit Recharge",amountToBePaid, creditCard,null);
         creditTransaction.setType("Credit");
         transactionService.addTransaction(creditTransaction);
         return bills.get(bills.size()-1);

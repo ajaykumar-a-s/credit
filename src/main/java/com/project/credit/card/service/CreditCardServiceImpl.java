@@ -185,14 +185,4 @@ public class CreditCardServiceImpl implements CreditCardService {
         return creditCardRepository.save(creditCard);
     }
 
-    @Override
-    public List<Bill> getBillByCardNumber(String cardNumber) throws CardException, BillException {
-
-        findCreditCardByCardNumber(cardNumber);
-        List<Bill> bills = creditCardRepository.findAllBillsByCardNumber(cardNumber);
-        if (bills.isEmpty()) {
-            throw new BillException("No bills found for the given card number");
-        }
-        return bills;
-    }
 }
