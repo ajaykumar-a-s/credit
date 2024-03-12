@@ -42,7 +42,7 @@ class TransactionServiceTests {
     @Autowired
     private TransactionService transactionService;
     Customer customer = new Customer("John Doe", "johndoe@example.com", "Ninja@2002", "6234567890", "123 Main St", Date.valueOf(LocalDate.now().minusYears(20)), 2000000.0);
-    Merchant merchant = new Merchant("Amazon", "amazon@merchant.com", "Ninja@2002", "9234567890", "123 Main St", Date.valueOf(LocalDate.now().minusYears(20)), 5000.0, "1234567890123456");
+    Merchant merchant = new Merchant("Amazon", "amazon@merchant.com", "Ninja@2002", "9234567890", "123 Main St", Date.valueOf(LocalDate.now().minusYears(20)), "1234567890123456");
     CreditCardRequest creditCardRequest = null;
     CreditCard creditCard = null;
     TransactionDto transactionDto = null;

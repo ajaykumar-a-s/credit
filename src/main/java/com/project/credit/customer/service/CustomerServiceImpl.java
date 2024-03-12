@@ -1,5 +1,6 @@
 package com.project.credit.customer.service;
 
+import com.project.credit.LoginDto;
 import com.project.credit.customer.entity.Customer;
 import com.project.credit.customer.exception.CustomerException;
 import com.project.credit.customer.repository.CustomerRepository;
@@ -98,6 +99,30 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer deleteCustomerById(Long customerId) throws CustomerException {
         Customer customer = getCustomerById(customerId);
         customerRepository.deleteById(customerId);
+        return customer;
+    }
+
+    @Override
+    public Customer loginCustomer(LoginDto loginDto) throws CustomerException {
+        if (loginDto.getEmail() == null){
+            throw new CustomerException("Email cannot be null");
+        }
+        if(loginDto.getPassword() == null){
+            throw new CustomerException("Password cannot be null");
+        }
+        if(!loginDto.getEmail().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")){
+            throw new CustomerException("Invalid email format");
+        }
+        if (!loginDto.getPassword().matches(".*\\d.*") || loginDto.getPassword().length() < 8 || loginDto.getPassword().equals(loginDto.getPassword().toLowerCase()) || loginDto.getPassword().equals(loginDto.getPassword().toUpperCase()) || loginDto.getPassword().matches("[a-zA-Z0-9 ]*")){
+            throw new CustomerException("Invalid password format");
+        }
+        Customer customer = customerRepository.findByEmail(loginDto.getEmail());
+        if(customer == null){
+            throw new CustomerException("Customer with email " + loginDto.getEmail() + " not found");
+        }
+        if (!customer.getPassword().equals(loginDto.getPassword())){
+            throw new CustomerException("Invalid password");
+        }
         return customer;
     }
 
