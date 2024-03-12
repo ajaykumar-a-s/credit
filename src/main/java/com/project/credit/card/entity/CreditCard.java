@@ -23,6 +23,7 @@ public class CreditCard {
     private Integer cvv;
 
     private Double currentLimit;
+    @JsonIgnore
     private Date cardCreatedOn;
 
     @OneToOne
