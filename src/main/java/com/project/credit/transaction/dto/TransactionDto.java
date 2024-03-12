@@ -19,14 +19,10 @@ public class TransactionDto {
     public TransactionDto() {
     }
 
-    public TransactionDto(String fromCardNumber, String fromCardHolderName, String expiryDate, Integer cvv, String toCardNumber, String name, String description, Double amount) {
+    public TransactionDto(String fromCardNumber, String fromCardHolderName, String expiryDate, Integer cvv, String toCardNumber, String name, String description, Double amount) throws DateException {
         this.fromCardNumber = fromCardNumber;
         this.fromCardHolderName = fromCardHolderName;
-        try {
-            this.setExpiryDate(expiryDate);
-        } catch (DateException e) {
-            throw new RuntimeException(e);
-        }
+        this.setExpiryDate(expiryDate);
         this.cvv = cvv;
         this.toCardNumber = toCardNumber;
         this.name = name;

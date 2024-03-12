@@ -55,7 +55,7 @@ class TransactionServiceTests {
             creditCardRequest = creditCardService.requestCard(customer.getCustomerId());
             creditCard = creditCardService.validateCreditCardRequest(creditCardRequest.getCreditCardRequestId());
             transactionDto = new TransactionDto(customer.getCreditCard().getCardNumber(), "John Doe", "12/25", customer.getCreditCard().getCvv(), "1234567890123456", "Amazon", "Test Transaction", 100.0);
-        } catch (CustomerException | MerchantException | CreditCardRequestException | CardException e) {
+        } catch (CustomerException | MerchantException | CreditCardRequestException | CardException | DateException e) {
             System.out.println(e.getMessage());
         }
 

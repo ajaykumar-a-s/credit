@@ -67,7 +67,8 @@ public class BillServiceTests {
                 transactionService.addTransaction(transaction);
 
             }
-        } catch (CustomerException | MerchantException | CreditCardRequestException | CardException|TransactionException e) {
+        } catch (CustomerException | MerchantException | CreditCardRequestException | CardException |
+                 TransactionException | DateException e) {
             System.out.println(e.getMessage());
         }
     }
