@@ -12,20 +12,20 @@ public class TransactionDto {
     private java.sql.Date expiryDate;
     private Integer cvv;
     private String toCardNumber;
-    private String name;
+    private String transactionName;
     private String description;
     private Double amount;
 
     public TransactionDto() {
     }
 
-    public TransactionDto(String fromCardNumber, String fromCardHolderName, String expiryDate, Integer cvv, String toCardNumber, String name, String description, Double amount) throws DateException {
+    public TransactionDto(String fromCardNumber, String fromCardHolderName, String expiryDate, Integer cvv, String toCardNumber, String transactionName, String description, Double amount) throws DateException {
         this.fromCardNumber = fromCardNumber;
         this.fromCardHolderName = fromCardHolderName;
         this.setExpiryDate(expiryDate);
         this.cvv = cvv;
         this.toCardNumber = toCardNumber;
-        this.name = name;
+        this.transactionName = transactionName;
         this.description = description;
         this.amount = amount;
     }
@@ -84,12 +84,12 @@ public class TransactionDto {
         this.toCardNumber = toCardNumber;
     }
 
-    public String getName() {
-        return name;
+    public String getTransactionName() {
+        return transactionName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTransactionName(String transactionName) {
+        this.transactionName = transactionName;
     }
 
     public String getDescription() {
