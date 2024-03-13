@@ -39,7 +39,7 @@ public class TransactionController {
         return transactionService.getAllTransactionsByCardNumberForParticularDuration(cardNumber, startDate, endDate).stream().map(this::covertTransactionToTransactionResponseDto).toList();
     }
     public TransactionResponseDto covertTransactionToTransactionResponseDto(Transaction transaction) {
-        return new TransactionResponseDto(transaction.getTransactionId(), transaction.getName(), transaction.getDescription(), transaction.getAmount(), transaction.getDate(), transaction.getType(), transaction.getCreditCard().getCardNumber(), transaction.getMerchant().getCardNumber());
+        return new TransactionResponseDto(transaction.getTransactionId(), transaction.getTransactionName(), transaction.getDescription(), transaction.getAmount(), transaction.getDate(), transaction.getTransactionType(), transaction.getCreditCard().getCardNumber(), transaction.getMerchant().getCardNumber());
     }
 
 }

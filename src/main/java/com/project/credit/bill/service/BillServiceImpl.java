@@ -90,7 +90,7 @@ public class BillServiceImpl implements BillService {
             throw new BillException("No bill is generated for this month");
         }
         Transaction creditTransaction = new Transaction("Bill Payment","Credit Recharge",amountToBePaid, creditCard,null);
-        creditTransaction.setType("Credit");
+        creditTransaction.setTransactionType("Credit");
         transactionService.addTransaction(creditTransaction);
         return bills.get(bills.size()-1);
     }

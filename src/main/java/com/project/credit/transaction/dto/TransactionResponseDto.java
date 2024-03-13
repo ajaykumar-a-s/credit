@@ -4,24 +4,24 @@ import java.sql.Date;
 
 public class TransactionResponseDto {
     private Long transactionId;
-    private String name;
+    private String transactionName;
     private String description;
     private Double amount;
     private Date date;
-    private String type;
+    private String transactionType;
     private String creditCardNumber;
     private String merchantCardNumber;
 
     public TransactionResponseDto() {
     }
 
-    public TransactionResponseDto(Long transactionId, String name, String description, Double amount, Date date, String type, String creditCardNumber, String merchantCardNumber) {
+    public TransactionResponseDto(Long transactionId, String transactionName, String description, Double amount, Date date, String transactionType, String creditCardNumber, String merchantCardNumber) {
         this.transactionId = transactionId;
-        this.name = name;
+        this.transactionName = transactionName;
         this.description = description;
         this.amount = amount;
         this.date = date;
-        this.type = type;
+        this.transactionType = transactionType;
         this.creditCardNumber = creditCardNumber;
         this.merchantCardNumber = merchantCardNumber;
     }
@@ -34,12 +34,12 @@ public class TransactionResponseDto {
         this.transactionId = transactionId;
     }
 
-    public String getName() {
-        return name;
+    public String getTransactionName() {
+        return transactionName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTransactionName(String transactionName) {
+        this.transactionName = transactionName;
     }
 
     public String getDescription() {
@@ -66,12 +66,12 @@ public class TransactionResponseDto {
         this.date = date;
     }
 
-    public String getType() {
-        return type;
+    public String getTransactionType() {
+        return transactionType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
     }
 
     public String getCreditCardNumber() {
