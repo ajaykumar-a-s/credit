@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -67,7 +68,7 @@ public class CreditCardServiceImpl implements CreditCardService {
     }
 
     @Override
-    public CreditCard validateCreditCardRequest(Long creditCardRequestId) throws CustomerException, CardException, CreditCardRequestException {
+    public CreditCard validateCreditCardRequest(Long creditCardRequestId) throws CustomerException, CreditCardRequestException {
         CreditCardRequest creditCardRequest = creditCardRequestRepository.findById(creditCardRequestId).orElse(null);
         if (creditCardRequest == null) {
             throw new CreditCardRequestException("No such request exists for the given id");
@@ -121,7 +122,7 @@ public class CreditCardServiceImpl implements CreditCardService {
     }
 
     public Date getValidUptoDate() {
-        LocalDate validUptoLocalDate = LocalDate.now().plusYears(2); // Get the date 2 years from the current date
+        LocalDate validUptoLocalDate = YearMonth.from(LocalDate.now().plusYears(2)).atEndOfMonth();
         return Date.valueOf(validUptoLocalDate);
     }
 

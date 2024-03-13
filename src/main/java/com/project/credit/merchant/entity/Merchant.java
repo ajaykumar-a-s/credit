@@ -6,22 +6,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
-import java.util.Date;
-
 @Entity
 public class Merchant {
     @Id
     @GeneratedValue
     private Long merchantId;
     private String name;
-    @Column(unique = true)
-    private String email;
-
-    private String password;
-    @Column(unique = true)
-    private String phone;
-    private String address;
-    private Date dateOfBirth;
     @JsonIgnore
     private Double balance;
     @Column(unique = true)
@@ -30,13 +20,8 @@ public class Merchant {
     public Merchant() {
     }
 
-    public Merchant(String name, String email, String password, String phone, String address, Date dateOfBirth, String cardNumber) {
+    public Merchant(String name, String cardNumber) {
         this.name = name;
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
-        this.address = address;
-        this.dateOfBirth = dateOfBirth;
         this.balance = 0.0;
         this.cardNumber = cardNumber;
     }
@@ -57,38 +42,6 @@ public class Merchant {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public Double getBalance() {
         return balance;
     }
@@ -105,11 +58,4 @@ public class Merchant {
         this.cardNumber = cardNumber;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
 }

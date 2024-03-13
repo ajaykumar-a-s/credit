@@ -12,6 +12,7 @@ public class TransactionRequestDto {
     private java.sql.Date expiryDate;
     private Integer cvv;
     private String toCardNumber;
+    private String toCardHolderName;
     private String transactionName;
     private String description;
     private Double amount;
@@ -19,9 +20,10 @@ public class TransactionRequestDto {
     public TransactionRequestDto() {
     }
 
-    public TransactionRequestDto(String fromCardNumber, String fromCardHolderName, String expiryDate, Integer cvv, String toCardNumber, String transactionName, String description, Double amount) throws DateException {
+    public TransactionRequestDto(String fromCardNumber, String fromCardHolderName, String expiryDate, Integer cvv, String toCardNumber, String toCardHolderName, String transactionName, String description, Double amount) throws DateException {
         this.fromCardNumber = fromCardNumber;
         this.fromCardHolderName = fromCardHolderName;
+        this.toCardHolderName = toCardHolderName;
         this.setExpiryDate(expiryDate);
         this.cvv = cvv;
         this.toCardNumber = toCardNumber;
@@ -106,5 +108,13 @@ public class TransactionRequestDto {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public String getToCardHolderName() {
+        return toCardHolderName;
+    }
+
+    public void setToCardHolderName(String toCardHolderName) {
+        this.toCardHolderName = toCardHolderName;
     }
 }

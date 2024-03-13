@@ -33,45 +33,6 @@ public class MerchantServiceImpl implements MerchantService {
         if (!merchant.getCardNumber().matches("[0-9]+")) {
             throw new MerchantException("Card number should contain only digits");
         }
-        if (merchant.getEmail() == null || merchant.getEmail().isEmpty()) {
-            throw new MerchantException("Email cannot be empty");
-        }
-        if (!merchant.getEmail().matches("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")) {
-            throw new MerchantException("Invalid email");
-        }
-        if (merchant.getPhone() == null || merchant.getPhone().isEmpty()) {
-            throw new MerchantException("Phone number cannot be empty");
-        }
-        if (merchant.getPhone().length() != 10) {
-            throw new MerchantException("Phone number should be 10 digits");
-        }
-        if (!merchant.getPhone().matches("[0-9]+")) {
-            throw new MerchantException("Phone number should contain only digits");
-        }
-        if (merchant.getAddress() == null || merchant.getAddress().isEmpty()) {
-            throw new MerchantException("Address cannot be empty");
-        }
-        if (merchant.getPassword() == null || merchant.getPassword().isEmpty()) {
-            throw new MerchantException("Password cannot be empty");
-        }
-        if (merchant.getDateOfBirth() == null) {
-            throw new MerchantException("Date of birth cannot be empty");
-        }
-        if (merchant.getDateOfBirth().compareTo(new Date(System.currentTimeMillis())) > 0) {
-            throw new MerchantException("Date of birth cannot be in future");
-        }
-        if (new Date(System.currentTimeMillis()).getYear() - merchant.getDateOfBirth().getYear() < 18) {
-            throw new MerchantException("Age should be greater than 18");
-        }
-        if (new Date(System.currentTimeMillis()).getYear() - merchant.getDateOfBirth().getYear() > 100) {
-            throw new MerchantException("Age should be less than 100");
-        }
-        if (merchantRepository.findByEmail(merchant.getEmail()) != null) {
-            throw new MerchantException("Merchant with email " + merchant.getEmail() + " already exists");
-        }
-        if (merchantRepository.findByPhone(merchant.getPhone()) != null) {
-            throw new MerchantException("Merchant with phone number " + merchant.getPhone() + " already exists");
-        }
         if (merchantRepository.findByCardNumber(merchant.getCardNumber()) != null) {
             throw new MerchantException("Merchant with card number " + merchant.getCardNumber() + " already exists");
         }

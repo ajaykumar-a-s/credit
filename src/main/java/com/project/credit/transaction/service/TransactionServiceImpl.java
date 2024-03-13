@@ -69,6 +69,9 @@ public class TransactionServiceImpl implements TransactionService {
         if (creditCard.getCardCreatedOn().compareTo(new Date(System.currentTimeMillis())) > 0) {
             throw new CardException("Card has not been activated");
         }
+        if (!merchant.getName().equals(transactionRequestDto.getToCardHolderName())){
+            throw new MerchantException("Merchant name does not match");
+        }
         creditCard.setCurrentLimit(creditCard.getCurrentLimit() - transactionRequestDto.getAmount());
         creditCardService.updateCreditCard(creditCard);
         merchant.setBalance(merchant.getBalance() + transactionRequestDto.getAmount());

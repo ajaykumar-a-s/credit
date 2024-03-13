@@ -27,10 +27,10 @@ public class CreditCardRequestController {
             return creditCardService.getRequestedCardList();
 
     }
-    @PostMapping("/validate/{customerId}")
-    public CreditCard validateCustomer(@PathVariable("customerId") Long customerId) throws CustomerException, CardException, CreditCardRequestException {
+    @PostMapping("/validate/{creditCardRequestId}")
+    public CreditCard validateCustomer(@PathVariable("creditCardRequestId") Long creditCardRequestId) throws CustomerException, CardException, CreditCardRequestException {
 
-            return creditCardService.validateCreditCardRequest(customerId);
+            return creditCardService.validateCreditCardRequest(creditCardRequestId);
 
     }
     @GetMapping("/cardlist")
