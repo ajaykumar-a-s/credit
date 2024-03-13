@@ -21,9 +21,6 @@ public class MerchantServiceImpl implements MerchantService {
         if (merchant == null) {
             throw new MerchantException("Merchant cannot be null");
         }
-        if (merchant.getBalance() == null) {
-            throw new MerchantException("Balance cannot be null");
-        }
         if (merchant.getName() == null || merchant.getName().isEmpty()) {
             throw new MerchantException("Merchant name cannot be empty");
         }
@@ -78,8 +75,7 @@ public class MerchantServiceImpl implements MerchantService {
         if (merchantRepository.findByCardNumber(merchant.getCardNumber()) != null) {
             throw new MerchantException("Merchant with card number " + merchant.getCardNumber() + " already exists");
         }
-
-
+        merchant.setBalance(0.0);
         return merchantRepository.save(merchant);
     }
 

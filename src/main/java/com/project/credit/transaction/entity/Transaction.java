@@ -23,10 +23,8 @@ public class Transaction {
     private Double amount;
     private Date date;
     private String type = "Debit";
-
     @ManyToOne
     private CreditCard creditCard;
-
     @ManyToOne
     private Merchant merchant;
 
@@ -91,5 +89,20 @@ public class Transaction {
         this.type = type;
     }
 
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    public Merchant getMerchant() {
+        return merchant;
+    }
+
+    public void setMerchant(Merchant merchant) {
+        this.merchant = merchant;
+    }
 }
 

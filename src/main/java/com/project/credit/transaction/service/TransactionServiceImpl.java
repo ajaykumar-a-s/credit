@@ -6,7 +6,7 @@ import com.project.credit.card.service.CreditCardService;
 import com.project.credit.merchant.entity.Merchant;
 import com.project.credit.merchant.exception.MerchantException;
 import com.project.credit.merchant.service.MerchantService;
-import com.project.credit.transaction.dto.TransactionDto;
+import com.project.credit.transaction.dto.TransactionRequestDto;
 import com.project.credit.transaction.entity.Transaction;
 import com.project.credit.transaction.exception.DateException;
 import com.project.credit.transaction.exception.TransactionException;
@@ -28,52 +28,52 @@ public class TransactionServiceImpl implements TransactionService {
     private MerchantService merchantService;
 
     @Override
-    public Transaction transferAmount(TransactionDto transactionDto) throws CardException, MerchantException, TransactionException {
+    public Transaction transferAmount(TransactionRequestDto transactionRequestDto) throws CardException, MerchantException, TransactionException {
 
-        if (transactionDto == null) {
+        if (transactionRequestDto == null) {
             throw new TransactionException("Transaction details cannot be empty");
         }
-        if (transactionDto.getFromCardNumber() == null || transactionDto.getFromCardNumber().isEmpty()) {
+        if (transactionRequestDto.getFromCardNumber() == null || transactionRequestDto.getFromCardNumber().isEmpty()) {
             throw new TransactionException("From card number cannot be empty");
         }
-        if (transactionDto.getToCardNumber() == null || transactionDto.getToCardNumber().isEmpty()) {
+        if (transactionRequestDto.getToCardNumber() == null || transactionRequestDto.getToCardNumber().isEmpty()) {
             throw new TransactionException("To card number cannot be empty");
         }
-        if (transactionDto.getAmount() == null || transactionDto.getAmount() <= 0) {
+        if (transactionRequestDto.getAmount() == null || transactionRequestDto.getAmount() <= 0) {
             throw new TransactionException("Amount cannot be empty or less than or equal to zero");
         }
-        if (transactionDto.getFromCardHolderName() == null || transactionDto.getFromCardHolderName().isEmpty()) {
+        if (transactionRequestDto.getFromCardHolderName() == null || transactionRequestDto.getFromCardHolderName().isEmpty()) {
             throw new TransactionException("From card holder name cannot be empty");
         }
-        if (transactionDto.getExpiryDate() == null) {
+        if (transactionRequestDto.getExpiryDate() == null) {
             throw new TransactionException("Expiry date cannot be empty");
         }
-        if (transactionDto.getCvv() == null || transactionDto.getCvv() <= 0) {
+        if (transactionRequestDto.getCvv() == null || transactionRequestDto.getCvv() <= 0) {
             throw new TransactionException("CVV cannot be empty");
         }
-        CreditCard creditCard = creditCardService.findCreditCardByCardNumber(transactionDto.getFromCardNumber());
-        Merchant merchant = merchantService.getMerchantByCardNumber(transactionDto.getToCardNumber());
+        CreditCard creditCard = creditCardService.findCreditCardByCardNumber(transactionRequestDto.getFromCardNumber());
+        Merchant merchant = merchantService.getMerchantByCardNumber(transactionRequestDto.getToCardNumber());
 
-        if (transactionDto.getExpiryDate().compareTo(new Date(System.currentTimeMillis())) < 0) {
+        if (transactionRequestDto.getExpiryDate().compareTo(new Date(System.currentTimeMillis())) < 0) {
             throw new CardException("Card has expired");
         }
-        if (creditCard.getCurrentLimit() < transactionDto.getAmount()) {
+        if (creditCard.getCurrentLimit() < transactionRequestDto.getAmount()) {
             throw new TransactionException("Insufficient Credit Limit");
         }
-        if (!creditCard.getCustomer().getName().equals(transactionDto.getFromCardHolderName())) {
+        if (!creditCard.getCustomer().getName().equals(transactionRequestDto.getFromCardHolderName())) {
             throw new TransactionException("Card holder name does not match");
         }
-        if (!creditCard.getCvv().equals(transactionDto.getCvv())) {
+        if (!creditCard.getCvv().equals(transactionRequestDto.getCvv())) {
             throw new TransactionException("CVV does not match");
         }
         if (creditCard.getCardCreatedOn().compareTo(new Date(System.currentTimeMillis())) > 0) {
             throw new CardException("Card has not been activated");
         }
-        creditCard.setCurrentLimit(creditCard.getCurrentLimit() - transactionDto.getAmount());
+        creditCard.setCurrentLimit(creditCard.getCurrentLimit() - transactionRequestDto.getAmount());
         creditCardService.updateCreditCard(creditCard);
-        merchant.setBalance(merchant.getBalance() + transactionDto.getAmount());
+        merchant.setBalance(merchant.getBalance() + transactionRequestDto.getAmount());
         merchantService.updateMerchant(merchant);
-        Transaction transaction = new Transaction(transactionDto.getTransactionName(), transactionDto.getDescription(), transactionDto.getAmount(), creditCard, merchant);
+        Transaction transaction = new Transaction(transactionRequestDto.getTransactionName(), transactionRequestDto.getDescription(), transactionRequestDto.getAmount(), creditCard, merchant);
         return addTransaction(transaction);
     }
 

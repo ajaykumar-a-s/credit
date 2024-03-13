@@ -6,7 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class TransactionDto {
+public class TransactionRequestDto {
     private String fromCardNumber;
     private String fromCardHolderName;
     private java.sql.Date expiryDate;
@@ -16,10 +16,10 @@ public class TransactionDto {
     private String description;
     private Double amount;
 
-    public TransactionDto() {
+    public TransactionRequestDto() {
     }
 
-    public TransactionDto(String fromCardNumber, String fromCardHolderName, String expiryDate, Integer cvv, String toCardNumber, String transactionName, String description, Double amount) throws DateException {
+    public TransactionRequestDto(String fromCardNumber, String fromCardHolderName, String expiryDate, Integer cvv, String toCardNumber, String transactionName, String description, Double amount) throws DateException {
         this.fromCardNumber = fromCardNumber;
         this.fromCardHolderName = fromCardHolderName;
         this.setExpiryDate(expiryDate);

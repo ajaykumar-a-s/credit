@@ -1,9 +1,8 @@
 package com.project.credit.transaction.service;
 
 import com.project.credit.card.exception.CardException;
-import com.project.credit.customer.exception.CustomerException;
 import com.project.credit.merchant.exception.MerchantException;
-import com.project.credit.transaction.dto.TransactionDto;
+import com.project.credit.transaction.dto.TransactionRequestDto;
 import com.project.credit.transaction.entity.Transaction;
 import com.project.credit.transaction.exception.DateException;
 import com.project.credit.transaction.exception.TransactionException;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public interface TransactionService {
 
-    Transaction transferAmount(TransactionDto transactionDto) throws CardException, MerchantException, TransactionException;
+    Transaction transferAmount(TransactionRequestDto transactionRequestDto) throws CardException, MerchantException, TransactionException;
     Transaction addTransaction(Transaction transaction) throws TransactionException;
 
     Transaction getTransactionById(Long id) throws TransactionException;

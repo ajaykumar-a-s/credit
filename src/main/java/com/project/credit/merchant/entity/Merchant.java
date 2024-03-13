@@ -1,5 +1,6 @@
 package com.project.credit.merchant.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +22,7 @@ public class Merchant {
     private String phone;
     private String address;
     private Date dateOfBirth;
-
+    @JsonIgnore
     private Double balance;
     @Column(unique = true)
     private String cardNumber;
