@@ -7,12 +7,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class TransactionRequestDto {
-    private String fromCardNumber;
-    private String fromCardHolderName;
+    private String customerCreditCardNumber;
+    private String customerName;
     private java.sql.Date expiryDate;
     private Integer cvv;
-    private String toCardNumber;
-    private String toCardHolderName;
+    private String merchantCardNumber;
+    private String merchantName;
     private String transactionName;
     private String description;
     private Double amount;
@@ -20,13 +20,14 @@ public class TransactionRequestDto {
     public TransactionRequestDto() {
     }
 
-    public TransactionRequestDto(String fromCardNumber, String fromCardHolderName, String expiryDate, Integer cvv, String toCardNumber, String toCardHolderName, String transactionName, String description, Double amount) throws DateException {
-        this.fromCardNumber = fromCardNumber;
-        this.fromCardHolderName = fromCardHolderName;
-        this.toCardHolderName = toCardHolderName;
+    public TransactionRequestDto(String customerCreditCardNumber, String customerName, String expiryDate, Integer cvv, String merchantCardNumber, String merchantName, String transactionName, String description, Double amount) throws DateException {
+        this.customerCreditCardNumber = customerCreditCardNumber;
+        this.customerName = customerName;
+
         this.setExpiryDate(expiryDate);
         this.cvv = cvv;
-        this.toCardNumber = toCardNumber;
+        this.merchantCardNumber = merchantCardNumber;
+        this.merchantName = merchantName;
         this.transactionName = transactionName;
         this.description = description;
         this.amount = amount;
@@ -54,20 +55,20 @@ public class TransactionRequestDto {
         return this.expiryDate;
     }
 
-    public String getFromCardNumber() {
-        return fromCardNumber;
+    public String getCustomerCreditCardNumber() {
+        return customerCreditCardNumber;
     }
 
-    public void setFromCardNumber(String fromCardNumber) {
-        this.fromCardNumber = fromCardNumber;
+    public void setCustomerCreditCardNumber(String customerCreditCardNumber) {
+        this.customerCreditCardNumber = customerCreditCardNumber;
     }
 
-    public String getFromCardHolderName() {
-        return fromCardHolderName;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setFromCardHolderName(String fromCardHolderName) {
-        this.fromCardHolderName = fromCardHolderName;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public Integer getCvv() {
@@ -78,12 +79,12 @@ public class TransactionRequestDto {
         this.cvv = cvv;
     }
 
-    public String getToCardNumber() {
-        return toCardNumber;
+    public String getMerchantCardNumber() {
+        return merchantCardNumber;
     }
 
-    public void setToCardNumber(String toCardNumber) {
-        this.toCardNumber = toCardNumber;
+    public void setMerchantCardNumber(String merchantCardNumber) {
+        this.merchantCardNumber = merchantCardNumber;
     }
 
     public String getTransactionName() {
@@ -110,11 +111,11 @@ public class TransactionRequestDto {
         this.amount = amount;
     }
 
-    public String getToCardHolderName() {
-        return toCardHolderName;
+    public String getMerchantName() {
+        return merchantName;
     }
 
-    public void setToCardHolderName(String toCardHolderName) {
-        this.toCardHolderName = toCardHolderName;
+    public void setMerchantName(String merchantName) {
+        this.merchantName = merchantName;
     }
 }

@@ -54,7 +54,7 @@ class TransactionServiceTests {
             merchantService.saveMerchant(merchant);
             creditCardRequest = creditCardService.requestCard(customer.getCustomerId());
             creditCard = creditCardService.validateCreditCardRequest(creditCardRequest.getCreditCardRequestId());
-            transactionRequestDto = new TransactionRequestDto(customer.getCreditCard().getCardNumber(), "John Doe", "12/25", customer.getCreditCard().getCvv(), "1234567890123456", "Amazon", "Test Transaction", 100.0);
+            transactionRequestDto = new TransactionRequestDto(customer.getCreditCard().getCardNumber(), "John Doe", "12/25", customer.getCreditCard().getCvv(), "1234567890123456", "Amazon", "Test Transaction", "Test Transaction Description", 100.0);
         } catch (CustomerException | MerchantException | CreditCardRequestException | CardException | DateException e) {
             System.out.println(e.getMessage());
         }
@@ -94,18 +94,18 @@ class TransactionServiceTests {
 
     @Test
     void testTransferAmountWithNullFromCardNumber() {
-        String fromCardNumber = transactionRequestDto.getFromCardNumber();
-        transactionRequestDto.setFromCardNumber(null);
+        String fromCardNumber = transactionRequestDto.getCustomerCreditCardNumber();
+        transactionRequestDto.setCustomerCreditCardNumber(null);
         Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionRequestDto));
-        transactionRequestDto.setFromCardNumber(fromCardNumber);
+        transactionRequestDto.setCustomerCreditCardNumber(fromCardNumber);
     }
 
     @Test
     void testTransferAmountWithNullToCardNumber() {
-        String toCardNumber = transactionRequestDto.getToCardNumber();
-        transactionRequestDto.setToCardNumber(null);
+        String toCardNumber = transactionRequestDto.getMerchantCardNumber();
+        transactionRequestDto.setMerchantCardNumber(null);
         Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionRequestDto));
-        transactionRequestDto.setToCardNumber(toCardNumber);
+        transactionRequestDto.setMerchantCardNumber(toCardNumber);
     }
 
     @Test
@@ -118,10 +118,10 @@ class TransactionServiceTests {
 
     @Test
     void testTransferAmountWithNullCardHolderName() {
-        String fromCardHolderName = transactionRequestDto.getFromCardHolderName();
-        transactionRequestDto.setFromCardHolderName(null);
+        String fromCardHolderName = transactionRequestDto.getCustomerName();
+        transactionRequestDto.setCustomerName(null);
         Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionRequestDto));
-        transactionRequestDto.setFromCardHolderName(fromCardHolderName);
+        transactionRequestDto.setCustomerName(fromCardHolderName);
     }
 
     @Test
@@ -158,10 +158,10 @@ class TransactionServiceTests {
 
     @Test
     void testTransferAMountWithInvalidCustomerName() {
-        String fromCardHolderName = transactionRequestDto.getFromCardHolderName();
-        transactionRequestDto.setFromCardHolderName("Jane Doe");
+        String fromCardHolderName = transactionRequestDto.getCustomerName();
+        transactionRequestDto.setCustomerName("Jane Doe");
         Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionRequestDto));
-        transactionRequestDto.setFromCardHolderName(fromCardHolderName);
+        transactionRequestDto.setCustomerName(fromCardHolderName);
     }
 
     @Test
@@ -239,7 +239,7 @@ class TransactionServiceTests {
         try {
             Transaction transaction1 = transactionService.transferAmount(transactionRequestDto);
             Transaction transaction2 = transactionService.transferAmount(transactionRequestDto);
-            List<Transaction> transactions = transactionService.getAllTransactionsByCardNumber(transactionRequestDto.getFromCardNumber());
+            List<Transaction> transactions = transactionService.getAllTransactionsByCardNumber(transactionRequestDto.getCustomerCreditCardNumber());
             Assertions.assertEquals(new ArrayList<>(Arrays.asList(transaction1, transaction2)), transactions);
             transactionService.deleteTransactionById(transaction1.getTransactionId());
             transactionService.deleteTransactionById(transaction2.getTransactionId());
@@ -258,7 +258,7 @@ class TransactionServiceTests {
         try {
             Transaction transaction1 = transactionService.transferAmount(transactionRequestDto);
             Transaction transaction2 = transactionService.transferAmount(transactionRequestDto);
-            List<Transaction> transactions = transactionService.getAllTransactionsByCardNumberForParticularDuration(transactionRequestDto.getFromCardNumber(), Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now()));
+            List<Transaction> transactions = transactionService.getAllTransactionsByCardNumberForParticularDuration(transactionRequestDto.getCustomerCreditCardNumber(), Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now()));
             Assertions.assertEquals(new ArrayList<>(Arrays.asList(transaction1, transaction2)), transactions);
             transactionService.deleteTransactionById(transaction1.getTransactionId());
             transactionService.deleteTransactionById(transaction2.getTransactionId());

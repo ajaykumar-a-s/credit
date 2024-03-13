@@ -9,20 +9,20 @@ public class TransactionResponseDto {
     private Double amount;
     private Date date;
     private String transactionType;
-    private String creditCardNumber;
+    private String customerCreditCardNumber;
     private String merchantCardNumber;
 
     public TransactionResponseDto() {
     }
 
-    public TransactionResponseDto(Long transactionId, String transactionName, String description, Double amount, Date date, String transactionType, String creditCardNumber, String merchantCardNumber) {
+    public TransactionResponseDto(Long transactionId, String transactionName, String description, Double amount, Date date, String transactionType, String customerCreditCardNumber, String merchantCardNumber) {
         this.transactionId = transactionId;
         this.transactionName = transactionName;
         this.description = description;
         this.amount = amount;
         this.date = date;
         this.transactionType = transactionType;
-        this.creditCardNumber = creditCardNumber;
+        this.customerCreditCardNumber = customerCreditCardNumber;
         this.merchantCardNumber = merchantCardNumber;
     }
 
@@ -74,12 +74,12 @@ public class TransactionResponseDto {
         this.transactionType = transactionType;
     }
 
-    public String getCreditCardNumber() {
-        return creditCardNumber;
+    public String getCustomerCreditCardNumber() {
+        return customerCreditCardNumber;
     }
 
-    public void setCreditCardNumber(String creditCardNumber) {
-        this.creditCardNumber = creditCardNumber;
+    public void setCustomerCreditCardNumber(String customerCreditCardNumber) {
+        this.customerCreditCardNumber = customerCreditCardNumber;
     }
 
     public String getMerchantCardNumber() {
