@@ -42,7 +42,7 @@ class TransactionServiceTests {
     @Autowired
     private TransactionService transactionService;
     Customer customer = new Customer("John Doe", "johndoe@example.com", "Ninja@2002", "6234567890", "123 Main St", Date.valueOf(LocalDate.now().minusYears(20)), 2000000.0);
-    Merchant merchant = new Merchant("Amazon", "1234567890123456");
+    Merchant merchant = new Merchant("Amazon", "0000000000000000");
     CreditCardRequest creditCardRequest = null;
     CreditCard creditCard = null;
     TransactionRequestDto transactionRequestDto = null;
@@ -54,9 +54,9 @@ class TransactionServiceTests {
             merchantService.saveMerchant(merchant);
             creditCardRequest = creditCardService.requestCard(customer.getCustomerId());
             creditCard = creditCardService.validateCreditCardRequest(creditCardRequest.getCreditCardRequestId());
-            transactionRequestDto = new TransactionRequestDto(customer.getCreditCard().getCardNumber(), "John Doe", "12/25", customer.getCreditCard().getCvv(), "1234567890123456", "Amazon", "Test Transaction", "Test Transaction Description", 100.0);
+            transactionRequestDto = new TransactionRequestDto(customer.getCreditCard().getCardNumber(), "John Doe", creditCard.getValidUptoAsString(), customer.getCreditCard().getCvv(), "1234567890123456", "Amazon", "Test Transaction", "Test Transaction Description", 100.0);
         } catch (CustomerException | MerchantException | CreditCardRequestException | CardException | DateException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
 
     }
@@ -68,7 +68,7 @@ class TransactionServiceTests {
             customerService.deleteCustomerById(customer.getCustomerId());
             merchantService.deleteMerchantById(merchant.getMerchantId());
         } catch (CardException | CustomerException | MerchantException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
 
     }
@@ -80,7 +80,7 @@ class TransactionServiceTests {
             Assertions.assertEquals(Transaction.class, transaction.getClass());
             transactionService.deleteTransactionById(transaction.getTransactionId());
         } catch (TransactionException | CardException | MerchantException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -180,7 +180,7 @@ class TransactionServiceTests {
             creditCard.setCardCreatedOn(Date.valueOf(LocalDate.now().minusYears(1)));
             creditCardService.updateCreditCard(creditCard);
         } catch (CardException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -191,7 +191,7 @@ class TransactionServiceTests {
             Assertions.assertEquals(transaction, transactionService.addTransaction(transaction));
             transactionService.deleteTransactionById(transaction.getTransactionId());
         } catch (TransactionException | CardException | MerchantException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -207,7 +207,7 @@ class TransactionServiceTests {
             Assertions.assertEquals(transaction, transactionService.getTransactionById(transaction.getTransactionId()));
             transactionService.deleteTransactionById(transaction.getTransactionId());
         } catch (TransactionException | CardException | MerchantException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -225,7 +225,7 @@ class TransactionServiceTests {
             transactionService.deleteTransactionById(transaction1.getTransactionId());
             transactionService.deleteTransactionById(transaction2.getTransactionId());
         } catch (MerchantException | TransactionException | CardException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -244,7 +244,7 @@ class TransactionServiceTests {
             transactionService.deleteTransactionById(transaction1.getTransactionId());
             transactionService.deleteTransactionById(transaction2.getTransactionId());
         } catch (MerchantException | TransactionException | CardException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -263,7 +263,7 @@ class TransactionServiceTests {
             transactionService.deleteTransactionById(transaction1.getTransactionId());
             transactionService.deleteTransactionById(transaction2.getTransactionId());
         } catch (MerchantException | TransactionException | CardException | DateException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -288,7 +288,7 @@ class TransactionServiceTests {
             Transaction transaction = transactionService.transferAmount(transactionRequestDto);
             Assertions.assertEquals(transaction, transactionService.deleteTransactionById(transaction.getTransactionId()));
         } catch (TransactionException | CardException | MerchantException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 

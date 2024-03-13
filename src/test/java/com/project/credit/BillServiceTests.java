@@ -57,7 +57,7 @@ public class BillServiceTests {
             creditCardRequest = creditCardService.requestCard(customer.getCustomerId());
             creditCard = creditCardService.validateCreditCardRequest(creditCardRequest.getCreditCardRequestId());
             creditCard.setCardCreatedOn(Date.valueOf(LocalDate.now().minusMonths(1)));
-            transactionRequestDto = new TransactionRequestDto(customer.getCreditCard().getCardNumber(), "John Doe", "12/25", customer.getCreditCard().getCvv(), "1234567890123456", "Amazon", "Test Transaction", "Test Transaction Description", 100.0);
+            transactionRequestDto = new TransactionRequestDto(customer.getCreditCard().getCardNumber(), "John Doe", creditCard.getValidUptoAsString(), customer.getCreditCard().getCvv(), "1234567890123456", "Amazon", "Test Transaction", "Test Transaction Description", 100.0);
             for (int i=0;i<5;i++) {
                 Transaction transaction = transactionService.transferAmount(transactionRequestDto);
                 transaction.setDate(Date.valueOf(LocalDate.now().minusMonths(1)));

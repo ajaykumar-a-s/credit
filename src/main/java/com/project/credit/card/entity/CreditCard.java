@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,5 +134,12 @@ public class CreditCard {
 
     public void setCardCreatedOn(Date cardCreatedOn) {
         this.cardCreatedOn = cardCreatedOn;
+    }
+    public String getValidUptoAsString() {
+        if (validUpto != null) {
+            return validUpto.toLocalDate().format(DateTimeFormatter.ofPattern("MM/yy"));
+        } else {
+            return null;
+        }
     }
 }
