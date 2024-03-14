@@ -9,7 +9,7 @@ import java.util.Calendar;
 public class TransactionRequestDto {
     private String customerCreditCardNumber;
     private String customerName;
-    private java.sql.Date expiryDate;
+    private java.sql.Date validUpto;
     private Integer cvv;
     private String merchantCardNumber;
     private String merchantName;
@@ -20,11 +20,11 @@ public class TransactionRequestDto {
     public TransactionRequestDto() {
     }
 
-    public TransactionRequestDto(String customerCreditCardNumber, String customerName, String expiryDate, Integer cvv, String merchantCardNumber, String merchantName, String transactionName, String description, Double amount) throws DateException {
+    public TransactionRequestDto(String customerCreditCardNumber, String customerName, String validUpto, Integer cvv, String merchantCardNumber, String merchantName, String transactionName, String description, Double amount) throws DateException {
         this.customerCreditCardNumber = customerCreditCardNumber;
         this.customerName = customerName;
 
-        this.setExpiryDate(expiryDate);
+        this.setValidUpto(validUpto);
         this.cvv = cvv;
         this.merchantCardNumber = merchantCardNumber;
         this.merchantName = merchantName;
@@ -34,25 +34,25 @@ public class TransactionRequestDto {
     }
 
 
-    public void setExpiryDate(String expiryDate) throws DateException {
+    public void setValidUpto(String validUpto) throws DateException {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/yy");
         java.util.Date date = null;
         try {
-            date = sdf.parse(expiryDate);
+            date = sdf.parse(validUpto);
         } catch (ParseException e) {
             throw new DateException("Invalid date format. Please use MM/yy format.");
         }
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH)); // set day to the last of the month
-        this.expiryDate = new java.sql.Date(cal.getTimeInMillis());
+        this.validUpto = new java.sql.Date(cal.getTimeInMillis());
     }
     public void setExpiryDate(java.sql.Date expiryDate) {
-        this.expiryDate = expiryDate;
+        this.validUpto = expiryDate;
     }
 
-    public java.sql.Date getExpiryDate() {
-        return this.expiryDate;
+    public java.sql.Date getValidUpto() {
+        return this.validUpto;
     }
 
     public String getCustomerCreditCardNumber() {

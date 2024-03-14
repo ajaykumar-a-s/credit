@@ -46,7 +46,7 @@ public class TransactionServiceImpl implements TransactionService {
         if (transactionRequestDto.getCustomerName() == null || transactionRequestDto.getCustomerName().isEmpty()) {
             throw new TransactionException("From card holder name cannot be empty");
         }
-        if (transactionRequestDto.getExpiryDate() == null) {
+        if (transactionRequestDto.getValidUpto() == null) {
             throw new TransactionException("Expiry date cannot be empty");
         }
         if (transactionRequestDto.getCvv() == null || transactionRequestDto.getCvv() <= 0) {
@@ -55,7 +55,7 @@ public class TransactionServiceImpl implements TransactionService {
         CreditCard creditCard = creditCardService.findCreditCardByCardNumber(transactionRequestDto.getCustomerCreditCardNumber());
         Merchant merchant = merchantService.getMerchantByCardNumber(transactionRequestDto.getMerchantCardNumber());
 
-        if (transactionRequestDto.getExpiryDate().compareTo(new Date(System.currentTimeMillis())) < 0) {
+        if (transactionRequestDto.getValidUpto().compareTo(new Date(System.currentTimeMillis())) < 0) {
             throw new CardException("Card has expired");
         }
         if (creditCard.getCurrentLimit() < transactionRequestDto.getAmount()) {

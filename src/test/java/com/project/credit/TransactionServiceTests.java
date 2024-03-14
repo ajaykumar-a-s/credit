@@ -29,7 +29,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @SpringBootTest
 @Transactional
@@ -120,7 +119,7 @@ class TransactionServiceTests {
 
     @Test
     void testTransferAmountWithNullExpiryDate() {
-        Date expiryDate = transactionRequestDto.getExpiryDate();
+        Date expiryDate = transactionRequestDto.getValidUpto();
         transactionRequestDto.setExpiryDate((Date) null);
         Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionRequestDto));
         transactionRequestDto.setExpiryDate(expiryDate);
@@ -136,7 +135,7 @@ class TransactionServiceTests {
 
     @Test
     void testTransferAmountWithExpiredDate() {
-        Date expiryDate = transactionRequestDto.getExpiryDate();
+        Date expiryDate = transactionRequestDto.getValidUpto();
         transactionRequestDto.setExpiryDate(Date.valueOf(LocalDate.now().minusYears(1)));
         Assertions.assertThrows(CardException.class, () -> transactionService.transferAmount(transactionRequestDto));
         transactionRequestDto.setExpiryDate(expiryDate);
