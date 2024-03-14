@@ -216,14 +216,13 @@ class TransactionServiceTests {
     }
     @Test
     void testGetAllTransactionsByCardNumber() throws MerchantException, TransactionException, CardException {
-
-            Transaction transaction1 = transactionService.transferAmount(transactionRequestDto);
-            Transaction transaction2 = transactionService.transferAmount(transactionRequestDto);
-            List<Transaction> transactions = transactionService.getAllTransactionsByCardNumber(transactionRequestDto.getCustomerCreditCardNumber());
-            Assertions.assertEquals(ArrayList.class, transactions.getClass());
-            transactionService.deleteTransactionById(transaction1.getTransactionId());
-            transactionService.deleteTransactionById(transaction2.getTransactionId());
-
+        Transaction transaction1 = transactionService.transferAmount(transactionRequestDto);
+        Transaction transaction2 = transactionService.transferAmount(transactionRequestDto);
+        List<Transaction> expectedTransactions = Arrays.asList(transaction1, transaction2);
+        List<Transaction> actualTransactions = transactionService.getAllTransactionsByCardNumber(transactionRequestDto.getCustomerCreditCardNumber());
+        Assertions.assertIterableEquals(expectedTransactions, actualTransactions);
+        transactionService.deleteTransactionById(transaction1.getTransactionId());
+        transactionService.deleteTransactionById(transaction2.getTransactionId());
     }
 
     @Test

@@ -111,7 +111,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<Transaction> getAllTransactionsByCardNumber(String cardNumber) throws CardException, TransactionException {
         CreditCard creditCard = creditCardService.findCreditCardByCardNumber(cardNumber);
-        List<Transaction> transactions = transactionRepository.findAllByCreditCard(creditCard);
+        List<Transaction> transactions = creditCard.getTransactions();
         if (transactions.isEmpty()) {
             throw new TransactionException("No transactions found");
         }
