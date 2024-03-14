@@ -26,6 +26,16 @@ public class Merchant {
         this.cardNumber = cardNumber;
     }
 
+    @Override
+    public String toString() {
+        return "Merchant{" +
+                "merchantId=" + merchantId +
+                ", name='" + name + '\'' +
+                ", balance=" + balance +
+                ", cardNumber='" + cardNumber + '\'' +
+                '}';
+    }
+
     public Long getMerchantId() {
         return merchantId;
     }

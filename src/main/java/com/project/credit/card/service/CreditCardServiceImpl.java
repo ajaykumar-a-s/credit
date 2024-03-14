@@ -196,12 +196,24 @@ public class CreditCardServiceImpl implements CreditCardService {
         creditCardRequestRepository.delete(creditCardRequest);
         return null;
     }
+
     @Override
     public CreditCardRequest getCreditCardRequestById(Long creditCardRequestId) throws CreditCardRequestException {
-        CreditCardRequest creditCardRequest=creditCardRequestRepository.findById(creditCardRequestId).orElse(null);
-        if(creditCardRequest==null)
+        CreditCardRequest creditCardRequest = creditCardRequestRepository.findById(creditCardRequestId).orElse(null);
+        if (creditCardRequest == null)
             throw new CreditCardRequestException("No such request found");
         return creditCardRequest;
+    }
+
+    @Override
+    public CreditCardRequest updateCreditCardRequest(CreditCardRequest creditCardRequest) throws CreditCardRequestException {
+        if (creditCardRequest == null) {
+            throw new CreditCardRequestException("Credit card request cannot be null");
+        }
+        if (getCreditCardRequestById(creditCardRequest.getCreditCardRequestId()) == null) {
+            throw new CreditCardRequestException("No such credit card request found in database");
+        }
+        return creditCardRequestRepository.save(creditCardRequest);
     }
 
 

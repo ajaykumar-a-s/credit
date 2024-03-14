@@ -32,6 +32,8 @@ public class Transaction {
     public Transaction() {
     }
 
+
+
     public Transaction(String transactionName, String description, double amount, CreditCard creditCard, Merchant merchant) {
         this.transactionName = transactionName;
         this.description = description;
@@ -40,6 +42,19 @@ public class Transaction {
         this.creditCard = creditCard;
         this.merchant = merchant;
         this.date = Date.valueOf(LocalDate.now());
+    }
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "transactionId=" + transactionId +
+                ", transactionName='" + transactionName + '\'' +
+                ", description='" + description + '\'' +
+                ", amount=" + amount +
+                ", date=" + date +
+                ", transactionType='" + transactionType + '\'' +
+                ", creditCard=" + creditCard +
+                ", merchant=" + merchant +
+                '}';
     }
 
     public Long getTransactionId() {
@@ -106,4 +121,5 @@ public class Transaction {
         this.merchant = merchant;
     }
 }
+
 

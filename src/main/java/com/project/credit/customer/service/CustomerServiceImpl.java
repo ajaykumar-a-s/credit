@@ -98,7 +98,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer deleteCustomerById(Long customerId) throws CustomerException {
         Customer customer = getCustomerById(customerId);
-        if(customer.getCreditCard() == null){
+        if(customer.getCreditCard() != null){
             throw new CustomerException("Has credit card, cannot delete customer");
         }
         customerRepository.deleteById(customerId);

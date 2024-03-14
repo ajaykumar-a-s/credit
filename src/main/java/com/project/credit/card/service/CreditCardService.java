@@ -33,4 +33,5 @@ public interface CreditCardService {
 
    public  CreditCardRequest deleteCreditCardRequestById(Long creditCardRequestId) throws CreditCardRequestException;
    public  CreditCardRequest getCreditCardRequestById(Long creditCardRequestId) throws CreditCardRequestException;
+   public CreditCardRequest updateCreditCardRequest(CreditCardRequest creditCardRequest) throws CreditCardRequestException;
 }

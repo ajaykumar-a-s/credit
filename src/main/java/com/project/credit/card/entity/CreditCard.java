@@ -42,6 +42,7 @@ public class CreditCard {
     @OneToMany
     private List<Bill> bills = new ArrayList<>();
 
+
     public CreditCard() {
     }
 
@@ -53,6 +54,22 @@ public class CreditCard {
         this.cardCreatedOn = Date.valueOf(LocalDate.now());
         this.customer = customer;
         this.creditCardType = creditCardType;
+    }
+
+    @Override
+    public String toString() {
+        return "CreditCard{" +
+                "creditCardId=" + creditCardId +
+                ", cardNumber='" + cardNumber + '\'' +
+                ", validUpto=" + validUpto +
+                ", cvv=" + cvv +
+                ", currentLimit=" + currentLimit +
+                ", cardCreatedOn=" + cardCreatedOn +
+                ", customer=" + customer +
+                ", creditCardType=" + creditCardType +
+                ", transactions=" + transactions +
+                ", bills=" + bills +
+                '}';
     }
 
     public Long getCreditCardId() {

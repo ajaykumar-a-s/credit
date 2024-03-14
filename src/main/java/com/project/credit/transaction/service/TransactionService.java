@@ -22,5 +22,5 @@ public interface TransactionService {
     List<Transaction> getAllTransactionsByCardNumber(String cardNumber) throws CardException, TransactionException;
 
     List<Transaction> getAllTransactionsByCardNumberForParticularDuration(String cardNumber, Date startDate, Date endDate) throws CardException, DateException, TransactionException;
-    Transaction deleteTransactionById(Long id) throws TransactionException;
+    Transaction deleteTransactionById(Long id) throws TransactionException, CardException;
 }

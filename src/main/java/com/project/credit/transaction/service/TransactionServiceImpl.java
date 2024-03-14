@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -77,6 +78,7 @@ public class TransactionServiceImpl implements TransactionService {
         merchant.setBalance(merchant.getBalance() + transactionRequestDto.getAmount());
         merchantService.updateMerchant(merchant);
         Transaction transaction = new Transaction(transactionRequestDto.getTransactionName(), transactionRequestDto.getDescription(), transactionRequestDto.getAmount(), creditCard, merchant);
+        creditCard.getTransactions().add(transaction);
         return addTransaction(transaction);
     }
 
@@ -124,8 +126,13 @@ public class TransactionServiceImpl implements TransactionService {
         if (startDate.compareTo(endDate) > 0) {
             throw new DateException("Start date cannot be greater than end date");
         }
-        creditCardService.findCreditCardByCardNumber(cardNumber);
-        List<Transaction> transactions = transactionRepository.findAllByDateBetween(startDate, endDate);
+        CreditCard creditCard = creditCardService.findCreditCardByCardNumber(cardNumber);
+        List<Transaction> transactions = new ArrayList<>();
+        for(Transaction transaction : creditCard.getTransactions()){
+            if (transaction.getDate().compareTo(startDate) >= 0 && transaction.getDate().compareTo(endDate) <= 0) {
+                transactions.add(transaction);
+            }
+        }
         if (transactions.isEmpty()) {
             throw new TransactionException("No transactions found");
         }
@@ -133,8 +140,11 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction deleteTransactionById(Long id) throws TransactionException {
+    public Transaction deleteTransactionById(Long id) throws TransactionException, CardException {
         Transaction transaction = getTransactionById(id);
+        CreditCard creditCard = transaction.getCreditCard();
+        creditCard.getTransactions().remove(transaction);
+        creditCardService.updateCreditCard(creditCard);
         transactionRepository.deleteById(id);
         return transaction;
     }
