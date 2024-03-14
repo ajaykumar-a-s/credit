@@ -78,8 +78,10 @@ public class TransactionServiceImpl implements TransactionService {
         merchant.setBalance(merchant.getBalance() + transactionRequestDto.getAmount());
         merchantService.updateMerchant(merchant);
         Transaction transaction = new Transaction(transactionRequestDto.getTransactionName(), transactionRequestDto.getDescription(), transactionRequestDto.getAmount(), creditCard, merchant);
-        creditCard.getTransactions().add(transaction);
-        return addTransaction(transaction);
+        Transaction resultTransaction =  addTransaction(transaction);
+        creditCard.getTransactions().add(resultTransaction);
+        creditCardService.updateCreditCard(creditCard);
+        return resultTransaction;
     }
 
     @Override
