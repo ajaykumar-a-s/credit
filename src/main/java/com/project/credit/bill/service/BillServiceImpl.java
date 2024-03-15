@@ -55,7 +55,7 @@ public class BillServiceImpl implements BillService {
                     return bills.get(bills.size() - 1);
         }
 
-        transactionsOfMonth=  transactionService.getAllTransactionsByCardNumberForParticularDuration(cardNumber,firstDateOfMonth,lastDateOfMonth);
+        transactionsOfMonth=  transactionService.getAllTransactionsByCustomerCreditCardNumberForParticularDuration(cardNumber,firstDateOfMonth,lastDateOfMonth);
 
          for (Transaction list :transactionsOfMonth) {
               amountToBePaid +=list.getAmount();
