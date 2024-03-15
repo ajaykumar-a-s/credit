@@ -29,7 +29,7 @@ public class TransactionController {
     public List<TransactionResponseDto> getAllTransactions() throws TransactionException {
         return transactionService.getAllTransactions().stream().map(transactionService::covertTransactionToTransactionResponseDto).toList();
     }
-    @GetMapping("transactions/{custoemrCreditCardNumber}")
+    @GetMapping("transactions/{customerCreditCardNumber}")
     public List<TransactionResponseDto> getAllTransactionsByCustomerCreditCardNumber(@PathVariable("customerCreditCardNumber") String customerCreditCardNumber) throws CardException, TransactionException {
         return this.transactionService.getAllTransactionsByCustomerCreditCardNumber(customerCreditCardNumber).stream().map(transactionService::covertTransactionToTransactionResponseDto).toList();
     }
