@@ -14,7 +14,7 @@ import com.project.credit.customer.service.CustomerService;
 import com.project.credit.merchant.entity.Merchant;
 import com.project.credit.merchant.exception.MerchantException;
 import com.project.credit.merchant.service.MerchantService;
-import com.project.credit.transaction.dto.TransactionDto;
+import com.project.credit.transaction.dto.TransactionRequestDto;
 import com.project.credit.transaction.entity.Transaction;
 import com.project.credit.transaction.exception.DateException;
 import com.project.credit.transaction.exception.TransactionException;
@@ -29,9 +29,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootTest
 @Transactional
@@ -47,10 +44,10 @@ public class BillServiceTests {
     @Autowired
     private BillService billService;
     Customer customer = new Customer("John Doe", "johndoe@example.com", "Ninja@2002", "6234567890", "123 Main St", Date.valueOf("1990-01-01"), 2000000.0);
-    Merchant merchant = new Merchant("Amazon", "amazon@merchant.com", "Ninja@2002", "9234567890", "123 Main St", Date.valueOf("1990-01-01"), 5000.0, "1234567890123456");
+    Merchant merchant = new Merchant("Amazon", "1234567890123456");
     CreditCardRequest creditCardRequest = null;
     CreditCard creditCard = null;
-    TransactionDto transactionDto = null;
+    TransactionRequestDto transactionRequestDto = null;
 
     @BeforeEach
     public void init() {
@@ -60,14 +57,15 @@ public class BillServiceTests {
             creditCardRequest = creditCardService.requestCard(customer.getCustomerId());
             creditCard = creditCardService.validateCreditCardRequest(creditCardRequest.getCreditCardRequestId());
             creditCard.setCardCreatedOn(Date.valueOf(LocalDate.now().minusMonths(1)));
-            transactionDto = new TransactionDto(customer.getCreditCard().getCardNumber(), "John Doe", "12/25", customer.getCreditCard().getCvv(), "1234567890123456", "Amazon", "Test Transaction", 100.0);
+            transactionRequestDto = new TransactionRequestDto(customer.getCreditCard().getCardNumber(), "John Doe", creditCard.getValidUpto(), customer.getCreditCard().getCvv(), "1234567890123456", "Amazon", "Test Transaction", "Test Transaction Description", 100.0);
             for (int i=0;i<5;i++) {
-                Transaction transaction = transactionService.transferAmount(transactionDto);
+                Transaction transaction = transactionService.transferAmount(transactionRequestDto);
                 transaction.setDate(Date.valueOf(LocalDate.now().minusMonths(1)));
                 transactionService.addTransaction(transaction);
 
             }
-        } catch (CustomerException | MerchantException | CreditCardRequestException | CardException|TransactionException e) {
+        } catch (CustomerException | MerchantException | CreditCardRequestException | CardException |
+                 TransactionException | DateException e) {
             System.out.println(e.getMessage());
         }
     }

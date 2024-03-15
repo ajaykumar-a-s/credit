@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class CreditCard {
     private Integer cvv;
 
     private Double currentLimit;
+    @JsonIgnore
     private Date cardCreatedOn;
 
     @OneToOne
@@ -35,10 +37,13 @@ public class CreditCard {
 
 
     @OneToMany
+    @JsonIgnore
     private List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany
+    @JsonIgnore
     private List<Bill> bills = new ArrayList<>();
+
 
     public CreditCard() {
     }
@@ -51,6 +56,22 @@ public class CreditCard {
         this.cardCreatedOn = Date.valueOf(LocalDate.now());
         this.customer = customer;
         this.creditCardType = creditCardType;
+    }
+
+    @Override
+    public String toString() {
+        return "CreditCard{" +
+                "creditCardId=" + creditCardId +
+                ", cardNumber='" + cardNumber + '\'' +
+                ", validUpto=" + validUpto +
+                ", cvv=" + cvv +
+                ", currentLimit=" + currentLimit +
+                ", cardCreatedOn=" + cardCreatedOn +
+                ", customer=" + customer +
+                ", creditCardType=" + creditCardType +
+                ", transactions=" + transactions +
+                ", bills=" + bills +
+                '}';
     }
 
     public Long getCreditCardId() {
@@ -68,8 +89,9 @@ public class CreditCard {
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
+    @JsonIgnore
 
-    public Date getValidUpto() {
+    public Date getValidUptoAsDate() {
         return validUpto;
     }
 
@@ -132,5 +154,12 @@ public class CreditCard {
 
     public void setCardCreatedOn(Date cardCreatedOn) {
         this.cardCreatedOn = cardCreatedOn;
+    }
+    public String getValidUpto() {
+        if (validUpto != null) {
+            return validUpto.toLocalDate().format(DateTimeFormatter.ofPattern("MM/yy"));
+        } else {
+            return null;
+        }
     }
 }

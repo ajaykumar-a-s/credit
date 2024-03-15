@@ -3,6 +3,7 @@ package com.project.credit.card.controller;
 import com.project.credit.card.entity.CreditCard;
 import com.project.credit.card.entity.CreditCardRequest;
 import com.project.credit.card.exception.CardException;
+import com.project.credit.card.exception.CreditCardRequestException;
 import com.project.credit.card.service.CreditCardService;
 import com.project.credit.customer.exception.CustomerException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,31 +15,23 @@ import java.util.List;
 public class CreditCardRequestController {
     @Autowired
     private CreditCardService creditCardService;
-    @PostMapping("/request/{id}")
-    public CreditCardRequest requestCard(@PathVariable("id") Long customerId) throws CustomerException
-    {
-        try {
+    @PostMapping("/request/{customerId}")
+    public CreditCardRequest requestCard(@PathVariable("customerId") Long customerId) throws CustomerException, CreditCardRequestException {
+
             return creditCardService.requestCard(customerId);
-        } catch (com.project.credit.card.exception.CreditCardRequestException e) {
-            throw new RuntimeException(e);
-        }
+
     }
     @GetMapping("/requestlist")
-    public List<CreditCardRequest> getRequestedCardList() throws CardException
-    {
-        try {
+    public List<CreditCardRequest> getRequestedCardList() throws CreditCardRequestException {
+
             return creditCardService.getRequestedCardList();
-        } catch (com.project.credit.card.exception.CreditCardRequestException e) {
-            throw new RuntimeException(e);
-        }
+
     }
-    @PostMapping("/validate/{id}")
-    public CreditCard validateCustomer(@PathVariable("id") Long customerId) throws CustomerException, CardException {
-        try {
-            return creditCardService.validateCreditCardRequest(customerId);
-        } catch (com.project.credit.card.exception.CreditCardRequestException e) {
-            throw new RuntimeException(e);
-        }
+    @PostMapping("/validate/{creditCardRequestId}")
+    public CreditCard validateCustomer(@PathVariable("creditCardRequestId") Long creditCardRequestId) throws CustomerException, CardException, CreditCardRequestException {
+
+            return creditCardService.validateCreditCardRequest(creditCardRequestId);
+
     }
     @GetMapping("/cardlist")
     public List<CreditCard> getCardList() throws CardException

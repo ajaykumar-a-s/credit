@@ -1,5 +1,6 @@
 package com.project.credit.customer.controller;
 
+import com.project.credit.LoginDto;
 import com.project.credit.customer.entity.Customer;
 import com.project.credit.customer.exception.CustomerException;
 import com.project.credit.customer.service.CustomerService;
@@ -40,6 +41,11 @@ public class CustomerController {
     public List<Customer> viewAllCustomers() throws CustomerException
     {
         return customerService.viewAllCustomers();
+    }
+    @GetMapping("/customer-login")
+    public Customer loginCustomer(@RequestBody LoginDto loginDto) throws CustomerException
+    {
+        return customerService.loginCustomer(loginDto);
     }
 }
 

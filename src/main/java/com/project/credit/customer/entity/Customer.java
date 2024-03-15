@@ -1,5 +1,6 @@
 package com.project.credit.customer.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.credit.card.entity.CreditCard;
 import jakarta.persistence.*;
 

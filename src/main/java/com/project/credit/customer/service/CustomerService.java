@@ -1,5 +1,6 @@
 package com.project.credit.customer.service;
 
+import com.project.credit.LoginDto;
 import com.project.credit.customer.entity.Customer;
 import com.project.credit.customer.exception.CustomerException;
 
@@ -17,6 +18,7 @@ public interface CustomerService {
 
     Customer deleteCustomerById(Long customerId) throws CustomerException;
 
+    Customer loginCustomer(LoginDto loginDto) throws CustomerException;
 }
 
 

@@ -11,7 +11,7 @@ import com.project.credit.customer.service.CustomerService;
 import com.project.credit.merchant.entity.Merchant;
 import com.project.credit.merchant.exception.MerchantException;
 import com.project.credit.merchant.service.MerchantService;
-import com.project.credit.transaction.dto.TransactionDto;
+import com.project.credit.transaction.dto.TransactionRequestDto;
 import com.project.credit.transaction.entity.Transaction;
 import com.project.credit.transaction.exception.DateException;
 import com.project.credit.transaction.exception.TransactionException;
@@ -25,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,158 +41,148 @@ class TransactionServiceTests {
     private MerchantService merchantService;
     @Autowired
     private TransactionService transactionService;
-    Customer customer = new Customer("John Doe", "johndoe@example.com", "Ninja@2002", "6234567890", "123 Main St", Date.valueOf("1990-01-01"), 2000000.0);
-    Merchant merchant = new Merchant("Amazon", "amazon@merchant.com", "Ninja@2002", "9234567890", "123 Main St", Date.valueOf("1990-01-01"), 5000.0, "1234567890123456");
+    Customer customer = new Customer("John Doe", "johndoe@example.com", "Ninja@2002", "6234567890", "123 Main St", Date.valueOf(LocalDate.now().minusYears(20)), 2000000.0);
+    Merchant merchant = new Merchant("Amazon", "0000000000000000");
     CreditCardRequest creditCardRequest = null;
     CreditCard creditCard = null;
-    TransactionDto transactionDto = null;
+    TransactionRequestDto transactionRequestDto = null;
+
 
     @BeforeEach
-    public void init() {
-        try {
-            customerService.saveCustomer(customer);
-            merchantService.saveMerchant(merchant);
-            creditCardRequest = creditCardService.requestCard(customer.getCustomerId());
-            creditCard = creditCardService.validateCreditCardRequest(creditCardRequest.getCreditCardRequestId());
-            transactionDto = new TransactionDto(customer.getCreditCard().getCardNumber(), "John Doe", "12/25", customer.getCreditCard().getCvv(), "1234567890123456", "Amazon", "Test Transaction", 100.0);
-        } catch (CustomerException | MerchantException | CreditCardRequestException | CardException e) {
-            System.out.println(e.getMessage());
-        }
+    public void init() throws CustomerException, MerchantException, CreditCardRequestException, CardException, DateException, TransactionException {
+
+        customerService.saveCustomer(customer);
+        merchantService.saveMerchant(merchant);
+        creditCardRequest = creditCardService.requestCard(customer.getCustomerId());
+        creditCard = creditCardService.validateCreditCardRequest(creditCardRequest.getCreditCardRequestId());
+        transactionRequestDto = new TransactionRequestDto(customer.getCreditCard().getCardNumber(), "John Doe", creditCard.getValidUpto(), customer.getCreditCard().getCvv(), "0000000000000000", "Amazon", "Test Transaction", "Test Transaction Description", 100.0);
 
     }
 
     @AfterEach
-    public void cleanUp() {
-        try {
-            creditCardService.deleteCreditCardByCardNumber(creditCard.getCardNumber());
-            customerService.deleteCustomerById(customer.getCustomerId());
-            merchantService.deleteMerchantById(merchant.getMerchantId());
-        } catch (CardException | CustomerException | MerchantException e) {
-            System.out.println(e.getMessage());
-        }
+    public void cleanUp() throws CustomerException, CardException, MerchantException, CreditCardRequestException {
+        creditCardService.deleteCreditCardByCardNumber(creditCard.getCardNumber());
+        creditCardService.deleteCreditCardRequestById(creditCardRequest.getCreditCardRequestId());
+        customerService.deleteCustomerById(customer.getCustomerId());
+        merchantService.deleteMerchantById(merchant.getMerchantId());
 
     }
 
+
     @Test
-    void testTransferAmount() {
-        try {
-            Transaction transaction = transactionService.transferAmount(transactionDto);
-            Assertions.assertEquals(Transaction.class, transaction.getClass());
-            transactionService.deleteTransactionById(transaction.getTransactionId());
-        } catch (TransactionException | CardException | MerchantException e) {
-            System.out.println(e.getMessage());
-        }
+    void testTransferAmount() throws MerchantException, TransactionException, CardException {
+        Transaction transaction = transactionService.transferAmount(transactionRequestDto);
+        Assertions.assertEquals(Transaction.class, transaction.getClass());
+        transactionService.deleteTransactionById(transaction.getTransactionId());
+
     }
 
     @Test
     void testTransferAmountWithNullTransactionDto() {
-        TransactionDto transactionDto = this.transactionDto;
-        this.transactionDto = null;
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(this.transactionDto));
-        this.transactionDto = transactionDto;
+        TransactionRequestDto transactionRequestDto = this.transactionRequestDto;
+        this.transactionRequestDto = null;
+        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(this.transactionRequestDto));
+        this.transactionRequestDto = transactionRequestDto;
     }
 
     @Test
     void testTransferAmountWithNullFromCardNumber() {
-        String fromCardNumber = transactionDto.getFromCardNumber();
-        transactionDto.setFromCardNumber(null);
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionDto));
-        transactionDto.setFromCardNumber(fromCardNumber);
+        String fromCardNumber = transactionRequestDto.getCustomerCreditCardNumber();
+        transactionRequestDto.setCustomerCreditCardNumber(null);
+        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionRequestDto));
+        transactionRequestDto.setCustomerCreditCardNumber(fromCardNumber);
     }
 
     @Test
     void testTransferAmountWithNullToCardNumber() {
-        String toCardNumber = transactionDto.getToCardNumber();
-        transactionDto.setToCardNumber(null);
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionDto));
-        transactionDto.setToCardNumber(toCardNumber);
+        String toCardNumber = transactionRequestDto.getMerchantCardNumber();
+        transactionRequestDto.setMerchantCardNumber(null);
+        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionRequestDto));
+        transactionRequestDto.setMerchantCardNumber(toCardNumber);
     }
 
     @Test
     void testTransferAmountWithNullAmount() {
-        Double amount = transactionDto.getAmount();
-        transactionDto.setAmount(null);
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionDto));
-        transactionDto.setAmount(amount);
+        Double amount = transactionRequestDto.getAmount();
+        transactionRequestDto.setAmount(null);
+        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionRequestDto));
+        transactionRequestDto.setAmount(amount);
     }
 
     @Test
     void testTransferAmountWithNullCardHolderName() {
-        String fromCardHolderName = transactionDto.getFromCardHolderName();
-        transactionDto.setFromCardHolderName(null);
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionDto));
-        transactionDto.setFromCardHolderName(fromCardHolderName);
+        String fromCardHolderName = transactionRequestDto.getCustomerName();
+        transactionRequestDto.setCustomerName(null);
+        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionRequestDto));
+        transactionRequestDto.setCustomerName(fromCardHolderName);
     }
 
     @Test
     void testTransferAmountWithNullExpiryDate() {
-        Date expiryDate = transactionDto.getExpiryDate();
-        transactionDto.setExpiryDate((Date) null);
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionDto));
-        transactionDto.setExpiryDate(expiryDate);
+        Date expiryDate = transactionRequestDto.getValidUpto();
+        transactionRequestDto.setExpiryDate((Date) null);
+        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionRequestDto));
+        transactionRequestDto.setExpiryDate(expiryDate);
     }
 
     @Test
     void testTransferAmountWithNullCvv() {
-        Integer cvv = transactionDto.getCvv();
-        transactionDto.setCvv(null);
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionDto));
-        transactionDto.setCvv(cvv);
+        Integer cvv = transactionRequestDto.getCvv();
+        transactionRequestDto.setCvv(null);
+        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionRequestDto));
+        transactionRequestDto.setCvv(cvv);
     }
 
     @Test
     void testTransferAmountWithExpiredDate() {
-        Date expiryDate = transactionDto.getExpiryDate();
-        transactionDto.setExpiryDate(new Date(System.currentTimeMillis() - 100000));
-        Assertions.assertThrows(CardException.class, () -> transactionService.transferAmount(transactionDto));
-        transactionDto.setExpiryDate(expiryDate);
+        Date expiryDate = transactionRequestDto.getValidUpto();
+        transactionRequestDto.setExpiryDate(Date.valueOf(LocalDate.now().minusYears(1)));
+        Assertions.assertThrows(CardException.class, () -> transactionService.transferAmount(transactionRequestDto));
+        transactionRequestDto.setExpiryDate(expiryDate);
     }
 
     @Test
     void testTransferAmountWithExcessAmount() {
-        Double amount = transactionDto.getAmount();
-        transactionDto.setAmount(creditCard.getCurrentLimit() + 100);
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionDto));
-        transactionDto.setAmount(amount);
+        Double amount = transactionRequestDto.getAmount();
+        transactionRequestDto.setAmount(creditCard.getCurrentLimit() + 100);
+        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionRequestDto));
+        transactionRequestDto.setAmount(amount);
     }
 
     @Test
     void testTransferAMountWithInvalidCustomerName() {
-        String fromCardHolderName = transactionDto.getFromCardHolderName();
-        transactionDto.setFromCardHolderName("Jane Doe");
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionDto));
-        transactionDto.setFromCardHolderName(fromCardHolderName);
+        String fromCardHolderName = transactionRequestDto.getCustomerName();
+        transactionRequestDto.setCustomerName("Jane Doe");
+        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionRequestDto));
+        transactionRequestDto.setCustomerName(fromCardHolderName);
     }
 
     @Test
     void testTransferAmountWithInvalidCvv() {
-        Integer cvv = transactionDto.getCvv();
-        transactionDto.setCvv(creditCard.getCvv() + 1);
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionDto));
-        transactionDto.setCvv(cvv);
-    }
-    @Test
-    void testTransferAmountWithInactiveCard() {
-        creditCard.setCardCreatedOn(new Date(System.currentTimeMillis() + 100000));
-        try {
-            creditCardService.updateCreditCard(creditCard);
-            Assertions.assertThrows(CardException.class, () -> transactionService.transferAmount(transactionDto));
-            creditCard.setCardCreatedOn(new Date(System.currentTimeMillis() - 100000));
-            creditCardService.updateCreditCard(creditCard);
-        } catch (CardException e) {
-            System.out.println(e.getMessage());
-        }
+        Integer cvv = transactionRequestDto.getCvv();
+        transactionRequestDto.setCvv(creditCard.getCvv() + 1);
+        Assertions.assertThrows(TransactionException.class, () -> transactionService.transferAmount(transactionRequestDto));
+        transactionRequestDto.setCvv(cvv);
     }
 
     @Test
-    void testAddTransaction() {
-        try {
-            Transaction transaction = transactionService.transferAmount(transactionDto);
+    void testTransferAmountWithInactiveCard() throws CardException {
+        creditCard.setCardCreatedOn(new Date(System.currentTimeMillis() + 100000));
+
+        creditCardService.updateCreditCard(creditCard);
+        Assertions.assertThrows(CardException.class, () -> transactionService.transferAmount(transactionRequestDto));
+        creditCard.setCardCreatedOn(Date.valueOf(LocalDate.now().minusYears(1)));
+        creditCardService.updateCreditCard(creditCard);
+
+    }
+
+    @Test
+    void testAddTransaction() throws MerchantException, TransactionException, CardException {
+
+            Transaction transaction = transactionService.transferAmount(transactionRequestDto);
             Assertions.assertEquals(transaction, transactionService.addTransaction(transaction));
             transactionService.deleteTransactionById(transaction.getTransactionId());
-        } catch (TransactionException | CardException | MerchantException e) {
-            System.out.println(e.getMessage());
-        }
+
     }
 
     @Test
@@ -200,14 +191,11 @@ class TransactionServiceTests {
     }
 
     @Test
-    void testGetTransactionById() {
-        try {
-            Transaction transaction = transactionService.transferAmount(transactionDto);
-            Assertions.assertEquals(transaction, transactionService.getTransactionById(transaction.getTransactionId()));
-            transactionService.deleteTransactionById(transaction.getTransactionId());
-        } catch (TransactionException | CardException | MerchantException e) {
-            System.out.println(e.getMessage());
-        }
+    void testGetTransactionById() throws MerchantException, TransactionException, CardException {
+        Transaction transaction = transactionService.transferAmount(transactionRequestDto);
+        Assertions.assertEquals(transaction, transactionService.getTransactionById(transaction.getTransactionId()));
+        transactionService.deleteTransactionById(transaction.getTransactionId());
+
     }
 
     @Test
@@ -216,35 +204,22 @@ class TransactionServiceTests {
     }
 
     @Test
-    void testGetAllTransactions() {
-        try {
-            Transaction transaction1 = transactionService.transferAmount(transactionDto);
-            Transaction transaction2 = transactionService.transferAmount(transactionDto);
-            Assertions.assertEquals(new ArrayList<>(Arrays.asList(transaction1, transaction2)), transactionService.getAllTransactions());
-            transactionService.deleteTransactionById(transaction1.getTransactionId());
-            transactionService.deleteTransactionById(transaction2.getTransactionId());
-        } catch (MerchantException | TransactionException | CardException e) {
-            System.out.println(e.getMessage());
-        }
+    void testGetAllTransactions() throws MerchantException, TransactionException, CardException {
+        Transaction transaction1 = transactionService.transferAmount(transactionRequestDto);
+        Transaction transaction2 = transactionService.transferAmount(transactionRequestDto);
+        Assertions.assertEquals(ArrayList.class, transactionService.getAllTransactions().getClass());
+        transactionService.deleteTransactionById(transaction1.getTransactionId());
+        transactionService.deleteTransactionById(transaction2.getTransactionId());
     }
-
     @Test
-    void testGetAllTransactionsWithNoTransactions() {
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.getAllTransactions());
-    }
-
-    @Test
-    void testGetAllTransactionsByCardNumber() {
-        try {
-            Transaction transaction1 = transactionService.transferAmount(transactionDto);
-            Transaction transaction2 = transactionService.transferAmount(transactionDto);
-            List<Transaction> transactions = transactionService.getAllTransactionsByCardNumber(transactionDto.getFromCardNumber());
-            Assertions.assertEquals(new ArrayList<>(Arrays.asList(transaction1, transaction2)), transactions);
-            transactionService.deleteTransactionById(transaction1.getTransactionId());
-            transactionService.deleteTransactionById(transaction2.getTransactionId());
-        } catch (MerchantException | TransactionException | CardException e) {
-            System.out.println(e.getMessage());
-        }
+    void testGetAllTransactionsByCardNumber() throws MerchantException, TransactionException, CardException {
+        Transaction transaction1 = transactionService.transferAmount(transactionRequestDto);
+        Transaction transaction2 = transactionService.transferAmount(transactionRequestDto);
+        List<Transaction> expectedTransactions = Arrays.asList(transaction1, transaction2);
+        List<Transaction> actualTransactions = transactionService.getAllTransactionsByCardNumber(transactionRequestDto.getCustomerCreditCardNumber());
+        Assertions.assertIterableEquals(expectedTransactions, actualTransactions);
+        transactionService.deleteTransactionById(transaction1.getTransactionId());
+        transactionService.deleteTransactionById(transaction2.getTransactionId());
     }
 
     @Test
@@ -253,22 +228,20 @@ class TransactionServiceTests {
     }
 
     @Test
-    void testGetAllTransactionsByCardNumberForParticularDuration() {
-        try {
-            Transaction transaction1 = transactionService.transferAmount(transactionDto);
-            Transaction transaction2 = transactionService.transferAmount(transactionDto);
-            List<Transaction> transactions = transactionService.getAllTransactionsByCardNumberForParticularDuration(transactionDto.getFromCardNumber(), new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
-            Assertions.assertEquals(new ArrayList<>(Arrays.asList(transaction1, transaction2)), transactions);
+    void testGetAllTransactionsByCardNumberForParticularDuration() throws MerchantException, TransactionException, CardException, DateException {
+
+            Transaction transaction1 = transactionService.transferAmount(transactionRequestDto);
+            Transaction transaction2 = transactionService.transferAmount(transactionRequestDto);
+            List<Transaction> transactions = transactionService.getAllTransactionsByCardNumberForParticularDuration(transactionRequestDto.getCustomerCreditCardNumber(), Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now()));
+            Assertions.assertEquals(ArrayList.class, transactions.getClass());
             transactionService.deleteTransactionById(transaction1.getTransactionId());
             transactionService.deleteTransactionById(transaction2.getTransactionId());
-        } catch (MerchantException | TransactionException | CardException | DateException e) {
-            System.out.println(e.getMessage());
-        }
+
     }
 
     @Test
-    void testGetAllTransactionsByCardNumberForParticularDurationWithNoTransactions() {
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.getAllTransactionsByCardNumberForParticularDuration(customer.getCreditCard().getCardNumber(), new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())));
+    void testGetAllTransactionsByCardNumberForParticularDurationWithNoTransactions()  {
+        Assertions.assertThrows(TransactionException.class, () -> transactionService.getAllTransactionsByCardNumberForParticularDuration(customer.getCreditCard().getCardNumber(), Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now())));
     }
 
     @Test
@@ -278,25 +251,21 @@ class TransactionServiceTests {
 
     @Test
     void testGetAllTransactionsByCardNumberForParticularDurationWithInvalidDates() {
-        Assertions.assertThrows(DateException.class, () -> transactionService.getAllTransactionsByCardNumberForParticularDuration(customer.getCreditCard().getCardNumber(), new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis() - 100000)));
+        Assertions.assertThrows(DateException.class, () -> transactionService.getAllTransactionsByCardNumberForParticularDuration(customer.getCreditCard().getCardNumber(), Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now().minusDays(1))));
     }
 
     @Test
-    void testDeleteTransactionById() {
-        try {
-            Transaction transaction = transactionService.transferAmount(transactionDto);
+    void testDeleteTransactionById() throws MerchantException, TransactionException, CardException {
+
+            Transaction transaction = transactionService.transferAmount(transactionRequestDto);
             Assertions.assertEquals(transaction, transactionService.deleteTransactionById(transaction.getTransactionId()));
-        } catch (TransactionException | CardException | MerchantException e) {
-            System.out.println(e.getMessage());
-        }
+
     }
 
     @Test
     void testDeleteTransactionByIdWithInvalidId() {
         Assertions.assertThrows(TransactionException.class, () -> transactionService.deleteTransactionById(0L));
     }
-
-
 
 
 }

@@ -18,15 +18,13 @@ public class Transaction {
     @Id
     @GeneratedValue
     private Long transactionId;
-    private String name;
+    private String transactionName;
     private String description;
     private Double amount;
     private Date date;
-    private String type = "Debit";
-
+    private String transactionType = "Debit";
     @ManyToOne
     private CreditCard creditCard;
-
     @ManyToOne
     private Merchant merchant;
 
@@ -34,13 +32,29 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(String name, String description, double amount, CreditCard creditCard, Merchant merchant) {
-        this.name = name;
+
+
+    public Transaction(String transactionName, String description, double amount, CreditCard creditCard, Merchant merchant) {
+        this.transactionName = transactionName;
         this.description = description;
         this.amount = amount;
+        this.transactionType = "Debit";
         this.creditCard = creditCard;
         this.merchant = merchant;
         this.date = Date.valueOf(LocalDate.now());
+    }
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "transactionId=" + transactionId +
+                ", transactionName='" + transactionName + '\'' +
+                ", description='" + description + '\'' +
+                ", amount=" + amount +
+                ", date=" + date +
+                ", transactionType='" + transactionType + '\'' +
+                ", creditCard=" + creditCard +
+                ", merchant=" + merchant +
+                '}';
     }
 
     public Long getTransactionId() {
@@ -51,12 +65,12 @@ public class Transaction {
         this.transactionId = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTransactionName() {
+        return transactionName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTransactionName(String name) {
+        this.transactionName = name;
     }
 
     public String getDescription() {
@@ -83,13 +97,29 @@ public class Transaction {
         this.date = date;
     }
 
-    public String getType() {
-        return type;
+    public String getTransactionType() {
+        return transactionType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTransactionType(String type) {
+        this.transactionType = type;
     }
 
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    public Merchant getMerchant() {
+        return merchant;
+    }
+
+    public void setMerchant(Merchant merchant) {
+        this.merchant = merchant;
+    }
 }
+
 
