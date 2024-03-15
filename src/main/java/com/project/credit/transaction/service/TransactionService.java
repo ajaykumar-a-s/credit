@@ -3,6 +3,7 @@ package com.project.credit.transaction.service;
 import com.project.credit.card.exception.CardException;
 import com.project.credit.merchant.exception.MerchantException;
 import com.project.credit.transaction.dto.TransactionRequestDto;
+import com.project.credit.transaction.dto.TransactionResponseDto;
 import com.project.credit.transaction.entity.Transaction;
 import com.project.credit.transaction.exception.DateException;
 import com.project.credit.transaction.exception.TransactionException;
@@ -23,4 +24,5 @@ public interface TransactionService {
 
     List<Transaction> getAllTransactionsByCardNumberForParticularDuration(String cardNumber, Date startDate, Date endDate) throws CardException, DateException, TransactionException;
     Transaction deleteTransactionById(Long id) throws TransactionException, CardException;
+    TransactionResponseDto covertTransactionToTransactionResponseDto(Transaction transaction);
 }

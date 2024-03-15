@@ -7,6 +7,7 @@ import com.project.credit.merchant.entity.Merchant;
 import com.project.credit.merchant.exception.MerchantException;
 import com.project.credit.merchant.service.MerchantService;
 import com.project.credit.transaction.dto.TransactionRequestDto;
+import com.project.credit.transaction.dto.TransactionResponseDto;
 import com.project.credit.transaction.entity.Transaction;
 import com.project.credit.transaction.exception.DateException;
 import com.project.credit.transaction.exception.TransactionException;
@@ -149,5 +150,8 @@ public class TransactionServiceImpl implements TransactionService {
         creditCardService.updateCreditCard(creditCard);
         transactionRepository.deleteById(id);
         return transaction;
+    }
+    public TransactionResponseDto covertTransactionToTransactionResponseDto(Transaction transaction) {
+        return new TransactionResponseDto(transaction.getTransactionId(), transaction.getTransactionName(), transaction.getDescription(), transaction.getAmount(), transaction.getDate(), transaction.getTransactionType(), transaction.getCreditCard().getCardNumber(), transaction.getMerchant().getCardNumber());
     }
 }

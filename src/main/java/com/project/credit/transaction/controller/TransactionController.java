@@ -20,26 +20,24 @@ public class TransactionController {
     private TransactionService transactionService;
     @PostMapping("/transfer-amount")
     public TransactionResponseDto transferAmount(@RequestBody TransactionRequestDto transactionRequestDto) throws CardException, MerchantException, TransactionException {
-        return this.covertTransactionToTransactionResponseDto(transactionService.transferAmount(transactionRequestDto));
+        return transactionService.covertTransactionToTransactionResponseDto(transactionService.transferAmount(transactionRequestDto));
     }
     @GetMapping("transaction/{id}")
     public TransactionResponseDto getTransactionById(@PathVariable("id") Long id) throws TransactionException {
-        return this.covertTransactionToTransactionResponseDto(transactionService.getTransactionById(id));
+        return transactionService.covertTransactionToTransactionResponseDto(transactionService.getTransactionById(id));
     }
     @GetMapping("transactions")
     public List<TransactionResponseDto> getAllTransactions() throws TransactionException {
-        return transactionService.getAllTransactions().stream().map(this::covertTransactionToTransactionResponseDto).toList();
+        return transactionService.getAllTransactions().stream().map(transactionService::covertTransactionToTransactionResponseDto).toList();
     }
     @GetMapping("transactions/{cardNumber}")
     public List<TransactionResponseDto> getAllTransactionsByCardNumber(@PathVariable("cardNumber") String cardNumber) throws CardException, TransactionException {
-        return this.transactionService.getAllTransactionsByCardNumber(cardNumber).stream().map(this::covertTransactionToTransactionResponseDto).toList();
+        return this.transactionService.getAllTransactionsByCardNumber(cardNumber).stream().map(transactionService::covertTransactionToTransactionResponseDto).toList();
     }
     @GetMapping("transactions/{cardNumber}/{startDate}/{endDate}")
     public List<TransactionResponseDto> getAllTransactionsByCardNumberForParticularDuration(@PathVariable("cardNumber") String cardNumber, @PathVariable("startDate") Date startDate, @PathVariable("endDate") Date endDate) throws CardException, DateException, TransactionException {
-        return transactionService.getAllTransactionsByCardNumberForParticularDuration(cardNumber, startDate, endDate).stream().map(this::covertTransactionToTransactionResponseDto).toList();
+        return transactionService.getAllTransactionsByCardNumberForParticularDuration(cardNumber, startDate, endDate).stream().map(transactionService::covertTransactionToTransactionResponseDto).toList();
     }
-    public TransactionResponseDto covertTransactionToTransactionResponseDto(Transaction transaction) {
-        return new TransactionResponseDto(transaction.getTransactionId(), transaction.getTransactionName(), transaction.getDescription(), transaction.getAmount(), transaction.getDate(), transaction.getTransactionType(), transaction.getCreditCard().getCardNumber(), transaction.getMerchant().getCardNumber());
-    }
+
 
 }

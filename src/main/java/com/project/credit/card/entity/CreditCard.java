@@ -37,9 +37,11 @@ public class CreditCard {
 
 
     @OneToMany
+    @JsonIgnore
     private List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany
+    @JsonIgnore
     private List<Bill> bills = new ArrayList<>();
 
 
@@ -87,8 +89,9 @@ public class CreditCard {
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
+    @JsonIgnore
 
-    public Date getValidUpto() {
+    public Date getValidUptoAsDate() {
         return validUpto;
     }
 
@@ -152,7 +155,7 @@ public class CreditCard {
     public void setCardCreatedOn(Date cardCreatedOn) {
         this.cardCreatedOn = cardCreatedOn;
     }
-    public String getValidUptoAsString() {
+    public String getValidUpto() {
         if (validUpto != null) {
             return validUpto.toLocalDate().format(DateTimeFormatter.ofPattern("MM/yy"));
         } else {

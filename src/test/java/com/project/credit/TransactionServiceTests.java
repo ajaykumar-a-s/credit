@@ -55,7 +55,7 @@ class TransactionServiceTests {
         merchantService.saveMerchant(merchant);
         creditCardRequest = creditCardService.requestCard(customer.getCustomerId());
         creditCard = creditCardService.validateCreditCardRequest(creditCardRequest.getCreditCardRequestId());
-        transactionRequestDto = new TransactionRequestDto(customer.getCreditCard().getCardNumber(), "John Doe", creditCard.getValidUptoAsString(), customer.getCreditCard().getCvv(), "0000000000000000", "Amazon", "Test Transaction", "Test Transaction Description", 100.0);
+        transactionRequestDto = new TransactionRequestDto(customer.getCreditCard().getCardNumber(), "John Doe", creditCard.getValidUpto(), customer.getCreditCard().getCvv(), "0000000000000000", "Amazon", "Test Transaction", "Test Transaction Description", 100.0);
 
     }
 
@@ -177,14 +177,12 @@ class TransactionServiceTests {
     }
 
     @Test
-    void testAddTransaction() {
-        try {
+    void testAddTransaction() throws MerchantException, TransactionException, CardException {
+
             Transaction transaction = transactionService.transferAmount(transactionRequestDto);
             Assertions.assertEquals(transaction, transactionService.addTransaction(transaction));
             transactionService.deleteTransactionById(transaction.getTransactionId());
-        } catch (TransactionException | CardException | MerchantException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     @Test
@@ -257,13 +255,11 @@ class TransactionServiceTests {
     }
 
     @Test
-    void testDeleteTransactionById() {
-        try {
+    void testDeleteTransactionById() throws MerchantException, TransactionException, CardException {
+
             Transaction transaction = transactionService.transferAmount(transactionRequestDto);
             Assertions.assertEquals(transaction, transactionService.deleteTransactionById(transaction.getTransactionId()));
-        } catch (TransactionException | CardException | MerchantException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     @Test
