@@ -216,7 +216,7 @@ class TransactionServiceTests {
         Transaction transaction1 = transactionService.transferAmount(transactionRequestDto);
         Transaction transaction2 = transactionService.transferAmount(transactionRequestDto);
         List<Transaction> expectedTransactions = Arrays.asList(transaction1, transaction2);
-        List<Transaction> actualTransactions = transactionService.getAllTransactionsByCardNumber(transactionRequestDto.getCustomerCreditCardNumber());
+        List<Transaction> actualTransactions = transactionService.getAllTransactionsByCustomerCreditCardNumber(transactionRequestDto.getCustomerCreditCardNumber());
         Assertions.assertIterableEquals(expectedTransactions, actualTransactions);
         transactionService.deleteTransactionById(transaction1.getTransactionId());
         transactionService.deleteTransactionById(transaction2.getTransactionId());
@@ -224,7 +224,7 @@ class TransactionServiceTests {
 
     @Test
     void testGetAllTransactionsByCardNumberWithNoTransactions() {
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.getAllTransactionsByCardNumber(customer.getCreditCard().getCardNumber()));
+        Assertions.assertThrows(TransactionException.class, () -> transactionService.getAllTransactionsByCustomerCreditCardNumber(customer.getCreditCard().getCardNumber()));
     }
 
     @Test
@@ -232,7 +232,7 @@ class TransactionServiceTests {
 
             Transaction transaction1 = transactionService.transferAmount(transactionRequestDto);
             Transaction transaction2 = transactionService.transferAmount(transactionRequestDto);
-            List<Transaction> transactions = transactionService.getAllTransactionsByCardNumberForParticularDuration(transactionRequestDto.getCustomerCreditCardNumber(), Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now()));
+            List<Transaction> transactions = transactionService.getAllTransactionsByCustomerCreditCardNumberForParticularDuration(transactionRequestDto.getCustomerCreditCardNumber(), Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now()));
             Assertions.assertEquals(ArrayList.class, transactions.getClass());
             transactionService.deleteTransactionById(transaction1.getTransactionId());
             transactionService.deleteTransactionById(transaction2.getTransactionId());
@@ -241,17 +241,17 @@ class TransactionServiceTests {
 
     @Test
     void testGetAllTransactionsByCardNumberForParticularDurationWithNoTransactions()  {
-        Assertions.assertThrows(TransactionException.class, () -> transactionService.getAllTransactionsByCardNumberForParticularDuration(customer.getCreditCard().getCardNumber(), Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now())));
+        Assertions.assertThrows(TransactionException.class, () -> transactionService.getAllTransactionsByCustomerCreditCardNumberForParticularDuration(customer.getCreditCard().getCardNumber(), Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now())));
     }
 
     @Test
     void testGetAllTransactionsByCardNumberForParticularDurationWithNullDates() {
-        Assertions.assertThrows(DateException.class, () -> transactionService.getAllTransactionsByCardNumberForParticularDuration(customer.getCreditCard().getCardNumber(), null, null));
+        Assertions.assertThrows(DateException.class, () -> transactionService.getAllTransactionsByCustomerCreditCardNumberForParticularDuration(customer.getCreditCard().getCardNumber(), null, null));
     }
 
     @Test
     void testGetAllTransactionsByCardNumberForParticularDurationWithInvalidDates() {
-        Assertions.assertThrows(DateException.class, () -> transactionService.getAllTransactionsByCardNumberForParticularDuration(customer.getCreditCard().getCardNumber(), Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now().minusDays(1))));
+        Assertions.assertThrows(DateException.class, () -> transactionService.getAllTransactionsByCustomerCreditCardNumberForParticularDuration(customer.getCreditCard().getCardNumber(), Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now().minusDays(1))));
     }
 
     @Test

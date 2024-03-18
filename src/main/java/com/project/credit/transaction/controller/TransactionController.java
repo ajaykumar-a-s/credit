@@ -4,7 +4,6 @@ import com.project.credit.card.exception.CardException;
 import com.project.credit.merchant.exception.MerchantException;
 import com.project.credit.transaction.dto.TransactionRequestDto;
 import com.project.credit.transaction.dto.TransactionResponseDto;
-import com.project.credit.transaction.entity.Transaction;
 import com.project.credit.transaction.exception.DateException;
 import com.project.credit.transaction.exception.TransactionException;
 import com.project.credit.transaction.service.TransactionService;
@@ -30,13 +29,13 @@ public class TransactionController {
     public List<TransactionResponseDto> getAllTransactions() throws TransactionException {
         return transactionService.getAllTransactions().stream().map(transactionService::covertTransactionToTransactionResponseDto).toList();
     }
-    @GetMapping("transactions/{cardNumber}")
-    public List<TransactionResponseDto> getAllTransactionsByCardNumber(@PathVariable("cardNumber") String cardNumber) throws CardException, TransactionException {
-        return this.transactionService.getAllTransactionsByCardNumber(cardNumber).stream().map(transactionService::covertTransactionToTransactionResponseDto).toList();
+    @GetMapping("transactions/{customerCreditCardNumber}")
+    public List<TransactionResponseDto> getAllTransactionsByCustomerCreditCardNumber(@PathVariable("customerCreditCardNumber") String customerCreditCardNumber) throws CardException, TransactionException {
+        return this.transactionService.getAllTransactionsByCustomerCreditCardNumber(customerCreditCardNumber).stream().map(transactionService::covertTransactionToTransactionResponseDto).toList();
     }
-    @GetMapping("transactions/{cardNumber}/{startDate}/{endDate}")
-    public List<TransactionResponseDto> getAllTransactionsByCardNumberForParticularDuration(@PathVariable("cardNumber") String cardNumber, @PathVariable("startDate") Date startDate, @PathVariable("endDate") Date endDate) throws CardException, DateException, TransactionException {
-        return transactionService.getAllTransactionsByCardNumberForParticularDuration(cardNumber, startDate, endDate).stream().map(transactionService::covertTransactionToTransactionResponseDto).toList();
+    @GetMapping("transactions/{customerCreditCardNumber}/{startDate}/{endDate}")
+    public List<TransactionResponseDto> getAllTransactionsByCustomerCreditCardNumberForParticularDuration(@PathVariable("customerCreditCardNumber") String customerCreditCardNumber, @PathVariable("startDate") Date startDate, @PathVariable("endDate") Date endDate) throws CardException, DateException, TransactionException {
+        return transactionService.getAllTransactionsByCustomerCreditCardNumberForParticularDuration(customerCreditCardNumber, startDate, endDate).stream().map(transactionService::covertTransactionToTransactionResponseDto).toList();
     }
 
 

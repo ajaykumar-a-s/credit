@@ -20,9 +20,9 @@ public interface TransactionService {
 
     List<Transaction> getAllTransactions() throws TransactionException;
 
-    List<Transaction> getAllTransactionsByCardNumber(String cardNumber) throws CardException, TransactionException;
+    List<Transaction> getAllTransactionsByCustomerCreditCardNumber(String customerCreditCardNumber) throws CardException, TransactionException;
 
-    List<Transaction> getAllTransactionsByCardNumberForParticularDuration(String cardNumber, Date startDate, Date endDate) throws CardException, DateException, TransactionException;
+    List<Transaction> getAllTransactionsByCustomerCreditCardNumberForParticularDuration(String customerCreditCardNumber, Date startDate, Date endDate) throws CardException, DateException, TransactionException;
     Transaction deleteTransactionById(Long id) throws TransactionException, CardException;
     TransactionResponseDto covertTransactionToTransactionResponseDto(Transaction transaction);
 }

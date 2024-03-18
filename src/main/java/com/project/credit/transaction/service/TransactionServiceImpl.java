@@ -112,8 +112,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> getAllTransactionsByCardNumber(String cardNumber) throws CardException, TransactionException {
-        CreditCard creditCard = creditCardService.findCreditCardByCardNumber(cardNumber);
+    public List<Transaction> getAllTransactionsByCustomerCreditCardNumber(String customerCreditCardNumber) throws CardException, TransactionException {
+        CreditCard creditCard = creditCardService.findCreditCardByCardNumber(customerCreditCardNumber);
         List<Transaction> transactions = creditCard.getTransactions();
         if (transactions.isEmpty()) {
             throw new TransactionException("No transactions found");
@@ -122,14 +122,14 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> getAllTransactionsByCardNumberForParticularDuration(String cardNumber, Date startDate, Date endDate) throws CardException, DateException, TransactionException {
+    public List<Transaction> getAllTransactionsByCustomerCreditCardNumberForParticularDuration(String customerCreditCardNumber, Date startDate, Date endDate) throws CardException, DateException, TransactionException {
         if (startDate == null || endDate == null) {
             throw new DateException("Start date and end date cannot be empty");
         }
         if (startDate.compareTo(endDate) > 0) {
             throw new DateException("Start date cannot be greater than end date");
         }
-        CreditCard creditCard = creditCardService.findCreditCardByCardNumber(cardNumber);
+        CreditCard creditCard = creditCardService.findCreditCardByCardNumber(customerCreditCardNumber);
         List<Transaction> transactions = new ArrayList<>();
         for(Transaction transaction : creditCard.getTransactions()){
             if (transaction.getDate().compareTo(startDate) >= 0 && transaction.getDate().compareTo(endDate) <= 0) {
