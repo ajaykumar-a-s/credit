@@ -42,7 +42,7 @@ public class CustomerController {
     {
         return customerService.viewAllCustomers();
     }
-    @GetMapping("/customer-login")
+    @PostMapping("/customer-login")
     public Customer loginCustomer(@RequestBody LoginDto loginDto) throws CustomerException
     {
         return customerService.loginCustomer(loginDto);

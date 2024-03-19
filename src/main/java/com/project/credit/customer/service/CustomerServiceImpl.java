@@ -107,10 +107,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer loginCustomer(LoginDto loginDto) throws CustomerException {
-        if (loginDto.getEmail() == null){
+        if (loginDto.getEmail() == null || loginDto.getEmail().isEmpty()){
             throw new CustomerException("Email cannot be null");
         }
-        if(loginDto.getPassword() == null){
+        if(loginDto.getPassword() == null || loginDto.getPassword().isEmpty()){
             throw new CustomerException("Password cannot be null");
         }
         if(!loginDto.getEmail().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")){

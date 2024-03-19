@@ -15,7 +15,7 @@ import java.util.List;
 public class CreditCardRequestController {
     @Autowired
     private CreditCardService creditCardService;
-    @PostMapping("/request/{customerId}")
+    @GetMapping("/request/{customerId}")
     public CreditCardRequest requestCard(@PathVariable("customerId") Long customerId) throws CustomerException, CreditCardRequestException {
 
             return creditCardService.requestCard(customerId);
@@ -27,7 +27,7 @@ public class CreditCardRequestController {
             return creditCardService.getRequestedCardList();
 
     }
-    @PostMapping("/validate/{creditCardRequestId}")
+    @GetMapping("/validate/{creditCardRequestId}")
     public CreditCard validateCustomer(@PathVariable("creditCardRequestId") Long creditCardRequestId) throws CustomerException, CardException, CreditCardRequestException {
 
             return creditCardService.validateCreditCardRequest(creditCardRequestId);
