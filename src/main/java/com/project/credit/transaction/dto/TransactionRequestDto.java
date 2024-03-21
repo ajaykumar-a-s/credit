@@ -1,20 +1,32 @@
 package com.project.credit.transaction.dto;
 
 import com.project.credit.transaction.exception.DateException;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class TransactionRequestDto {
+    @Pattern(regexp = "[0-9]{16}", message = "Invalid credit card number")
     private String customerCreditCardNumber;
+    @NotBlank
     private String customerName;
+    @NotNull
     private java.sql.Date validUpto;
+    @Pattern(regexp = "[0-9]{3}", message = "Invalid cvv")
     private Integer cvv;
+    @Pattern(regexp = "[0-9]{16}", message = "Invalid credit card number")
     private String merchantCardNumber;
+    @NotBlank
     private String merchantName;
     private String transactionName;
     private String description;
+    @Pattern(regexp = "[0-9]+(\\.[0-9][0-9]?)?", message = "Invalid amount")
+    @Min(value = 1, message = "Amount should be greater than 0")
     private Double amount;
 
     public TransactionRequestDto() {
@@ -23,7 +35,6 @@ public class TransactionRequestDto {
     public TransactionRequestDto(String customerCreditCardNumber, String customerName, String validUpto, Integer cvv, String merchantCardNumber, String merchantName, String transactionName, String description, Double amount) throws DateException {
         this.customerCreditCardNumber = customerCreditCardNumber;
         this.customerName = customerName;
-
         this.setValidUpto(validUpto);
         this.cvv = cvv;
         this.merchantCardNumber = merchantCardNumber;
