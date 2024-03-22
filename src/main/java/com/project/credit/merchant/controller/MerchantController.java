@@ -27,7 +27,7 @@ public class MerchantController {
         return merchantService.getMerchantById(merchantId);
     }
 
-    @PutMapping("/merchant/update")
+    @PutMapping("/merchant")
     public Merchant updateMerchant(@RequestBody Merchant merchant) throws  MerchantException
     {
         return merchantService.updateMerchant(merchant);
