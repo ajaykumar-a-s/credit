@@ -1,12 +1,19 @@
 package com.project.credit.customer.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+
 import com.project.credit.card.entity.CreditCard;
 import jakarta.persistence.*;
 
 import java.sql.Date;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "customerId")
+
 public class Customer {
 
     @Id

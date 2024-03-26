@@ -1,10 +1,7 @@
 package com.project.credit.transaction.dto;
 
 import com.project.credit.transaction.exception.DateException;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,7 +14,8 @@ public class TransactionRequestDto {
     private String customerName;
     @NotNull
     private java.sql.Date validUpto;
-    @Pattern(regexp = "[0-9]{3}", message = "Invalid cvv")
+    @Min(value = 100, message = "CVV must be a 3-digit number")
+    @Max(value = 999, message = "CVV must be a 3-digit number")
     private Integer cvv;
     @Pattern(regexp = "[0-9]{16}", message = "Invalid credit card number")
     private String merchantCardNumber;
@@ -25,8 +23,7 @@ public class TransactionRequestDto {
     private String merchantName;
     private String transactionName;
     private String description;
-    @Pattern(regexp = "[0-9]+(\\.[0-9][0-9]?)?", message = "Invalid amount")
-    @Min(value = 1, message = "Amount should be greater than 0")
+    @DecimalMin(value = "1.0", inclusive = true, message = "Amount should be greater than 0")
     private Double amount;
 
     public TransactionRequestDto() {
