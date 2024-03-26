@@ -1,9 +1,13 @@
 package com.project.credit.card.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.project.credit.bill.entity.Bill;
 import com.project.credit.customer.entity.Customer;
 import com.project.credit.transaction.entity.Transaction;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.sql.Date;
@@ -13,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "creditCardId")
+
 public class CreditCard {
     @Id
     @GeneratedValue
@@ -28,7 +34,6 @@ public class CreditCard {
     private Date cardCreatedOn;
 
     @OneToOne
-    @JsonIgnore
     private Customer customer;
 
 
