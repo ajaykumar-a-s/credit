@@ -152,6 +152,9 @@ public class TransactionServiceImpl implements TransactionService {
         return transaction;
     }
     public TransactionResponseDto covertTransactionToTransactionResponseDto(Transaction transaction) {
+        if (transaction.getMerchant() == null) {
+            return new TransactionResponseDto(transaction.getTransactionId(), transaction.getTransactionName(), transaction.getDescription(), transaction.getAmount(), transaction.getDate(), transaction.getTransactionType(), transaction.getCreditCard().getCardNumber(), null);
+        }
         return new TransactionResponseDto(transaction.getTransactionId(), transaction.getTransactionName(), transaction.getDescription(), transaction.getAmount(), transaction.getDate(), transaction.getTransactionType(), transaction.getCreditCard().getCardNumber(), transaction.getMerchant().getCardNumber());
     }
 }
